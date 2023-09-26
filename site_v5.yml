@@ -72,7 +72,7 @@
         sha256sum: 336811855ee97fcd8413343dc42f4d26362502860e8a9193e4db305e3e8ef80a
     urls:
       jetty:
-        url: "{{ download.jetty.baseurl }}/jetty-distribution-{{ download.jetty.version }}.tar.gz"
+        url: "{{ download.jetty.baseurl }}/jetty-home-{{ download.jetty.version }}.tar.gz"
       shib_idp:
         url: "{{ download.shib_idp.baseurl }}/shibboleth-identity-provider-{{ download.shib_idp.version }}.tar.gz"
       mysql_connector:
