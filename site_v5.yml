@@ -99,7 +99,7 @@
       repository: "{{ install_base }}/shibboleth-idp5-installer/repository"
     jetty:
       root: "{{ install_base }}/jetty"
-      home: "{{ install_base }}/jetty/jetty-distribution-{{ download.jetty.version }}"
+      home: "{{ install_base }}/jetty/jetty-home-{{ download.jetty.version }}"
       base: "{{ install_base }}/shibboleth/jetty"
       current: "{{ install_base }}/jetty/current"
       tmp_directory: "{{ install_base }}/shibboleth/jetty/tmp"
