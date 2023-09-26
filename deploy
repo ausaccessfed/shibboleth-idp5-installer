@@ -3,7 +3,7 @@
 declare -a nodes
 
 the_install_base=/opt
-working_dir=$the_install_base/shibboleth-idp4-installer/repository
+working_dir=$the_install_base/shibboleth-idp5-installer/repository
 
 cd $working_dir || exit
 
@@ -71,7 +71,7 @@ then
   echo -e "--------------\n"
   echo -e  "  The following actions are planned to run in the next deployment.\n"
 else
-  echo -e "\nDeploying Shibboleth V4 IdP"
+  echo -e "\nDeploying Shibboleth V5 IdP"
   echo -e "---------------------------\n"
   echo -e "  This process will perform the following ACTIONS: \n"
 fi
