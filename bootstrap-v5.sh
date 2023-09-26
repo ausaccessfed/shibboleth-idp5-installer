@@ -22,7 +22,7 @@ function setup_valid_oss {
 }
 
 function set_internal_variables {
-    LOCAL_REPO=$INSTALL_BASE/shibboleth-idp4-installer/repository
+    LOCAL_REPO=$INSTALL_BASE/shibboleth-idp5-installer/repository
     SHIBBOLETH_IDP_INSTANCE=$INSTALL_BASE/shibboleth/shibboleth-idp/current
     ANSIBLE_HOSTS_FILE=$LOCAL_REPO/ansible_hosts
     ANSIBLE_HOST_VARS=$LOCAL_REPO/host_vars/$HOST_NAME
@@ -33,9 +33,9 @@ function set_internal_variables {
     CREDENTIAL_BACKUP_PATH=$ASSETS/idp/credentials
     LDAP_PROPERTIES=$ASSETS/idp/conf/ldap.properties
     SECRETS_PROPERTIES=$ASSETS/idp/credentials/secrets.properties
-    ACTIVITY_LOG=$INSTALL_BASE/shibboleth-idp4-installer/activity.log
+    ACTIVITY_LOG=$INSTALL_BASE/shibboleth-idp5-installer/activity.log
 
-    GIT_REPO=https://github.com/ausaccessfed/shibboleth-idp4-installer.git
+    GIT_REPO=https://github.com/ausaccessfed/shibboleth-idp5-installer.git
     GIT_BRANCH=master
 
     FR_TEST_REG=https://manager.test.aaf.edu.au/federationregistry/registration/idp
