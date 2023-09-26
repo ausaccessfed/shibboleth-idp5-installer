@@ -1,0 +1,355 @@
+---
+- name: 'Set shared facts'
+  set_fact:
+    jetty_dist_archive_path='{{ installer.path }}/jetty-distribution-{{ download.jetty.version }}.tar.gz'
+
+- name: 'Create jetty user'
+  user: name=jetty
+
+- name: 'Create jetty root'
+  file:
+    path: '{{ jetty.root }}'
+    owner: root
+    group: jetty
+    state: directory
+    mode: 0750
+
+- name: 'Download jetty distribution'
+  get_url:
+    url: '{{ urls.jetty.url }}'
+    dest: '{{ jetty_dist_archive_path }}'
+    checksum: 'sha256:{{ download.jetty.sha256sum }}'
+
+- name: 'Extract jetty distribution'
+  shell: >
+    umask 0027;
+    tar zx -C {{ jetty.root }} -f {{ jetty_dist_archive_path }} --no-same-permissions;
+    chown -R root {{ jetty.home }};
+    chgrp -R jetty {{ jetty.home }}
+    creates={{ jetty.home }}
+
+- name: 'Remove demo-base'
+  file:
+    path: '{{ jetty.home }}/demo-base'
+    state: absent
+
+- name: 'Symlink jetty to installed distribution'
+  file:
+    name: '{{ jetty.current }}'
+    src: '{{ jetty.home }}'
+    owner: root
+    group: jetty
+    state: link
+    force: yes
+
+- name: 'Create directories required for JETTY_BASE'
+  file:
+    name: '{{ item }}'
+    state: directory
+    owner: root
+    group: jetty
+    mode: 0750
+  with_items:
+    - '{{ jetty.base }}'
+    - '{{ jetty.base }}/credentials'
+    - '{{ jetty.base }}/etc'
+    - '{{ jetty.base }}/lib'
+    - '{{ jetty.base }}/lib/ext'
+    - '{{ jetty.base }}/lib/logback'
+    - '{{ jetty.base }}/lib/slf4j'
+    - '{{ jetty.base }}/modules'
+    - '{{ jetty.base }}/resources'
+    - '{{ jetty.base }}/start.d'
+    - '{{ jetty.base }}/webapps'
+    - '{{ jetty.base }}/webapps/root'
+    - '{{ jetty.base }}/webapps/root/WEB-INF'
+
+# Files in jetty.base/etc
+
+- name: 'Create Logback access configuration'
+  template:
+    dest: '{{ jetty.base }}/etc/jetty-logback-access.xml'
+    src: 'templates/jetty/jetty-logback-access.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Create SSL Tweak configuration'
+  template:
+    dest: '{{ jetty.base }}/etc/tweak-ssl.xml'
+    src: 'templates/jetty/tweak-ssl.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set idp-backchannel.xml when backchannel enabled'
+  template:
+    dest: '{{ jetty.base }}/etc/idp-backchannel.xml'
+    src: 'templates/jetty/idp-backchannel.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+  when: enable_backchannel is defined and enable_backchannel=="true"
+
+- name: 'Unset idp-backchannel.xml when backchannel disabled'
+  file:
+    path: '{{ jetty.base }}/etc/idp-backchannel.xml'
+    state: absent
+  when: enable_backchannel is defined and enable_backchannel=="false"
+
+# Files in jetty.base/modules
+
+- name: 'Set http.mod'
+  template:
+    dest: '{{ jetty.base }}/modules/http.mod'
+    src: 'templates/jetty/http.mod'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set idp.mod'
+  template:
+    dest: '{{ jetty.base }}/modules/idp.mod'
+    src: 'templates/jetty/idp.mod'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set idp-backchannel.mod when backchannel enabled'
+  template:
+    dest: '{{ jetty.base }}/modules/idp-backchannel.mod'
+    src: 'templates/jetty/idp-backchannel.mod'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+  when: enable_backchannel is defined and enable_backchannel=="true"
+
+- name: 'UnSet idp-backchannel.mod when backchannel disabled'
+  file:
+    path: '{{ jetty.base }}/modules/idp-backchannel.mod'
+    state: absent
+  when: enable_backchannel is defined and enable_backchannel=="false"
+
+# Files in jetty.base/resources
+
+- name: 'Set logback-access configuration'
+  template:
+    dest: '{{ jetty.base }}/resources/logback-access.xml'
+    src: 'templates/jetty/logback-access.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set logback configuration'
+  template:
+    dest: '{{ jetty.base }}/resources/logback.xml'
+    src: 'templates/jetty/logback.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+# Files in jetty.base/start.d
+
+- name: 'Set idp.ini configuration'
+  template:
+    dest: '{{ jetty.base }}/start.d/idp.ini'
+    src: 'templates/jetty/idp.ini'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set idp-backchannel.ini when backchannel enabled'
+  template:
+    dest: '{{ jetty.base }}/start.d/idp-backchannel.ini'
+    src: 'templates/jetty/idp-backchannel.ini'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+  when: enable_backchannel is defined and enable_backchannel=="true"
+
+- name: 'Unset idp-backchannel.ini when backchannel disabled'
+  file:
+    path: '{{ jetty.base }}/start.d/idp-backchannel.ini'
+    state: absent
+  when: enable_backchannel is defined and enable_backchannel=="false"
+
+# Files in jetty.base/webapps
+
+- name: 'Set idp.xml'
+  template:
+    dest: '{{ jetty.base }}/webapps/idp.xml'
+    src: 'templates/jetty/idp.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set static.xml'
+  template:
+    dest: '{{ jetty.base }}/webapps/static.xml'
+    src: 'templates/jetty/static.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+# Files in jetty.base
+
+- name: 'Set start.ini'
+  template:
+    dest: '{{ jetty.base }}/start.ini'
+    src: 'templates/jetty/start.ini'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+# Files in jetty.base/webapps/root
+
+- name: 'Set 404'
+  template:
+    dest: '{{ jetty.base }}/webapps/root/404'
+    src: 'templates/jetty/404'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Set index.html'
+  template:
+    dest: '{{ jetty.base }}/webapps/root/index.html'
+    src: 'templates/jetty/index.html'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Add favicon.ico to site'
+  copy:
+    src: 'assets/{{ inventory_hostname }}/jetty/root/favicon.ico'
+    dest: '{{ jetty.base }}/webapps/root/favicon.ico'
+    owner: jetty
+    group: jetty
+    mode: 0640
+
+- name: 'Add favicon-mobile.ico to site'
+  copy:
+    src: 'assets/{{ inventory_hostname }}/jetty/root/favicon-mobile.ico'
+    dest: '{{ jetty.base }}/webapps/root/favicon-mobile.ico'
+    owner: jetty
+    group: jetty
+    mode: 0640
+
+- name: 'Add robots.txt to site'
+  copy:
+    src: 'templates/jetty/robots.txt'
+    dest: '{{ jetty.base }}/webapps/root/robots.txt'
+    owner: jetty
+    group: jetty
+    mode: 0640
+
+- name: 'Set web.xml'
+  template:
+    dest: '{{ jetty.base }}/webapps/root/WEB-INF/web.xml'
+    src: 'templates/jetty/web.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+
+# Jetty default in /etc/default
+
+- name: 'Set /etc/default/jetty'
+  template:
+    dest: '/etc/default/jetty'
+    src: 'templates/jetty/jetty'
+    owner: root
+    group: jetty
+    mode: 0644
+    backup: yes
+
+- name: 'Set permissions on jetty directory'
+  file:
+    path: '{{ jetty.home }}'
+    owner: root
+    group: jetty
+    mode: 0750
+    state: directory
+
+- name: 'Create jetty state directory'
+  file:
+    path: '{{ jetty.state_directory }}'
+    owner: jetty
+    group: jetty
+    state: directory
+    mode: 0700
+
+- name: 'Create a tmp directory for jetty'
+  file:
+    path: '{{ jetty.tmp_directory }}'
+    owner: jetty
+    group: jetty
+    state: directory
+    mode: 0700
+
+- name: 'Set permissions on jetty directory'
+  file:
+    path: '{{ item }}'
+    owner: root
+    group: jetty
+    mode: 0750
+  with_items:
+  - '{{ jetty.home }}'
+  - '{{ jetty.home }}/modules'
+  - '{{ jetty.home }}/resources'
+  - '{{ jetty.home }}/etc'
+  - '{{ jetty.home }}/lib'
+  - '{{ jetty.home }}/webapps'
+  - '{{ jetty.home }}/bin'
+
+- name: 'Set executable files for jetty'
+  file:
+    path: '{{ item }}'
+    owner: root
+    group: jetty
+    mode: 0750
+  with_items:
+  - '{{ jetty.home }}/bin/jetty.sh'
+
+- name: 'Create jetty log directory'
+  file:
+    name: /var/log/jetty
+    owner: jetty
+    group: jetty
+    mode: 0700
+    state: directory
+
+- name: 'Symlink jetty log directory'
+  file:
+    name: '{{ jetty.base }}/logs'
+    src: /var/log/jetty
+    state: link
+    owner: jetty
+    group: jetty
+    force: yes
+
+- name: 'Create Web PKCS#12 archive'
+  openssl_pkcs12:
+    action: export
+    path: '{{ jetty.base }}/credentials/idp-userfacing.p12'
+    friendly_name: 'Web Site cert and key'
+    privatekey_path: 'assets/{{ inventory_hostname }}/tls/server.key'
+    certificate_path: 'assets/{{ inventory_hostname }}/tls/server.crt'
+    other_certificates: 'assets/{{ inventory_hostname }}/tls/intermediate.crt'
+    passphrase: '{{ jetty.web_443_keystore_pw }}'
+    state: present
+    mode: 0640
+    owner: root
+    group: jetty

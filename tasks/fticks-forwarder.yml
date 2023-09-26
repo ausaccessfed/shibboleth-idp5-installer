@@ -1,0 +1,83 @@
+---
+
+- name: FTicks... Add td-agent user to the jetty group so it can read logs
+  user:
+    name: td-agent
+    groups: jetty
+
+- name: FTicks... Add TresureData repositoy
+  yum_repository:
+    name: TreasureData
+    description: Contains the td-agent
+    baseurl: http://packages.treasuredata.com/4/redhat/$releasever/$basearch
+    gpgcheck: yes
+    gpgkey: https://packages.treasuredata.com/GPG-KEY-td-agent
+  when: patch_with=="yum"
+
+- name: FTicks... Install td-agent - yum
+  yum:
+    pkg:
+      - td-agent
+    state: installed
+  when: patch_with=="yum"
+
+- name: FTicks... get the td-agent apt key
+  apt_key:
+    url: https://packages.treasuredata.com/GPG-KEY-td-agent
+    state: present
+  when: patch_with=="apt"
+
+- name: FTicks... Add treasure data repository to apt
+  template:
+    src: templates/fticks-forwarder/treasure-data.list
+    dest: /etc/apt/sources.list.d/treasure-data.list
+    owner: root
+    group: root
+    mode: 0644
+  when: patch_with=="apt"
+
+- name: FTicks... Install td-agent - apt
+  apt:
+    name:
+      - td-agent
+    state: present
+    update_cache: yes
+  when: patch_with=="apt"
+
+- name: FTicks... Install Kinesis plugin
+  gem:
+    executable: /sbin/td-agent-gem
+    name: fluent-plugin-kinesis
+    state: latest
+    user_install: no
+
+- name: FTicks... Configure td-agent to forward to aggregator
+  template:
+    src: fticks-forwarder/td-agent.conf.j2
+    dest: /etc/td-agent/td-agent.conf
+    owner: root
+    mode: u=rw,g=r,o=r
+  notify: Restart td-agent
+
+- name: FTicks... Enable and start the td-agent service
+  service:
+    name: td-agent
+    enabled: yes
+    state: started
+
+- name: FTicks... Create directory to hold the log position file
+  file:
+    path: /var/log/td-agent/shib-idp
+    state: directory
+    mode: '0750'
+    owner: td-agent
+    group: td-agent
+
+- name: FTicks... Set fticks.properties file
+  template:
+    src: 'assets/{{inventory_hostname}}/idp/conf/fticks.properties'
+    dest: '{{ shib_idp.home }}/conf/fticks.properties'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: no

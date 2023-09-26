@@ -1,0 +1,5 @@
+---
+- meta: flush_handlers
+
+- name: 'Enable idp service'
+  service: name=idp state=restarted enabled=yes

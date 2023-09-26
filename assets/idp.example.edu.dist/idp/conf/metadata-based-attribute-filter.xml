@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AttributeFilterPolicyGroup id="{{ federation_id }}-ShibbolethFilterPolicy"
+        xmlns="urn:mace:shibboleth:2.0:afp"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
+
+    <!-- Applies only to entities found in the Federation metadata and the 
+         attribute requirements of each service as defined in the metadata -->
+
+    <AttributeFilterPolicy id="{{ federation_id }}-fed-policy">
+
+        <PolicyRequirementRule xsi:type="InEntityGroup"
+                               groupID="{{ federation_group_id }}" />
+
+        <AttributeRule attributeID="persistentID">
+            <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="transientId">
+            <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+
+    <!--         AAF CORE ATTRIBUTES                -->
+
+        <AttributeRule attributeID="auEduPersonSharedToken">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="displayName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonAffiliation">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonAssurance">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonEntitlement">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonPrincipalName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonScopedAffiliation">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonTargetedID">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="mail">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="givenName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="sn">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="schacHomeOrganization">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="schacHomeOrganizationType">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="o">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonOrcid">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+    <!--         AAF Furture possible CORE attributes   -->
+
+        <AttributeRule attributeID="samlSubjectID">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="samlPairwiseID">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+    <!--         AAF OPTIONAL ATTRIBUTES                -->
+
+        <!-- Schema: eduPerson -->
+
+        <AttributeRule attributeID="eduPersonNickname">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonOrcid">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonPrimaryAffiliation">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonPrimaryOrgUnitDN">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonOrgDN">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonOrgUnitDN">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: eduCourse -->
+  
+        <AttributeRule attributeID="eduCourseOffering">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduCourseMember">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: eduMember -->
+  
+        <AttributeRule attributeID="isMemberOf">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: SCHAC -->
+  
+        <AttributeRule attributeID="schacPersonalUniqueID">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: auEduPerson -->
+
+        <AttributeRule attributeID="auEduPersonAffiliation">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+  
+        <AttributeRule attributeID="auEduPersonLegalName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- AAF Specific attributes -->
+  
+        <AttributeRule attributeID="dsdStudentId">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="exlibrisid">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: Core Schema Attributes -->
+  
+        <AttributeRule attributeID="manager">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="mobileNumber">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="uid">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: X.500 Attributes -->
+
+        <AttributeRule attributeID="businessCategory">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="cn">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="description">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="facsimileTelephoneNumber">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="initials">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="l">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="organizationalUnit">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="physicalDeliveryOfficeName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="postOfficeBox">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="postalAddress">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="postalCode">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="seeAlso">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="stateProvince">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="street">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+  
+        <AttributeRule attributeID="telephoneNumber">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+  
+        <AttributeRule attributeID="title">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: inetOrgPerson -->
+  
+        <AttributeRule attributeID="carLicense">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+  
+        <AttributeRule attributeID="employeeNumber">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="employeeType">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="departmentNumber">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="preferredLanguage">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <!-- Schema: MS Active Directory -->
+  
+        <AttributeRule attributeID="division">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="department">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
+        </AttributeRule>
+
+    </AttributeFilterPolicy>
+</AttributeFilterPolicyGroup>
+

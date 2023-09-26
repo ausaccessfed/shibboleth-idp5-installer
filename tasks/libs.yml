@@ -1,0 +1,140 @@
+---
+- name: 'Create libraries directory'
+  file:
+    path: '{{ shib_idp.libs }}'
+    owner: root
+    group: jetty
+    state: directory
+    mode: 0750
+
+- name: 'Install jetty94-dta-ssl'
+  get_url:
+    url: '{{ urls.dta_ssl.url }}'
+    dest:  '{{ shib_idp.libs }}/jetty94-dta-ssl-{{ download.dta_ssl.version }}.jar'
+    checksum: 'sha256:{{ download.dta_ssl.sha256sum }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Link to jetty94-dta-ssl library'
+  file:
+    name: '{{ jetty.base }}/lib/ext/jetty94-dta-ssl.jar'
+    src: '{{ shib_idp.libs }}/jetty94-dta-ssl-{{ download.dta_ssl.version }}.jar'
+    state: link
+
+- name: 'Install logback-access'
+  get_url:
+    url: '{{ urls.logback_access.url }}'
+    dest: '{{ shib_idp.libs }}/logback-access-{{ download.logback_access.version }}.jar'
+    checksum: 'sha256:{{ download.logback_access.sha256sum }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Link to logback-access library'
+  file:
+    name: '{{ jetty.base }}/lib/logback/logback-access.jar'
+    src: '{{ shib_idp.libs }}/logback-access-{{ download.logback_access.version }}.jar'
+    state: link
+
+- name: 'Install logback-classic'
+  get_url:
+    url: '{{ urls.logback_classic.url }}'
+    dest: '{{ shib_idp.libs }}/logback-classic-{{ download.logback_classic.version }}.jar'
+    checksum: 'sha256:`{{ download.logback_classic.sha256sum }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Link to logback-classic library'
+  file:
+    name: '{{ jetty.base }}/lib/logback/logback-classic.jar'
+    src: '{{ shib_idp.libs }}/logback-classic-{{ download.logback_classic.version }}.jar'
+    state: link
+
+- name: 'Install logback-core'
+  get_url:
+    url: '{{ urls.logback_core.url }}'
+    dest: '{{ shib_idp.libs }}/logback-core-{{ download.logback_core.version }}.jar'
+    checksum: 'sha256:{{ download.logback_core.sha256sum }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Link to logback-core library'
+  file:
+    name: '{{ jetty.base }}/lib/logback/logback-core.jar'
+    src: '{{ shib_idp.libs }}/logback-core-{{ download.logback_core.version }}.jar'
+    state: link
+
+- name: 'Install jcl-over-slf4j'
+  get_url:
+    url: '{{ urls.jcl_over_slf4j.url }}'
+    dest: '{{ shib_idp.libs }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar'
+    checksum: 'sha256:{{ download.jcl_over_slf4j.sha256sum }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Link to jcl-over-slf4j library'
+  file:
+    name: '{{ jetty.base }}/lib/logback/jcl-over-slf4j.jar'
+    src: '{{ shib_idp.libs }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar'
+    state: link
+
+- name: 'Install slf4j-api'
+  get_url:
+    url: '{{ urls.slf4j_api.url }}'
+    dest: '{{ shib_idp.libs }}/slf4j-api-{{ download.slf4j_api.version }}.jar'
+    checksum: 'sha256:{{ download.slf4j_api.sha256sum }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Link to slf4j-api library'
+  file:
+    name: '{{ jetty.base }}/lib/logback/slf4j-api.jar'
+    src: '{{ shib_idp.libs }}/slf4j-api-{{ download.slf4j_api.version }}.jar'
+    state: link
+
+- name: 'Install aaf-shib-ext library'
+  get_url:
+    url: '{{ urls.aaf_shib_ext.url }}'
+    dest: '{{ shib_idp.libs }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar'
+    checksum: 'sha256:{{ download.aaf_shib_ext.sha256sum }}'
+    mode: 0640
+    owner: root
+    group: jetty
+
+- name: 'Link to aaf-shib-ext library'
+  file:
+    name: '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib/aaf-shib-ext.jar'
+    src: '{{ shib_idp.libs }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar'
+    state: link
+
+- name: 'Install mysql connector library'
+  get_url:
+    url: '{{ urls.mysql_connector.url }}'
+    dest: '{{ installer.path }}/mysql-connector-java-{{ download.mysql_connector.version }}.tar.gz'
+    checksum: 'sha256:{{ download.mysql_connector.sha256sum }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Extract mysql connector library distribution'
+  shell: >
+    umask 0027;
+    tar zx -C {{ installer.path }} -f {{ installer.path }}/mysql-connector-java-{{ download.mysql_connector.version }}.tar.gz;
+    creates={{ installer.path }}/mysql-connector-java-{{ download.mysql_connector.version }}/mysql-connector-java-{{ download.mysql_connector.version }}.jar
+
+- name: 'Copy over mysql connector lib'
+  shell: |
+    umask 0022
+    cp {{ installer.path }}/mysql-connector-java-{{ download.mysql_connector.version }}/mysql-connector-java-{{ download.mysql_connector.version }}.jar {{ shib_idp.libs }}/ creates="{{ shib_idp.libs }}/mysql-connector-java-{{ download.mysql_connector.version }}.jar"
+
+- name: 'Link to mysql connector lib'
+  file:
+    name: '{{ jetty.base }}/lib/ext/mysql-connector-java-bin.jar'
+    src: '{{ shib_idp.libs }}/mysql-connector-java-{{ download.mysql_connector.version }}.jar'
+    state: link
+

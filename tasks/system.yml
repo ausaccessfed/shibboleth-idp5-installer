@@ -1,0 +1,91 @@
+---
+- name: 'Update yum packages (yum -y update)'
+  yum: name=* state=latest
+  when: (((server_patch is undefined) or (server_patch is none) or (server_patch=="true")) and (patch_with=="yum"))
+
+- name: 'Update apt packages (apt -y upgrade)'
+  apt: name=* state=latest
+  when: (((server_patch is undefined) or (server_patch is none) or (server_patch=="true")) and (patch_with=="apt"))
+
+- name: 'Check SELinux installed'
+  stat:
+    path: /etc/selinux/config
+  register: selinux_available
+
+- name: 'Set SELinux to permissive mode'
+  selinux:
+    policy: targeted
+    state: permissive
+  when: selinux_available.stat.exists == true
+
+- name: 'Install required packages (Version 7 and 8)'
+  yum:
+    name:
+      - java-11-openjdk-devel
+      - mariadb-devel
+      - mariadb
+      - mariadb-server
+      - chrony
+    state: installed
+  when: (((ansible_distribution_major_version == "7") or 
+          (ansible_distribution_major_version == "8")) and 
+         (patch_with=="yum"))
+
+- name: 'Install required packages (Version 9)'
+  yum:
+    name:
+      - java-11-openjdk-devel
+      - mariadb-devel
+      - mariadb
+      - mariadb-server
+      - chrony
+    state: installed
+    enablerepo: crb
+  when: ((ansible_distribution_major_version == "9") and
+         (patch_with=="yum"))
+
+- name: 'Install required packages - apt'
+  apt:
+    name:
+      - openjdk-11-jdk
+      - mariadb-server
+      - chrony
+    state: present
+    update_cache: yes
+  when: patch_with=="apt"
+
+- name: 'Install required packages - OS Version 7'
+  yum:
+    name:
+      - pyOpenSSL
+      - MySQL-python
+    state: installed
+  when: ((ansible_distribution_major_version == "7") and (patch_with=="yum"))
+
+- name: 'Install required packages - OS Version 8'
+  yum:
+    name:
+      - python3-pyOpenSSL
+      - python3-PyMySQL
+    state: installed
+  when: ((ansible_distribution_major_version == "8") and (patch_with=="yum"))
+
+- name: 'Install required packages - OS Version 9'
+  yum:
+    name:
+      - python3-cryptography
+      - python3-PyMySQL
+    state: installed
+  when: ((ansible_distribution_major_version == "9") and (patch_with=="yum"))
+
+- name: 'Install required packages - apt'
+  apt:
+    name:
+      - python3-pymysql
+    state: present
+    update_cache: yes
+  when: patch_with=="apt"
+
+- name: 'Enable chrony service'
+  service: name=chronyd state=started enabled=yes
+

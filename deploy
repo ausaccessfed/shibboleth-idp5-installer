@@ -1,0 +1,113 @@
+#!/bin/bash
+
+declare -a nodes
+
+the_install_base=/opt
+working_dir=$the_install_base/shibboleth-idp4-installer/repository
+
+cd $working_dir || exit
+
+function get_nodes {
+  i=1
+  getting_nodes=false
+  for line in $(cat ansible_hosts)
+  do
+    if [ $line == "[idp-servers]" ]; then
+      getting_nodes=true
+    else
+      if [[ "$line" == [* ]]; then
+        getting_nodes=false
+      else
+        if ( $getting_nodes ); then
+          nodes[$i]=$line
+        fi
+      fi
+    fi
+  done
+}
+
+function server_patch () {
+  patch=`grep "server_patch:" host_vars/$1`
+
+  if [[ $patch == "server_patch: \"false\"" ]]; then
+    echo "      Node: $1 will NOT be patched"
+  else
+    echo "      Node: $1 will be patched"
+  fi
+}
+
+get_nodes
+
+echo ${nodes[*]}
+
+dry=false
+while getopts ":dhv" opt; do
+  case $opt in
+    h) # Show basic help
+     echo "Usage:"
+     echo "    deploy -h            Displays this help message."
+     echo "    deploy -v            Displays the version of the installer."
+     echo "    deploy -d            Performs a Dry Run of the deployment."
+     echo "    deploy               Deploys changes the IdP."
+     echo
+     exit 0
+     ;;
+    v) # Show version of installer
+     cat VERSION
+     exit 0
+     ;;
+    d) # Setup for a Dry run
+     dry=true
+     ;;
+    \? ) echo "Usage: deploy [-h] [-v] [-d]"
+     exit 1
+     ;;
+  esac
+done
+
+if [[ $dry = true ]]
+then
+  echo -e "\nDry run deploy"
+  echo -e "--------------\n"
+  echo -e  "  The following actions are planned to run in the next deployment.\n"
+else
+  echo -e "\nDeploying Shibboleth V4 IdP"
+  echo -e "---------------------------\n"
+  echo -e "  This process will perform the following ACTIONS: \n"
+fi
+echo "  1. Update underlying operating system packages to ensure any security issues are addressed"
+echo ""
+for x in ${nodes[*]}
+do
+  server_patch $x
+done
+echo ""
+echo "  2. Apply any configuration changes made within the assets directory for: "
+echo "    * Shibboleth IdP"
+echo "    * Jetty"
+echo ""
+echo -e "  3. RESTART all dependant processes.\n"
+
+echo "You MUST have a tested rollback plan in place before continuing."
+echo -e "\n-----\n"
+
+if [[ $dry = true ]]
+then
+  read -r -p "Are you sure you wish to continue with the dry run? [y/n] " response
+else
+  read -r -p "Are you sure you wish to continue with the process as detailed above? [y/n] " response
+fi
+response=${response,,}
+
+if [[ $response =~ ^(yes|y)$ ]]
+then
+  if [[ $dry = true ]]
+  then
+    ansible-playbook -i ansible_hosts site_v4.yml --force-handlers --extra-var="install_base=$the_install_base" --check
+  else
+    ansible-playbook -i ansible_hosts site_v4.yml --force-handlers --extra-var="install_base=$the_install_base"
+  fi
+else
+  echo -e "\nNo changes made, exiting."
+  exit 0
+fi

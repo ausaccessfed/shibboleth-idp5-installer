@@ -1,0 +1,164 @@
+---
+- hosts: all
+  pre_tasks:
+  vars:
+    installer:
+      root: "{{ install_base }}/shibboleth-idp4-installer"
+      path: "{{ install_base }}/shibboleth-idp4-installer/build"
+      repository: "{{ install_base }}/shibboleth-idp4-installer/repository"
+  tasks:
+    - name: 'Verify Ansible meets AAF Installer version requirments.'
+      assert:
+        that: "ansible_version.full is version_compare('2.9', '>=')"
+        msg: "You must update Ansible to at least 2.9 to use this version of the AAF IdP Installer."
+
+    - name: 'Create local_conf.yml if it does not exist'
+      copy:
+        src: '{{ installer.repository }}/templates/installer/local_conf.yml'
+        dest: '{{ installer.repository }}/tasks/local_conf.yml'
+        owner: root
+        group: root
+        mode: 0644
+        force: no
+
+- hosts: idp_servers
+  vars:
+    aaf_binaries:
+      baseurl: https://aaf-binaries.s3-ap-southeast-2.amazonaws.com 
+    download:
+      jetty:
+        baseurl: "{{ aaf_binaries.baseurl }}/jetty"
+        version: 9.4.51.v20230217
+        sha256sum: 5c34101bfb56b90c546df9b04f7931822b8f9bed676e02dc8c7c91b02a7f38b7
+      shib_idp:
+        baseurl: "{{ aaf_binaries.baseurl }}/shibboleth"
+        version: 4.3.1
+        sha256sum: 04d08d324a5a5f016ca69b96dbab58abbb5b3e0045455cc15cf0d33ffd6742d5
+      mysql_connector:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/Connector-J"
+        version: 8.0.28
+        sha256sum: 859afba47f1fd99eb7c010bfa101ed7c0f8bb278f6f62430adc8012ea82fb454
+      dta_ssl:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/jetty94-dta-ssl"
+        version: 1.0.0
+        sha256sum: 5e5de66e3517d30ff19ef66cf7a4aa5443b861d83e36a75e85845b007a03afbf
+      aaf_shib_ext:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf_shib_ext"
+        version: 2.0.0
+        sha256sum: 5244b2c2565ed40fe66ee8d551ad5e5f1aac0c26c06eace521658792297d464c
+      keystore:
+        baseurl: "{{ aaf_binaries.baseurl }}/keystore"
+        version: "Unknown"
+        sha256sum: ae4185b2f0bb1af00abc6a4502fbfbdc6a90aec65c7bcee08e37a1bc20de5ac1 
+      logback_access:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
+        version: 1.2.10
+        sha256sum: 8462a7d983a10700c2cc559b7df4254f3a21c2611c32476cb5a6702ce51524c9
+      logback_classic:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
+        version: 1.2.10
+        sha256sum: 3160ae988af82c8bf3024ddbe034a82da98bb186fd09e76c50543c5b9da5cc5e
+      logback_core:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
+        version: 1.2.10
+        sha256sum: ba51a3fe56691f9dd7fe742e4a73c3ab4aaaa32202c73409ba56f18687399a08
+      jcl_over_slf4j:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
+        version: 1.7.33
+        sha256sum: a2c0b70507e6f769ea571608fd9b728329c5c723af37c3b772127c58fb593dfc
+      slf4j_api:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
+        version: 1.7.33
+        sha256sum: 336811855ee97fcd8413343dc42f4d26362502860e8a9193e4db305e3e8ef80a
+    urls:
+      jetty:
+        url: "{{ download.jetty.baseurl }}/jetty-distribution-{{ download.jetty.version }}.tar.gz"
+      shib_idp:
+        url: "{{ download.shib_idp.baseurl }}/shibboleth-identity-provider-{{ download.shib_idp.version }}.tar.gz"
+      mysql_connector:
+        url: "{{ download.mysql_connector.baseurl }}/mysql-connector-java-{{ download.mysql_connector.version }}.tar.gz"
+      dta_ssl:
+        url: "{{ download.dta_ssl.baseurl }}/jetty94-dta-ssl-{{download.dta_ssl.version}}.jar"
+      aaf_shib_ext:
+        url: "{{ download.aaf_shib_ext.baseurl }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar"
+      keystore:
+        url: "{{ download.keystore.baseurl }}/keystore"
+      logback_access:
+         url: "{{ download.logback_access.baseurl }}/logback-access-{{ download.logback_access.version }}.jar"
+      logback_classic:
+         url: "{{ download.logback_classic.baseurl }}/logback-classic-{{ download.logback_classic.version }}.jar"
+      logback_core:
+         url: "{{ download.logback_core.baseurl }}/logback-core-{{ download.logback_core.version }}.jar"
+      jcl_over_slf4j:
+         url: "{{ download.jcl_over_slf4j.baseurl }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar"
+      slf4j_api:
+         url: "{{ download.slf4j_api.baseurl }}/slf4j-api-{{ download.slf4j_api.version }}.jar"
+    installer:
+      root: "{{ install_base }}/shibboleth-idp4-installer"
+      path: "{{ install_base }}/shibboleth-idp4-installer/build"
+      repository: "{{ install_base }}/shibboleth-idp4-installer/repository"
+    jetty:
+      root: "{{ install_base }}/jetty"
+      home: "{{ install_base }}/jetty/jetty-distribution-{{ download.jetty.version }}"
+      base: "{{ install_base }}/shibboleth/jetty"
+      current: "{{ install_base }}/jetty/current"
+      tmp_directory: "{{ install_base }}/shibboleth/jetty/tmp"
+      state_directory: "{{ install_base }}/shibboleth/jetty/tmp"
+      web_443_keystore_pw: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/web_443_keystore chars=letters,digits length=64') }}"
+    shib_idp:
+      home_root: "{{ install_base }}/shibboleth/shibboleth-idp"
+      home: "{{ install_base }}/shibboleth/shibboleth-idp/shibboleth-idp-{{ download.shib_idp.version }}"
+      libs: "{{ install_base }}/shibboleth/libs"
+      src_root: "{{ install_base }}/shibboleth/shibboleth-src"
+      src: "{{ install_base }}/shibboleth/shibboleth-src/shibboleth-identity-provider-{{ download.shib_idp.version }}"
+      current: "{{ install_base }}/shibboleth/shibboleth-idp/current"
+      keystore_password: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/shib_idp_keystore chars=letters,digits length=64') }}"
+      cookie_enc_key_password: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/cookie_enc_key chars=letters,digits length=64') }}"
+      aepst_salt: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/aespt_salt chars=letters,digits length=64') }}"
+      targeted_id_salt: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/targeted_id_salt chars=letters,digits length=64') }}"
+    db:
+      name: idp_db
+      username: idp_admin
+      password: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/mariadb chars=letters,digits length=64') }}"
+    fticks:
+      forwarder:
+        region: ap-southeast-2
+      salt: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/fticks_salt chars=letters,digits length=64') }}"
+  tasks:
+    - name: 'Create required directories for installer setup'
+      file:
+        name: '{{ item }}'
+        state: directory
+        owner: root
+        group: root
+        mode: 0700
+      with_items:
+        - '{{ installer.root }}'
+        - '{{ installer.path }}'
+
+    - include_tasks: tasks/system.yml
+    - include_tasks: tasks/jetty.yml
+    - include_tasks: tasks/db.yml
+    - include_tasks: tasks/idp.yml
+    - include_tasks: tasks/firewalld.yml
+      when: firewall is defined and firewall=="firewalld"
+    - include_tasks: tasks/fticks-forwarder.yml
+      when: >
+        fticks_key_id | default('', true) | trim != '' and 
+        fticks_secret_key | default('', true) |  trim != ''
+    - include_tasks: tasks/local_conf.yml
+    - include_tasks: tasks/final.yml
+
+  handlers:
+    - name: Restart idp
+      service:
+        name: idp
+        state: restarted
+    - name: Restart database
+      service:
+        name: mariadb
+        state: restarted
+    - name: Restart td-agent
+      service:
+        name: td-agent
+        state: restarted

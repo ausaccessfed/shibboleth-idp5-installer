@@ -1,0 +1,5 @@
+---
+# This file is for local ansible configuration that will be applied
+# to the installed IdP. It will not be overwritten by the installer 
+# any any time.
+

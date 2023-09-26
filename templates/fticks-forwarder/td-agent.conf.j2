@@ -1,0 +1,30 @@
+<source>
+  @type tail
+
+  tag fticks
+  <parse>
+    @type none
+  </parse>
+  path /var/log/shibboleth-idp/idp-fticks.log
+  pos_file /var/log/td-agent/shib-idp/idp-fticks.log.pos
+</source>
+
+<match fticks>
+  @type kinesis_firehose
+
+  data_key message
+  <inject>
+    time_key time
+  </inject>
+
+  {% if aaf_prod_env == "true" %}
+  delivery_stream_name aafFticksReceiver
+  {% else %}
+  delivery_stream_name aaf-testFticksReceiver
+  {% endif %}
+
+  region {{ fticks.forwarder.region }}
+
+  aws_key_id {{ fticks_key_id }}
+  aws_sec_key {{ fticks_secret_key }}
+</match>

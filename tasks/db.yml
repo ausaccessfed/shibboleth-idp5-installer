@@ -1,0 +1,97 @@
+- name: 'Create /var/run/mariadb'
+  file:
+    dest: /var/run/mariadb
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: 0700
+
+- name: 'Create /etc/mysql'
+  file:
+    dest: /etc/mysql
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: 'Write /etc/mysql/my.cnf'
+  template:
+    src: templates/db/my.cnf
+    dest: /etc/mysql/my.cnf
+    owner: root
+    group: root
+    mode: 0644
+  notify: 'Restart database'
+
+- name: 'Start database server'
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: 'Create lock_down_db.sql'
+  template:
+    src: templates/db/lock_down_db.sql
+    dest: '{{ installer.path }}/lock_down_db.sql'
+    owner: root
+    group: root
+    mode: 0600
+  register: security_sql
+
+- name: 'Run lock_down_db.sql'
+  command: 'mysql -e "source {{ installer.path }}/lock_down_db.sql"'
+  when: security_sql.changed
+
+- name: 'Write /root/.my.cnf'
+  template:
+    src: templates/db/dot-my.cnf
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+
+- name: 'Create application database'
+  mysql_db:
+#    login_unix_socket: /var/lib/mysql/mysql.sock
+    name: '{{ db.name }}'
+    collation: utf8mb4_unicode_ci
+    encoding: utf8mb4
+    state: present
+
+- name: 'Create db user'
+  mysql_user: 'name={{ db.username }} password={{ db.password }} priv={{ db.name }}.*:ALL state=present'
+  register: db_user
+
+- name: 'Copy over AESPT schema'
+  template:
+    src: templates/db/tb_st_ddl.sql
+    dest: '{{ installer.path }}/tb_st_ddl.sql'
+    owner: root
+    group: root
+    mode: 0600
+
+- name: 'Copy over TargetedID schema'
+  template:
+    src: templates/db/shibpid_ddl.sql
+    dest: '{{ installer.path }}/shibpid_ddl.sql'
+    owner: root
+    group: root
+    mode: 0600
+
+- name: 'Copy over StorageRecords schema'
+  template:
+    src: templates/db/tb_storage_records_ddl.sql
+    dest: '{{ installer.path }}/tb_storage_records_ddl.sql'
+    owner: root
+    group: root
+    mode: 0600
+
+- name: 'Import AESPT schema'
+  mysql_db: 'state=import name={{ db.name }} target={{ installer.path }}/tb_st_ddl.sql'
+
+- name: 'Import TargetedID schema'
+  mysql_db: 'state=import name={{ db.name }} target={{ installer.path }}/shibpid_ddl.sql'
+
+- name: 'Import Shibboleth IdP StorageRecords schema'
+  mysql_db: 'state=import name={{ db.name }} target={{ installer.path }}/tb_storage_records_ddl.sql'
+

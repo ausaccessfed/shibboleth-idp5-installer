@@ -1,0 +1,102 @@
+---
+# ------------------------------------------------------------------------------
+# EXAMPLE: CONFIGURED FOR AAF TEST ENVIRONMENT
+# ------------------------------------------------------------------------------
+
+# Which environment are we running in
+aaf_prod_env: "false"
+
+# The host name of the target machine
+idp_host_name: "idp.example.edu"
+
+# IdP Entity ID
+idp_entity_id: "https://idp.example.edu/idp/shibboleth"
+
+# IdP 'Attribute Scope'
+idp_attribute_scope: "example.edu"
+
+# Federation ID
+federation_id: "AAF"
+
+# The federation's group id used for metadata-based attribute filtering
+federation_group_id: "https://md.test.aaf.edu.au/aaf-test-metadata.xml"
+
+# Shared federation metadata
+metadata_url: "https://md.test.aaf.edu.au/aaf-test-metadata.xml"
+
+# Shared federation certificate
+metadata_cert_url: "https://md.aaf.edu.au/aaf-metadata-certificate.pem"
+metadata_cert_sha256sum: 00ec963039ca877b7111db3188d3d646e071c4c84ab8201fc35ad62a77ffa1a1
+
+# Metadata file name
+metadata_file_name: aaf-metadata.xml
+
+# Metadata certificate file name
+metadata_cert_file_name: aaf-metadata.pem
+
+# Your organisation's name
+organisation_name: "The University of Example"
+
+# Your organisation's support desk URL
+organisation_support: "https://support.example.edu"
+
+# Your organisation's home URL
+organisation_url: "https://example.edu"
+
+# Your organisation's password reset URL
+password_reset_url: "https://changepw.example.edu"
+
+# Your schacHomeOrganization. See http://www.terena.org/activities/tf-emc2/schacreleases.html
+home_organisation: "example.edu"
+
+# Your schacHomeOrganizationType. See http://www.terena.org/activities/tf-emc2/schacreleases.html
+# Relevant values are:
+# urn:mace:terena.org:schac:homeOrganizationType:au:university
+# urn:mace:terena.org:schac:homeOrganizationType:au:research-institution
+# urn:mace:terena.org:schac:homeOrganizationType:au:other
+home_organisation_type: "urn:mace:terena.org:schac:homeOrganizationType:au:university"
+
+# Run yum -update on every execution of update_idp.sh
+server_patch: "true"
+
+# OS Tool to patch the system
+patch_with: "yum"
+
+# Installed Firewall [firewalld | none ]
+firewall: "firewalld"
+
+# Enable BackChannel
+enable_backchannel: "false"
+
+# eduGAIN metadata
+edugain_metadata_url: "https://md.test.aaf.edu.au/aaf-edugain-test-metadata.xml"
+
+# Enable eduGAIN
+enable_edugain: "false"
+
+# eduGAIN Metadata file name
+edugain_metadata_file_name: edugain-metadata.xml
+
+# eduGAIN Metadata certificate file name
+edugain_metadata_cert_file_name: aaf-metadata.pem
+
+# Source Persistent ID attribute name (for Subject ID and Pairwise ID)
+source_persistent_id:
+
+# Old Persistent ID attribute name (for auEduPersonShared Token and eduPersonTargeted ID)
+old_source_persistent_id:
+
+# Set to true is the IdP is behind a device where ssl has been off-loaded to.
+idp_behind_proxy: "false"
+
+# Set default encryption [GCM | CBC].
+default_encryption: "CBC"
+
+# FTicks KEY_ID (Value provided on request to support@aaf.edu.au)
+fticks_key_id:
+
+# FTicks SECRET_KEY (Value provided on request to support@aaf.edu.au)
+fticks_secret_key:
+
+# FTicks delivery stream name
+delivery_stream_name: aaf-testFticksReceiver

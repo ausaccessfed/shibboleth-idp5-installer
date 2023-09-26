@@ -1,0 +1,35 @@
+---
+- name: 'Enable firewalld'
+  service: name=firewalld state=started enabled=yes
+
+- name: 'Open default Apache firewall ports'
+  firewalld:
+    port: '{{ item }}'
+    state: enabled
+    permanent: yes
+    immediate: yes
+  with_items:
+    - 443/tcp
+
+- name: 'Open Apache firewall port 8443 for the Backchannel when enabled'
+  firewalld:
+    port: '{{ item }}'
+    state: enabled
+    permanent: yes
+    immediate: yes
+  with_items:
+    - 8443/tcp
+  when: enable_backchannel is defined and enable_backchannel=="true"
+
+- name: 'Close Apache firewall port 8443 for the Backchannel when disabled'
+  firewalld:
+    port: '{{ item }}'
+    state: disabled
+    permanent: yes
+    immediate: yes
+  with_items:
+    - 8443/tcp
+  when: enable_backchannel is defined and enable_backchannel=="false"
+
+- meta: flush_handlers
+

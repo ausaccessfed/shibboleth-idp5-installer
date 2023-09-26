@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8" />
+<title>{{ organisation_name }} Federation IdP</title>
+</head>
+
+<body>
+<header>
+<h1>{{ organisation_name }}</h1>
+</header>
+<main>
+<section>
+<h1>404 Page Not Found</h4>
+</section>
+<p>Sorry about that! Looks like the page you were trying to visit doesn't exist.</p>
+<p>You might have landed here because: <ul><li>The page has been moved or deleted</li>
+<li>There was a typo in the address</li>
+</ul>
+</p>
+<p>If you feel like you should not be seeing this error please report it to <a href="mailto:{{ organisation_support }}">{{ organisation_support }}</a> with a description of what occurred. </p>
+</main>
+</body></html>
+

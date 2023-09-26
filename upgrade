@@ -1,0 +1,60 @@
+#!/bin/bash
+
+declare -a nodes
+
+function git_update_details {
+  remote=`git config --get remote.origin.url`
+  current_branch=`git symbolic-ref -q --short HEAD`
+
+  echo -e "The process will also perform the following UPGRADES:\n"
+  echo "  1. Upgrade to the most recent version of the installer: "
+  echo "    * The update will be retrieved from: ${remote}"
+  echo "    * It will be based on the most recent release from: ${current_branch}"
+  echo ""
+  echo "  2. May add additional files to your Assets area to allow for advanced configuration"
+  echo ""
+  echo "  3. Upgrade, if necessary, to the most recently vetted versions of: "
+  echo "    * Shibboleth IdP"
+  echo -e "    * Jetty\n\n"
+}
+
+the_install_base=/opt
+working_dir=$the_install_base/shibboleth-idp4-installer/repository
+
+cd $working_dir || exit
+
+git_update_details
+
+echo "You MUST have a tested rollback plan in place before continuing."
+echo -e "\n-----\n"
+
+read -r -p "Are you sure you wish to continue with the process as detailed above? [y/N] " response
+response=${response,,}
+
+if [[ $response =~ ^(yes|y)$ ]]
+then
+    echo -e "\nAttempting to update the AAF Installer respositry...\n"
+
+    git pull
+
+    retval=$?
+
+    if [ $retval -ne 0 ]
+    then
+        echo -e "\n   ----"
+        echo -e "   An ERROR occurred attempting to upgrade the local AAF Installer respoitory"
+        echo -e "   This must be resolved before your upgrade can proceed!\n"
+        echo -e "   Details of the issue are shown above."
+        echo -e "   ----"
+        echo -e "\nNo changes have been made. Exiting."
+        exit 1
+    else 
+        ansible-playbook -i ansible_hosts upgrade.yml --extra-var="install_base=$the_install_base"
+
+        echo "Changes have been applied, you must now deploy to apply these changes."
+    fi
+else
+    echo "No changes made, exiting."
+    exit 0
+
+fi

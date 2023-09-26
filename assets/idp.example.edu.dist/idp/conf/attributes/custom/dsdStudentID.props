@@ -1,0 +1,7 @@
+id=dsdStudentId
+transcoder=SAML2StringTranscoder SAML1StringTranscoder
+saml1.name=urn:oid:1.3.6.1.4.1.27691.1.1
+saml2.name=urn:oid:1.3.6.1.4.1.27691.1.1
+displayName.en=Student Number
+description.en=Numerically identifies a student within an organisation
+

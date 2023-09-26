@@ -1,0 +1,114 @@
+---
+- hosts: all
+  pre_tasks:
+  tasks:
+    - name: 'Verify Ansible meets AAF Installer version requirments.'
+      assert:
+        that: "ansible_version.full is version_compare('2.9', '>=')"
+        msg: "You must update Ansible to at least 2.9 to use this version of the AAF IdP Installer."
+
+- hosts: idp_servers
+  vars:
+    installer:
+      root: "{{ install_base }}/shibboleth-idp4-installer"
+      path: "{{ install_base }}/shibboleth-idp4-installer/build"
+      repository: "{{ install_base }}/shibboleth-idp4-installer/repository"
+  tasks:
+    - name: 'Add idp_behind_proxy to host_vars if it does not exist'
+      lineinfile:
+        path: '{{ installer.repository }}/host_vars/{{inventory_hostname}}'
+        line: "\n# Set to true is the IdP is behind a device where ssl has been off-loaded to.\nidp_behind_proxy: \"false\""
+        insertafter: EOF
+      when: idp_behind_proxy is not defined
+
+    - name: 'Add default_encryption to host_vars if it does not exist'
+      lineinfile:
+        path: '{{ installer.repository }}/host_vars/{{inventory_hostname}}'
+        line: "\n# Set default encryption [GCM | CBC].\ndefault_encryption: \"GCM\""
+        insertafter: EOF
+      when: default_encryption is not defined
+
+    - name: 'Add aaf_prod_env = true to host_vars if it does not exist and running in produstion'
+      lineinfile:
+        path: '{{ installer.repository }}/host_vars/{{inventory_hostname}}'
+        line: "\n# Are we running in the AAF Production environment\naaf_prod_env: \"true\""
+        insertafter: EOF
+      when: aaf_prod_env is not defined and metadata_url == "https://md.aaf.edu.au/aaf-metadata.xml"
+
+    - name: 'Set aaf_prod_envi = false to host_vars if it does not exist and running in Test'
+      lineinfile:
+        path: '{{ installer.repository }}/host_vars/{{inventory_hostname}}'
+        line: "\n# Are we running in the AAF Production environment\naaf_prod_env: \"false\""
+        insertafter: EOF
+      when: aaf_prod_env is not defined and metadata_url != "https://md.aaf.edu.au/aaf-metadata.xml"
+
+    - name: 'Add fticks_key_id value to hosts_vars if it does not exists'
+      lineinfile:
+        path: '{{ installer.repository }}/host_vars/{{inventory_hostname}}'
+        line: "\n# KEY ID provided by the AAF to enable FTicks logging\nfticks_key_id: \"\""
+        insertafter: EOF
+      when: fticks_key_id is not defined
+
+    - name: 'Add fticks_secret_key value to hosts_vars if it does not exists'
+      lineinfile:
+        path: '{{ installer.repository }}/host_vars/{{inventory_hostname}}'
+        line: "\n# SECRET KEY provided by the AAF to enable FTicks logging\nfticks_secret_key: \"\""
+        insertafter: EOF
+      when: fticks_key_id is not defined
+
+    - name: 'Check if F-TICKS config is already in logback.xml'
+      lineinfile:
+        path: '{{ installer.repository }}/assets/{{inventory_hostname}}/idp/conf/logback.xml'
+        regexp: 'fticks.properties'
+        state: absent
+      check_mode: yes
+      register: fticks
+
+    - name: 'Add loading of secrets.properties file to logback'
+      lineinfile:
+        path: '{{ installer.repository }}/assets/{{inventory_hostname}}/idp/conf/logback.xml'
+        insertafter: "<variable file="
+        firstmatch: yes
+        line: '<variable file="${idp.home}/credentials/secrets.properties" />'
+      when: not fticks.found
+
+    - name: 'Add loading of fticks.properties file to logback'
+      lineinfile:
+        path: '{{ installer.repository }}/assets/{{inventory_hostname}}/idp/conf/logback.xml'
+        insertafter: "<variable file="
+        firstmatch: yes
+        line: '<variable file="${idp.home}/conf/fticks.properties" />'
+      when: not fticks.found
+
+    - name: 'Add F-TICKS log file destination to logback.xml'
+      lineinfile:
+        path: '{{ installer.repository }}/assets/{{inventory_hostname}}/idp/conf/logback.xml'
+        insertafter: "</appender>"
+        line: |
+
+          <!-- F-TICKS log file destination -->
+          <appender name="IDP_FTICKS_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <File>${idp.home}/logs/idp-fticks.log</File>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+              <fileNamePattern>${idp.home}/logs/idp-fticks-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+              <maxHistory>180</maxHistory>
+            </rollingPolicy>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+              <charset>UTF-8</charset>
+              <Pattern>%msg%n</Pattern>
+            </encoder>
+          </appender>
+      when: not fticks.found
+
+    - name: 'Add fticks.salt to secrets.properties'
+      lineinfile:
+        path: '{{ installer.repository }}/assets/{{inventory_hostname}}/idp/credentials/secrets.properties'
+        insertafter: EOF
+        state: present
+        line: "fticks.salt = {{ '{{' }} fticks.salt {{ '}}' }}"
+
+    - name: 'Copy example files to assets only if they do not exist'
+      copy:
+        src: '{{ installer.repository }}/assets/idp.example.edu.dist/'
+        dest: '{{ installer.repository }}/assets/{{inventory_hostname}}'
+        force: no
