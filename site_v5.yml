@@ -3,14 +3,14 @@
   pre_tasks:
   vars:
     installer:
-      root: "{{ install_base }}/shibboleth-idp4-installer"
-      path: "{{ install_base }}/shibboleth-idp4-installer/build"
-      repository: "{{ install_base }}/shibboleth-idp4-installer/repository"
+      root: "{{ install_base }}/shibboleth-idp5-installer"
+      path: "{{ install_base }}/shibboleth-idp5-installer/build"
+      repository: "{{ install_base }}/shibboleth-idp5-installer/repository"
   tasks:
     - name: 'Verify Ansible meets AAF Installer version requirments.'
       assert:
-        that: "ansible_version.full is version_compare('2.9', '>=')"
-        msg: "You must update Ansible to at least 2.9 to use this version of the AAF IdP Installer."
+        that: "ansible_version.full is version_compare('2.14', '>=')"
+        msg: "You must update Ansible to at least 2.14 to use this version of the AAF IdP Installer."
 
     - name: 'Create local_conf.yml if it does not exist'
       copy:
@@ -28,12 +28,12 @@
     download:
       jetty:
         baseurl: "{{ aaf_binaries.baseurl }}/jetty"
-        version: 9.4.51.v20230217
-        sha256sum: 5c34101bfb56b90c546df9b04f7931822b8f9bed676e02dc8c7c91b02a7f38b7
+        version: 11.0.16
+        sha256sum: 88bd6ce28ff51ddb3437f7f35e0c0e32b88fb59346ede8b6b787eb1752265be1
       shib_idp:
         baseurl: "{{ aaf_binaries.baseurl }}/shibboleth"
-        version: 4.3.1
-        sha256sum: 04d08d324a5a5f016ca69b96dbab58abbb5b3e0045455cc15cf0d33ffd6742d5
+        version: 5.0.0
+        sha256sum: 7e782a0e82d01d724b4889700d4db603b17d9a912b21f7c0fcedf18527f9efff
       mysql_connector:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/Connector-J"
         version: 8.0.28
@@ -94,9 +94,9 @@
       slf4j_api:
          url: "{{ download.slf4j_api.baseurl }}/slf4j-api-{{ download.slf4j_api.version }}.jar"
     installer:
-      root: "{{ install_base }}/shibboleth-idp4-installer"
-      path: "{{ install_base }}/shibboleth-idp4-installer/build"
-      repository: "{{ install_base }}/shibboleth-idp4-installer/repository"
+      root: "{{ install_base }}/shibboleth-idp5-installer"
+      path: "{{ install_base }}/shibboleth-idp5-installer/build"
+      repository: "{{ install_base }}/shibboleth-idp5-installer/repository"
     jetty:
       root: "{{ install_base }}/jetty"
       home: "{{ install_base }}/jetty/jetty-distribution-{{ download.jetty.version }}"
