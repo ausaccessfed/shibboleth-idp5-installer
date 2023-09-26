@@ -1,7 +1,7 @@
 ---
 - name: 'Set shared facts'
   set_fact:
-    jetty_dist_archive_path='{{ installer.path }}/jetty-distribution-{{ download.jetty.version }}.tar.gz'
+    jetty_dist_archive_path='{{ installer.path }}/jetty-home-{{ download.jetty.version }}.tar.gz'
 
 - name: 'Create jetty user'
   user: name=jetty
