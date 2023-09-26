@@ -103,9 +103,9 @@ if [[ $response =~ ^(yes|y)$ ]]
 then
   if [[ $dry = true ]]
   then
-    ansible-playbook -i ansible_hosts site_v4.yml --force-handlers --extra-var="install_base=$the_install_base" --check
+    ansible-playbook -i ansible_hosts site_v5.yml --force-handlers --extra-var="install_base=$the_install_base" --check
   else
-    ansible-playbook -i ansible_hosts site_v4.yml --force-handlers --extra-var="install_base=$the_install_base"
+    ansible-playbook -i ansible_hosts site_v5.yml --force-handlers --extra-var="install_base=$the_install_base"
   fi
 else
   echo -e "\nNo changes made, exiting."
