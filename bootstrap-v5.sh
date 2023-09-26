@@ -356,7 +356,7 @@ function create_self_signed_certs {
 
 function run_ansible {
   pushd $LOCAL_REPO > /dev/null
-  ansible-playbook -i ansible_hosts site_v4.yml --force-handlers --extra-var="install_base=$INSTALL_BASE"
+  ansible-playbook -i ansible_hosts site_v5.yml --force-handlers --extra-var="install_base=$INSTALL_BASE"
   popd > /dev/null
 }
 
@@ -432,11 +432,11 @@ EOF
 }
 
 function prevent_duplicate_execution {
-  touch "/root/.lock-idp-bootstrap-v4"
+  touch "/root/.lock-idp-bootstrap-v5"
 }
 
 function duplicate_execution_warning {
-  if [ -e "/root/.lock-idp-bootstrap-v4" ]
+  if [ -e "/root/.lock-idp-bootstrap-v5" ]
   then
     echo -e "\n\n-----"
     echo "The bootstrap process has already been executed and could be destructive if run again."
@@ -476,7 +476,7 @@ function read_bootstrap_ini {
 
 function run_as_root {
     if [[ $USER != "root" ]]; then
-        echo "bootstrap-v4.sh MUST be run as root!"
+        echo "bootstrap-v5.sh MUST be run as root!"
         exit 1
     fi
 }
@@ -511,7 +511,7 @@ function get_cfg_section {
     if [[ $(declare -F cfg.section.$1) ]]; then
         cfg.section.$1
     else
-       echo "Section [$1] not found in bootstrap-v4.ini"
+       echo "Section [$1] not found in bootstrap-v5.ini"
        exit 1
     fi
 }
@@ -520,7 +520,7 @@ function bootstrap {
   setup_valid_oss
   run_as_root
   run_on_os
-  read_bootstrap_ini 'bootstrap-v4.ini'
+  read_bootstrap_ini 'bootstrap-v5.ini'
   get_cfg_section main
   get_cfg_section logging
   get_cfg_section ldap
