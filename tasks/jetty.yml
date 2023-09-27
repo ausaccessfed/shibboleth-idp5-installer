@@ -28,10 +28,11 @@
     chgrp -R jetty {{ jetty.home }}
     creates={{ jetty.home }}
 
-- name: 'Remove demo-base'
-  file:
-    path: '{{ jetty.home }}/demo-base'
-    state: absent
+# Does not appear to be part of Jetty any more?
+#- name: 'Remove demo-base'
+#  file:
+#    path: '{{ jetty.home }}/demo-base'
+#    state: absent
 
 - name: 'Symlink jetty to installed distribution'
   file:
@@ -54,15 +55,20 @@
     - '{{ jetty.base }}/credentials'
     - '{{ jetty.base }}/etc'
     - '{{ jetty.base }}/lib'
-    - '{{ jetty.base }}/lib/ext'
-    - '{{ jetty.base }}/lib/logback'
-    - '{{ jetty.base }}/lib/slf4j'
+#    - '{{ jetty.base }}/lib/ext'
+#    - '{{ jetty.base }}/lib/logback'
+#    - '{{ jetty.base }}/lib/slf4j'
     - '{{ jetty.base }}/modules'
     - '{{ jetty.base }}/resources'
     - '{{ jetty.base }}/start.d'
+    - '{{ jetty.base }}/static'
+    - '{{ jetty.base }}/tmp'
     - '{{ jetty.base }}/webapps'
-    - '{{ jetty.base }}/webapps/root'
-    - '{{ jetty.base }}/webapps/root/WEB-INF'
+#    - '{{ jetty.base }}/webapps/root'
+#    - '{{ jetty.base }}/webapps/root/WEB-INF'
+
+- name: 'Stop now'
+  meta: end_play
 
 # Files in jetty.base/etc
 

@@ -100,10 +100,10 @@
     jetty:
       root: "{{ install_base }}/jetty"
       home: "{{ install_base }}/jetty/jetty-home-{{ download.jetty.version }}"
-      base: "{{ install_base }}/shibboleth/jetty"
+      base: "{{ install_base }}/shibboleth/jetty11"
       current: "{{ install_base }}/jetty/current"
-      tmp_directory: "{{ install_base }}/shibboleth/jetty/tmp"
-      state_directory: "{{ install_base }}/shibboleth/jetty/tmp"
+      tmp_directory: "{{ jetty.base }}/tmp"
+      state_directory: "{{ install_base }}/shibboleth/jetty11/tmp"
       web_443_keystore_pw: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/web_443_keystore chars=letters,digits length=64') }}"
     shib_idp:
       home_root: "{{ install_base }}/shibboleth/shibboleth-idp"
