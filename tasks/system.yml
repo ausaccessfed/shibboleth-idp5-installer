@@ -21,7 +21,7 @@
 - name: 'Install required packages (Version 7 and 8)'
   yum:
     name:
-      - java-11-openjdk-devel
+      - java-17-openjdk-devel
       - mariadb-devel
       - mariadb
       - mariadb-server
@@ -34,7 +34,7 @@
 - name: 'Install required packages (Version 9)'
   yum:
     name:
-      - java-11-openjdk-devel
+      - java-17-openjdk-devel
       - mariadb-devel
       - mariadb
       - mariadb-server
@@ -47,7 +47,7 @@
 - name: 'Install required packages - apt'
   apt:
     name:
-      - openjdk-11-jdk
+      - openjdk-17-jdk
       - mariadb-server
       - chrony
     state: present
