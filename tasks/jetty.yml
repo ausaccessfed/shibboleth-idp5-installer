@@ -55,36 +55,24 @@
     - '{{ jetty.base }}/credentials'
     - '{{ jetty.base }}/etc'
     - '{{ jetty.base }}/lib'
-#    - '{{ jetty.base }}/lib/ext'
-#    - '{{ jetty.base }}/lib/logback'
+    - '{{ jetty.base }}/lib/ext'
+    - '{{ jetty.base }}/lib/logback'
 #    - '{{ jetty.base }}/lib/slf4j'
     - '{{ jetty.base }}/modules'
     - '{{ jetty.base }}/resources'
     - '{{ jetty.base }}/start.d'
-    - '{{ jetty.base }}/static'
+#    - '{{ jetty.base }}/static'
     - '{{ jetty.base }}/tmp'
     - '{{ jetty.base }}/webapps'
 #    - '{{ jetty.base }}/webapps/root'
 #    - '{{ jetty.base }}/webapps/root/WEB-INF'
 
-- name: 'Stop now'
-  meta: end_play
-
 # Files in jetty.base/etc
 
 - name: 'Create Logback access configuration'
   template:
-    dest: '{{ jetty.base }}/etc/jetty-logback-access.xml'
-    src: 'templates/jetty/jetty-logback-access.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-- name: 'Create SSL Tweak configuration'
-  template:
-    dest: '{{ jetty.base }}/etc/tweak-ssl.xml'
-    src: 'templates/jetty/tweak-ssl.xml'
+    dest: '{{ jetty.base }}/etc/jetty-requestlog.xml'
+    src: 'templates/jetty/etc/jetty-requestlog.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -93,7 +81,7 @@
 - name: 'Set idp-backchannel.xml when backchannel enabled'
   template:
     dest: '{{ jetty.base }}/etc/idp-backchannel.xml'
-    src: 'templates/jetty/idp-backchannel.xml'
+    src: 'templates/jetty/etc/idp-backchannel.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -105,6 +93,28 @@
     path: '{{ jetty.base }}/etc/idp-backchannel.xml'
     state: absent
   when: enable_backchannel is defined and enable_backchannel=="false"
+
+- name: 'Set jetty-ssl-context.xml'
+  template:
+    dest: '{{ jetty.base }}/etc/jetty-ssl-context.xml'
+    src: 'templates/jetty/etc/jetty-ssl-context.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set tweak-ssl.xml'
+  template:
+    dest: '{{ jetty.base }}/etc/tweak-ssl.xml'
+    src: 'templates/jetty/etc/tweak-ssl.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Stop now'
+  meta: end_play
+
 
 # Files in jetty.base/modules
 
