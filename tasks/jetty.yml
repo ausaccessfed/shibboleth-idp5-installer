@@ -139,28 +139,19 @@
     state: absent
   when: enable_backchannel is defined and enable_backchannel=="false"
 
-- name: 'Stop now'
-  meta: end_play
-
 # Files in jetty.base/resources
-
-- name: 'Set logback-access configuration'
-  template:
-    dest: '{{ jetty.base }}/resources/logback-access.xml'
-    src: 'templates/jetty/logback-access.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
 
 - name: 'Set logback configuration'
   template:
     dest: '{{ jetty.base }}/resources/logback.xml'
-    src: 'templates/jetty/logback.xml'
+    src: 'templates/jetty/resources/logback.xml'
     owner: root
     group: jetty
     mode: 0640
     backup: yes
+
+- name: 'Stop now'
+  meta: end_play
 
 # Files in jetty.base/start.d
 
