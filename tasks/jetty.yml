@@ -112,25 +112,12 @@
     mode: 0640
     backup: yes
 
-- name: 'Stop now'
-  meta: end_play
-
-
 # Files in jetty.base/modules
 
 - name: 'Set http.mod'
   template:
-    dest: '{{ jetty.base }}/modules/http.mod'
-    src: 'templates/jetty/http.mod'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-- name: 'Set idp.mod'
-  template:
     dest: '{{ jetty.base }}/modules/idp.mod'
-    src: 'templates/jetty/idp.mod'
+    src: 'templates/jetty/modules/idp.mod'
     owner: root
     group: jetty
     mode: 0640
@@ -139,7 +126,7 @@
 - name: 'Set idp-backchannel.mod when backchannel enabled'
   template:
     dest: '{{ jetty.base }}/modules/idp-backchannel.mod'
-    src: 'templates/jetty/idp-backchannel.mod'
+    src: 'templates/jetty/modules/idp-backchannel.mod'
     owner: root
     group: jetty
     mode: 0640
@@ -151,6 +138,9 @@
     path: '{{ jetty.base }}/modules/idp-backchannel.mod'
     state: absent
   when: enable_backchannel is defined and enable_backchannel=="false"
+
+- name: 'Stop now'
+  meta: end_play
 
 # Files in jetty.base/resources
 
