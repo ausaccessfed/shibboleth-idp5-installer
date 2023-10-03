@@ -46,66 +46,23 @@
         baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf_shib_ext"
         version: 2.0.0
         sha256sum: 5244b2c2565ed40fe66ee8d551ad5e5f1aac0c26c06eace521658792297d464c
+      jcl_over_slf4j:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/jcl-over-slf4j"
+        version: 2.0.5
+        sha256sum: 95fa90eb540df07b6a2fa70f3613761180d07c9c8f1c299e3f9a5c943313a2d6
+      logback-classic:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback-classic"
+        version: 1.3.6
+        sha256sum: c4958cc76d6197ad7ad461fa7be549e3098267d6ff98c831c672d3a4161f5b22
+      logback-core:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback-core"
+        version: 1.3.6
+        sha256sum: 671500d3e0f998aeeb412bcd9088119ef8a7013a4d708d356bd4b0afb3c02f64
       keystore:
         baseurl: "{{ aaf_binaries.baseurl }}/keystore"
         version: "Unknown"
         sha256sum: ae4185b2f0bb1af00abc6a4502fbfbdc6a90aec65c7bcee08e37a1bc20de5ac1 
-      logback_access:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
-        version: 1.2.10
-        sha256sum: 8462a7d983a10700c2cc559b7df4254f3a21c2611c32476cb5a6702ce51524c9
-      logback_classic:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
-        version: 1.2.10
-        sha256sum: 3160ae988af82c8bf3024ddbe034a82da98bb186fd09e76c50543c5b9da5cc5e
-      logback_core:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
-        version: 1.2.10
-        sha256sum: ba51a3fe56691f9dd7fe742e4a73c3ab4aaaa32202c73409ba56f18687399a08
-      jcl_over_slf4j:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
-        version: 1.7.33
-        sha256sum: a2c0b70507e6f769ea571608fd9b728329c5c723af37c3b772127c58fb593dfc
-      slf4j_api:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
-        version: 1.7.33
-        sha256sum: 336811855ee97fcd8413343dc42f4d26362502860e8a9193e4db305e3e8ef80a
-    urls:
-      jetty:
-        url: "{{ download.jetty.baseurl }}/jetty-home-{{ download.jetty.version }}.tar.gz"
       shib_idp:
-        url: "{{ download.shib_idp.baseurl }}/shibboleth-identity-provider-{{ download.shib_idp.version }}.tar.gz"
-      mysql_connector:
-        url: "{{ download.mysql_connector.baseurl }}/mysql-connector-java-{{ download.mysql_connector.version }}.tar.gz"
-      dta_ssl:
-        url: "{{ download.dta_ssl.baseurl }}/jetty94-dta-ssl-{{download.dta_ssl.version}}.jar"
-      aaf_shib_ext:
-        url: "{{ download.aaf_shib_ext.baseurl }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar"
-      keystore:
-        url: "{{ download.keystore.baseurl }}/keystore"
-      logback_access:
-         url: "{{ download.logback_access.baseurl }}/logback-access-{{ download.logback_access.version }}.jar"
-      logback_classic:
-         url: "{{ download.logback_classic.baseurl }}/logback-classic-{{ download.logback_classic.version }}.jar"
-      logback_core:
-         url: "{{ download.logback_core.baseurl }}/logback-core-{{ download.logback_core.version }}.jar"
-      jcl_over_slf4j:
-         url: "{{ download.jcl_over_slf4j.baseurl }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar"
-      slf4j_api:
-         url: "{{ download.slf4j_api.baseurl }}/slf4j-api-{{ download.slf4j_api.version }}.jar"
-    installer:
-      root: "{{ install_base }}/shibboleth-idp5-installer"
-      path: "{{ install_base }}/shibboleth-idp5-installer/build"
-      repository: "{{ install_base }}/shibboleth-idp5-installer/repository"
-    jetty:
-      root: "{{ install_base }}/jetty"
-      home: "{{ install_base }}/jetty/jetty-home-{{ download.jetty.version }}"
-      base: "{{ install_base }}/shibboleth/jetty11"
-      current: "{{ install_base }}/jetty/current"
-      tmp_directory: "{{ install_base }}/shibboleth/jetty11/tmp"
-      state_directory: "{{ install_base }}/shibboleth/jetty11/tmp"
-      web_443_keystore_pw: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/web_443_keystore chars=letters,digits length=64') }}"
-    shib_idp:
       home_root: "{{ install_base }}/shibboleth/shibboleth-idp"
       home: "{{ install_base }}/shibboleth/shibboleth-idp/shibboleth-idp-{{ download.shib_idp.version }}"
       libs: "{{ install_base }}/shibboleth/libs"

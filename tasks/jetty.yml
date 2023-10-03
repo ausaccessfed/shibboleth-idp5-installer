@@ -150,15 +150,21 @@
     mode: 0640
     backup: yes
 
-- name: 'Stop now'
-  meta: end_play
-
 # Files in jetty.base/start.d
 
 - name: 'Set idp.ini configuration'
   template:
     dest: '{{ jetty.base }}/start.d/idp.ini'
-    src: 'templates/jetty/idp.ini'
+    src: 'templates/jetty/start.d/idp.ini'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set idp-system.ini configuration'
+  template:
+    dest: '{{ jetty.base }}/start.d/idp-system.ini'
+    src: 'templates/jetty/start.d/idp-system.ini'
     owner: root
     group: jetty
     mode: 0640
@@ -167,7 +173,7 @@
 - name: 'Set idp-backchannel.ini when backchannel enabled'
   template:
     dest: '{{ jetty.base }}/start.d/idp-backchannel.ini'
-    src: 'templates/jetty/idp-backchannel.ini'
+    src: 'templates/jetty/start.d/idp-backchannel.ini'
     owner: root
     group: jetty
     mode: 0640
@@ -179,6 +185,9 @@
     path: '{{ jetty.base }}/start.d/idp-backchannel.ini'
     state: absent
   when: enable_backchannel is defined and enable_backchannel=="false"
+
+- name: 'Stop now'
+  meta: end_play
 
 # Files in jetty.base/webapps
 
