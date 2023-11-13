@@ -56,7 +56,7 @@
     - '{{ jetty.base }}/etc'
     - '{{ jetty.base }}/lib'
     - '{{ jetty.base }}/lib/ext'
-    - '{{ jetty.base }}/lib/logback'
+    - '{{ jetty.base }}/lib/logging'
 #    - '{{ jetty.base }}/lib/slf4j'
     - '{{ jetty.base }}/modules'
     - '{{ jetty.base }}/resources'
