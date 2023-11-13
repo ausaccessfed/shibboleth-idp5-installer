@@ -186,15 +186,12 @@
     state: absent
   when: enable_backchannel is defined and enable_backchannel=="false"
 
-- name: 'Stop now'
-  meta: end_play
-
 # Files in jetty.base/webapps
 
 - name: 'Set idp.xml'
   template:
     dest: '{{ jetty.base }}/webapps/idp.xml'
-    src: 'templates/jetty/idp.xml'
+    src: 'templates/jetty/webapps/idp.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -203,11 +200,14 @@
 - name: 'Set static.xml'
   template:
     dest: '{{ jetty.base }}/webapps/static.xml'
-    src: 'templates/jetty/static.xml'
+    src: 'templates/jetty/webapps/static.xml'
     owner: root
     group: jetty
     mode: 0640
     backup: yes
+
+- name: 'Stop now'
+  meta: end_play
 
 # Files in jetty.base
 
