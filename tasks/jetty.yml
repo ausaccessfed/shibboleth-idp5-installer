@@ -312,10 +312,8 @@
   with_items:
   - '{{ jetty.home }}'
   - '{{ jetty.home }}/modules'
-  - '{{ jetty.home }}/resources'
   - '{{ jetty.home }}/etc'
   - '{{ jetty.home }}/lib'
-  - '{{ jetty.home }}/webapps'
   - '{{ jetty.home }}/bin'
 
 - name: 'Set executable files for jetty'
