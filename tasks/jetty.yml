@@ -28,12 +28,6 @@
     chgrp -R jetty {{ jetty.home }}
     creates={{ jetty.home }}
 
-# Does not appear to be part of Jetty any more?
-#- name: 'Remove demo-base'
-#  file:
-#    path: '{{ jetty.home }}/demo-base'
-#    state: absent
-
 - name: 'Symlink jetty to installed distribution'
   file:
     name: '{{ jetty.current }}'
@@ -57,15 +51,13 @@
     - '{{ jetty.base }}/lib'
     - '{{ jetty.base }}/lib/ext'
     - '{{ jetty.base }}/lib/logging'
-#    - '{{ jetty.base }}/lib/slf4j'
     - '{{ jetty.base }}/modules'
     - '{{ jetty.base }}/resources'
     - '{{ jetty.base }}/start.d'
-    - '{{ jetty.base }}/static'
-    - '{{ jetty.base }}/static/WEB-INF'
     - '{{ jetty.base }}/tmp'
     - '{{ jetty.base }}/webapps'
-#    - '{{ jetty.base }}/webapps/root'
+    - '{{ jetty.base }}/webapps/root'
+    - '{{ jetty.base }}/webapps/root/WEB-INF'
 
 # Files in jetty.base/etc
 
@@ -197,41 +189,20 @@
     mode: 0640
     backup: yes
 
-- name: 'Set static.xml'
-  template:
-    dest: '{{ jetty.base }}/webapps/static.xml'
-    src: 'templates/jetty/webapps/static.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-### No needed
-# Files in jetty.base
-#
-#- name: 'Set start.ini'
-#  template:
-#    dest: '{{ jetty.base }}/start.ini'
-#    src: 'templates/jetty/start.ini'
-#    owner: root
-#    group: jetty
-#    mode: 0640
-#    backup: yes
-
-# Files in jetty.base/static
+# Files in jetty.base/webapps/root
 
 - name: 'Set 404'
   template:
-    dest: '{{ jetty.base }}/static/404'
-    src: 'templates/jetty/static/404'
+    dest: '{{ jetty.base }}/webapps/root/404'
+    src: 'templates/jetty/webapps/root/404'
     owner: root
     group: jetty
     mode: 0640
 
 - name: 'Set index.html'
   template:
-    dest: '{{ jetty.base }}/static/index.html'
-    src: 'templates/jetty/static/index.html'
+    dest: '{{ jetty.base }}/webapps/root/index.html'
+    src: 'templates/jetty/webapps/root/index.html'
     owner: root
     group: jetty
     mode: 0640
@@ -239,7 +210,7 @@
 - name: 'Add favicon.ico to site'
   copy:
     src: 'assets/{{ inventory_hostname }}/jetty/root/favicon.ico'
-    dest: '{{ jetty.base }}/static/favicon.ico'
+    dest: '{{ jetty.base }}/webapps/root/favicon.ico'
     owner: jetty
     group: jetty
     mode: 0640
@@ -247,23 +218,23 @@
 - name: 'Add favicon-mobile.ico to site'
   copy:
     src: 'assets/{{ inventory_hostname }}/jetty/root/favicon-mobile.ico'
-    dest: '{{ jetty.base }}/static/favicon-mobile.ico'
+    dest: '{{ jetty.base }}/webapps/root/favicon-mobile.ico'
     owner: jetty
     group: jetty
     mode: 0640
 
 - name: 'Add robots.txt to site'
   copy:
-    src: 'templates/jetty/static/robots.txt'
-    dest: '{{ jetty.base }}/static/robots.txt'
+    src: 'templates/jetty/webapps/root/robots.txt'
+    dest: '{{ jetty.base }}/webapps/root/robots.txt'
     owner: jetty
     group: jetty
     mode: 0640
 
 - name: 'Set web.xml'
   template:
-    dest: '{{ jetty.base }}/static/WEB-INF/web.xml'
-    src: 'templates/jetty/static/WEB-INF/web.xml'
+    dest: '{{ jetty.base }}/webapps/root/WEB-INF/web.xml'
+    src: 'templates/jetty/webapps/root/WEB-INF/web.xml'
     owner: root
     group: jetty
     mode: 0640
