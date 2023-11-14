@@ -268,9 +268,6 @@
     group: jetty
     mode: 0640
 
-- name: 'Stop now'
-  meta: end_play
-
 # Jetty default in /etc/default
 
 - name: 'Set /etc/default/jetty'
@@ -360,3 +357,7 @@
     mode: 0640
     owner: root
     group: jetty
+
+- name: 'Stop now'
+  meta: end_play
+
