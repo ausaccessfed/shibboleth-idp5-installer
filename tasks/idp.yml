@@ -32,6 +32,9 @@
     chgrp -R jetty {{ shib_idp.src }}
     creates={{ shib_idp.src }}
 
+- name: 'Stop now'
+  meta: end_play
+
 - name: 'Set Shibboleth IdP source directory permissions'
   file:
     name: '{{ shib_idp.src }}'

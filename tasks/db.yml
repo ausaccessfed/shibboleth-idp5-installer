@@ -94,7 +94,3 @@
 
 - name: 'Import Shibboleth IdP StorageRecords schema'
   mysql_db: 'state=import name={{ db.name }} target={{ installer.path }}/tb_storage_records_ddl.sql'
-
-- name: 'Stop now'
-  meta: end_play
-
