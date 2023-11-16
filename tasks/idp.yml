@@ -48,10 +48,18 @@
     group: root
     mode: 0700
 
+- name: 'Create installer properties - backup'
+  template:
+    dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties.backup'
+    src: 'templates/idp/install.properties'
+    owner: root
+    group: root
+    mode: 0700
+
 - name: 'Run IdP install'
   shell: |
     umask 0022
-    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
   args:
     creates: '{{ shib_idp.home }}'
 
