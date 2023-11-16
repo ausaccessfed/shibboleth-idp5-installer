@@ -51,7 +51,7 @@
         version: "Unknown"
         sha256sum: ae4185b2f0bb1af00abc6a4502fbfbdc6a90aec65c7bcee08e37a1bc20de5ac1 
       jcl_over_slf4j:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/jcl-over-slf4j"
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
         version: 2.0.5
         sha256sum: 95fa90eb540df07b6a2fa70f3613761180d07c9c8f1c299e3f9a5c943313a2d6
       logback_classic:
