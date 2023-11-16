@@ -62,6 +62,16 @@
         baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
         version: 1.3.6
         sha256sum: 671500d3e0f998aeeb412bcd9088119ef8a7013a4d708d356bd4b0afb3c02f64
+      plugins:
+        baseurl: "{{ aaf_binaries.baseurl }}/plugins"
+        nashorn:
+          name: "net.shibboleth.idp.plugin.nashorn"
+          version: 2.0.0
+          sha256sum: 6de49acf3a53fbec8698f1e985a0b7b2d16605d1a1a84f8ebf65a6476ba85f2a
+        storage_jdbc:
+          name: "net.shibboleth.plugin.storage.jdbc"
+          version: 2.0.0
+          sha256sum: abac557a582c344c990b5f270c3d84fbe93f8f93d52894057bf50ed037b476bd
     urls:
       jetty:
         url: "{{ download.jetty.baseurl }}/jetty-home-{{ download.jetty.version }}.tar.gz"
@@ -76,11 +86,17 @@
       keystore:
         url: "{{ download.keystore.baseurl }}/keystore"
       logback_classic:
-         url: "{{ download.logback_classic.baseurl }}/logback-classic-{{ download.logback_classic.version }}.jar"
+        url: "{{ download.logback_classic.baseurl }}/logback-classic-{{ download.logback_classic.version }}.jar"
       logback_core:
-         url: "{{ download.logback_core.baseurl }}/logback-core-{{ download.logback_core.version }}.jar"
+        url: "{{ download.logback_core.baseurl }}/logback-core-{{ download.logback_core.version }}.jar"
       jcl_over_slf4j:
-         url: "{{ download.jcl_over_slf4j.baseurl }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar"
+        url: "{{ download.jcl_over_slf4j.baseurl }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar"
+      plugins:
+        nashorn:
+          url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/truststore.asc.{{ download.plugin.nashorn.version }}"
+        storage_jdbc:
+          url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/truststore.asc.{{ download.plugin.storage_jdbc.version }}"
+
     installer:
       root: "{{ install_base }}/shibboleth-idp5-installer"
       path: "{{ install_base }}/shibboleth-idp5-installer/build"
