@@ -71,8 +71,9 @@
     group: jetty
     mode: 0750
   with_items:
-    - '{{ jetty.base }}/credentials/{{ download.plugins.nashorn.name }}'
-    - '{{ jetty.base }}/credentials/{{ download.plugins.storage_jdbc.name }}'
+    - '{{ shid_idp.home }}/plugins '
+    - '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}'
+    - '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}'
 
 - name: 'Keys for plugings - nashorn'
   get_url:
@@ -89,6 +90,20 @@
     owner: root
     group: jetty
     mode: 0640
+
+- name: 'Install plugin - nashorn'
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
+
+- name: 'Install plugin - storage.jdbc'
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
 
 - name: 'Stop now'
   meta: end_play
