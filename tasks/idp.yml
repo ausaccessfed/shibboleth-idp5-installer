@@ -63,15 +63,35 @@
   args:
     creates: '{{ shib_idp.home }}'
 
+- name: 'Directories for plugin keys'
+  file:
+    name: '{{ item }}'
+    state: directory
+    owner: root
+    group: jetty
+    mode: 0750
+  with_items:
+    - '{{ jetty.base }}/credentials/{{ download.plugins.nashorn.name }}'
+    - '{{ jetty.base }}/credentials/{{ download.plugins.storage_jdbc.name }}'
+
+- name: 'Keys for plugings - nashorn'
+  get_url:
+    url: '{{ urls.plugins.nashorn.url }}'
+    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Keys for plugings - storage.jdbc'
+  get_url:
+    url: '{{ urls.plugins.storage_jdbc.url }}'
+    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}'
+    owner: root
+    group: jetty
+    mode: 0640
+
 - name: 'Stop now'
   meta: end_play
-
-- name: 'Enable the Consent module'
-  shell: |
-    umask 0022
-    {{ shib_idp.home }}/bin/module.sh -e idp.intercept.Consent
-  args:
-    creates: '{{ shib_idp.home }}/views/intercept'
 
 - include_tasks: libs.yml
 
