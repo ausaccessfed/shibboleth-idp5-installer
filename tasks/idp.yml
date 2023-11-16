@@ -77,7 +77,7 @@
 - name: 'Keys for plugings - nashorn'
   get_url:
     url: '{{ urls.plugins.nashorn.url }}'
-    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}'
+    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}/truststore.asc'
     owner: root
     group: jetty
     mode: 0640
@@ -85,7 +85,7 @@
 - name: 'Keys for plugings - storage.jdbc'
   get_url:
     url: '{{ urls.plugins.storage_jdbc.url }}'
-    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}'
+    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}/truststore.asc'
     owner: root
     group: jetty
     mode: 0640
