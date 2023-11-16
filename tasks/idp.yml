@@ -32,9 +32,6 @@
     chgrp -R jetty {{ shib_idp.src }}
     creates={{ shib_idp.src }}
 
-- name: 'Stop now'
-  meta: end_play
-
 - name: 'Set Shibboleth IdP source directory permissions'
   file:
     name: '{{ shib_idp.src }}'
@@ -66,6 +63,9 @@
     {{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.sh
   args:
     creates: '{{ shib_idp.home }}'
+
+- name: 'Stop now'
+  meta: end_play
 
 - name: 'Enable the Consent module'
   shell: |
