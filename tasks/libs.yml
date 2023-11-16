@@ -22,21 +22,6 @@
     src: '{{ shib_idp.libs }}/jetty94-dta-ssl-{{ download.dta_ssl.version }}.jar'
     state: link
 
-- name: 'Install logback-access'
-  get_url:
-    url: '{{ urls.logback_access.url }}'
-    dest: '{{ shib_idp.libs }}/logback-access-{{ download.logback_access.version }}.jar'
-    checksum: 'sha256:{{ download.logback_access.sha256sum }}'
-    owner: root
-    group: jetty
-    mode: 0640
-
-- name: 'Link to logback-access library'
-  file:
-    name: '{{ jetty.base }}/lib/logback/logback-access.jar'
-    src: '{{ shib_idp.libs }}/logback-access-{{ download.logback_access.version }}.jar'
-    state: link
-
 - name: 'Install logback-classic'
   get_url:
     url: '{{ urls.logback_classic.url }}'
@@ -82,21 +67,6 @@
     src: '{{ shib_idp.libs }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar'
     state: link
 
-- name: 'Install slf4j-api'
-  get_url:
-    url: '{{ urls.slf4j_api.url }}'
-    dest: '{{ shib_idp.libs }}/slf4j-api-{{ download.slf4j_api.version }}.jar'
-    checksum: 'sha256:{{ download.slf4j_api.sha256sum }}'
-    owner: root
-    group: jetty
-    mode: 0640
-
-- name: 'Link to slf4j-api library'
-  file:
-    name: '{{ jetty.base }}/lib/logback/slf4j-api.jar'
-    src: '{{ shib_idp.libs }}/slf4j-api-{{ download.slf4j_api.version }}.jar'
-    state: link
-
 - name: 'Install aaf-shib-ext library'
   get_url:
     url: '{{ urls.aaf_shib_ext.url }}'
@@ -108,7 +78,7 @@
 
 - name: 'Link to aaf-shib-ext library'
   file:
-    name: '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib/aaf-shib-ext.jar'
+    name: '{{ jetty.base }}/lib/ext/aaf-shib-ext.jar'
     src: '{{ shib_idp.libs }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar'
     state: link
 

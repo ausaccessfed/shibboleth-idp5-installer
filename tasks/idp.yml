@@ -71,7 +71,7 @@
     group: jetty
     mode: 0750
   with_items:
-    - '{{ shid_idp.home }}/plugins '
+    - '{{ shib_idp.home }}/plugins'
     - '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}'
     - '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}'
 
@@ -105,10 +105,10 @@
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
 
+- include_tasks: libs.yml
+
 - name: 'Stop now'
   meta: end_play
-
-- include_tasks: libs.yml
 
 - name: 'Set customised messages.properties'
   template:
