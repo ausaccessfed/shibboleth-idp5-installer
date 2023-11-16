@@ -107,9 +107,6 @@
 
 - include_tasks: libs.yml
 
-- name: 'Stop now'
-  meta: end_play
-
 - name: 'Set customised messages.properties'
   template:
     dest: '{{ shib_idp.home }}/messages/messages.properties'
@@ -127,14 +124,6 @@
     group: jetty
     mode: 0640
     backup: no 
-
-- name: 'Remove "dummy" IdP branding'
-  file:
-    path: '{{ shib_idp.home }}/edit-webapp/images/{{ item }}'
-    state: absent
-  with_items:
-    - dummylogo-mobile.png
-    - dummylogo.png
 
 - name: 'Copy customised IdP branding (images)'
   copy:
@@ -162,6 +151,9 @@
     group: jetty
     mode: 0640
     backup: no
+
+- name: 'Stop now'
+  meta: end_play
 
 - name: 'Set customised views'
   template:
