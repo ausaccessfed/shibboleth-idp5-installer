@@ -40,15 +40,6 @@
     group: jetty
     mode: 0750
 
-# Wraps the Shibboleth IdP installer
-- name: 'Create installer script'
-  template:
-    dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.sh'
-    src: 'templates/idp/install.sh'
-    owner: root
-    group: root
-    mode: 0700
-
 - name: 'Create installer properties'
   template:
     dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
@@ -60,7 +51,7 @@
 - name: 'Run IdP install'
   shell: |
     umask 0022
-    {{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.sh
+    {{ shib_idp.src_root }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
   args:
     creates: '{{ shib_idp.home }}'
 
