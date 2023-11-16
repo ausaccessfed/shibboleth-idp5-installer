@@ -152,9 +152,6 @@
     mode: 0640
     backup: no
 
-- name: 'Stop now'
-  meta: end_play
-
 - name: 'Set customised views'
   template:
     dest: '{{ shib_idp.home }}/views/{{ item }}'
@@ -167,20 +164,19 @@
     - admin/unlock-keys.vm
     - client-storage/client-storage-read.vm
     - client-storage/client-storage-write.vm
-    - duo.vm
     - error.vm
+    - intercept/attribute-release.vm
+    - intercept/terms-of-use.vm
     - login-error.vm
     - login.vm
     - logout-complete.vm
     - logout-propagate.vm
     - logout.vm
-    - user-prefs.js
-    - user-prefs.vm
 
-- name: 'Re-run IdP install.sh to install aaf-shib-ext and IdP branding'
+- name: "Rebuild the idp.war file"
   shell: |
     umask 0022
-    {{ shib_idp.src_root }}/install-{{ download.shib_idp.version}}.sh
+    {{ shib_idp.home }}/bin/build.sh 
 
 - name: 'Symlink IdP log directory'
   file:
@@ -208,6 +204,9 @@
     owner: root
     group: jetty
     force: yes
+
+- name: 'Stop now'
+  meta: end_play
 
 - name: 'Set access control'
   template:
