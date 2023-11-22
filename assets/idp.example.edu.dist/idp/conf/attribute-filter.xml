@@ -14,6 +14,14 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
 
+
+    <!-- Release home org signifier to everybody. -->
+    <AttributeFilterPolicy id="alwaysRelease">
+        <PolicyRequirementRule xsi:type="ANY" />
+        
+        <AttributeRule attributeID="schacHomeOrganization" permitAny="true" />
+    </AttributeFilterPolicy>
+
     <!--
     Example rule relying on a locally applied tag in metadata to trigger attribute
     release of some specific attributes. Add additional attributes as desired.

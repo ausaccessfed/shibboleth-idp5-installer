@@ -143,21 +143,6 @@
        <InputDataConnector ref="ldap" attributeNames="sn" />
     </AttributeDefinition>
 
-    <!-- schacHomeOrganisation -->
-    <AttributeDefinition id="schacHomeOrganization" xsi:type="Simple">
-        <InputDataConnector ref="staticAttributes" attributeNames="schacHomeOrganization" />
-    </AttributeDefinition>
-
-    <!-- schacHomeOrganisationType -->
-    <AttributeDefinition id="schacHomeOrganizationType" xsi:type="Simple">
-        <InputDataConnector ref="staticAttributes" attributeNames="schacHomeOrganizationType" />
-    </AttributeDefinition>
-
-    <!-- o (Organisation) -->
-    <AttributeDefinition xsi:type="Simple" id="o">
-        <InputDataConnector ref="staticAttributes" attributeNames="o" />
-    </AttributeDefinition>
-
     <!-- eduPersonOrcid -->
     <AttributeDefinition id="eduPersonOrcid" xsi:type="Simple">
        <InputDataConnector ref="ldap" attributeNames="eduPersonOrcid" />
@@ -219,7 +204,8 @@
     <!--      Data Connectors                       -->
     <!-- ========================================== -->
 
-    <DataConnector id="staticAttributes" xsi:type="Static">
+    <DataConnector id="staticAttributes" xsi:type="Static" 
+                   exportAttributes="schacHomeOrganization schacHomeOrganizationType o">
         <Attribute id="schacHomeOrganization">
             <Value>{{ home_organisation }}</Value>
         </Attribute>
@@ -228,10 +214,6 @@
         </Attribute>
         <Attribute id="o">
             <Value>{{ organisation_name }}</Value>
-        </Attribute>
-        <Attribute id="eduPersonAssurance">
-            <Value>urn:mace:aaf.edu.au:iap:id:1</Value>
-            <Value>urn:mace:aaf.edu.au:iap:authn:1</Value>
         </Attribute>
     </DataConnector>
 
