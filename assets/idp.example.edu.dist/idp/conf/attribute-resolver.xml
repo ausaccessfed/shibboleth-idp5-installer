@@ -87,11 +87,15 @@
     </AttributeDefinition>
 
     <!-- eduPersonAssurance -->
-    <AttributeDefinition id="eduPersonAssurance" xsi:type="Simple">
-        <InputDataConnector ref="staticAttributes" attributeNames="eduPersonAssurance" />
+    <AttributeDefinition id="eduPersonAssurance" xsi:type="ScriptedAttribute">
+        <InputDataConnector ref="ldap" attributeNames="eduPersonAssurance" />
+        <Script><![CDATA[
+        
+          // TO DO
+       
+        ]]></Script>
     </AttributeDefinition>
 
-    
     <!-- eduPersonEntitlement -->
     <AttributeDefinition id="eduPersonEntitlement" xsi:type="Simple">
        <InputDataConnector ref="ldap" attributeNames="eduPersonEntitlement" />
@@ -254,7 +258,6 @@
         <aaf:BeanManagedConnection>shibboleth.JPAStorageService.DataSource</aaf:BeanManagedConnection>
     </DataConnector>
 
-{% if source_persistent_id != "" %}
     <DataConnector id="computed" xsi:type="ComputedId"
             generatedAttributeID="computedId"
             salt="%{idp.persistentId.salt}"
@@ -263,7 +266,5 @@
 
         <InputDataConnector ref="ldap" attributeNames="%{idp.newPersistentId.sourceAttribute}" />
     </DataConnector>
-{% endif %}
-
 
 </AttributeResolver>
