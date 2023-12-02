@@ -33,7 +33,7 @@
 
 - name: 'Link to logback-classic library'
   file:
-    name: '{{ jetty.base }}/lib/logging/logback-classic.jar'
+    name: '{{ jetty.base }}/lib/logging/logback-classic-{{ download.logback_classic.version }}.jar'
     src: '{{ shib_idp.libs }}/logback-classic-{{ download.logback_classic.version }}.jar'
     state: link
 
@@ -48,7 +48,7 @@
 
 - name: 'Link to logback-core library'
   file:
-    name: '{{ jetty.base }}/lib/logging/logback-core.jar'
+    name: '{{ jetty.base }}/lib/logging/logback-core-{{ download.logback_core.version }}.jar'
     src: '{{ shib_idp.libs }}/logback-core-{{ download.logback_core.version }}.jar'
     state: link
 
@@ -63,7 +63,7 @@
 
 - name: 'Link to jcl-over-slf4j library'
   file:
-    name: '{{ jetty.base }}/lib/logging/jcl-over-slf4j.jar'
+    name: '{{ jetty.base }}/lib/logging/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar'
     src: '{{ shib_idp.libs }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar'
     state: link
 
