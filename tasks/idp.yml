@@ -205,9 +205,6 @@
     group: jetty
     force: yes
 
-- name: 'Stop now'
-  meta: end_play
-
 - name: 'Set access control'
   template:
     src: 'assets/{{inventory_hostname}}/idp/conf/access-control.xml'
@@ -217,6 +214,9 @@
     mode: 0640
     backup: yes
  
+- name: 'Stop now'
+  meta: end_play
+
 - name: 'Set attribute filter'
   template:
     src: 'assets/{{inventory_hostname}}/idp/conf/attribute-filter.xml'
