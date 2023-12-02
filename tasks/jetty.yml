@@ -144,6 +144,15 @@
 
 # Files in jetty.base/start.d
 
+- name: 'Set start.ini configuration'
+  template:
+    dest: '(( jetty.base }}/start.d/start.ini
+    src: 'templates/jetty/start.d/start.ini'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+   
 - name: 'Set idp.ini configuration'
   template:
     dest: '{{ jetty.base }}/start.d/idp.ini'
