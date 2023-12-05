@@ -27,6 +27,7 @@
         <entry key="AttributeReleaseRejected" value="true" />
         <entry key="TermsRejected" value="true" />
         <entry key="EndpointResolutionFailed" value="true" />
+        <entry key="MessageAuthenticationError" value="true" />
         <entry key="RuntimeException" value="false" />
         <entry key="InvalidEvent" value="false" />
         <entry key="InvalidCSRFToken" value="false" />
