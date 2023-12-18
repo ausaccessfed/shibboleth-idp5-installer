@@ -43,7 +43,7 @@
     named keys to expand the feature to support multiple injected objects.
     
     You MUST NOT change the bean(s) referenced in this way, they should be treated as read-only from
-    wthin views.
+    within views.
     -->
     
     <!--

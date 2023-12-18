@@ -51,7 +51,7 @@
     <logger name="org.ldaptive" level="${idp.loglevel.ldap}"/>
 
     <!-- Logs embedded HTTP client messages -->
-    <logger name="org.apache.http" level="${idp.loglevel.httpclient}"/>
+    <logger name="org.apache.hc" level="${idp.loglevel.httpclient}"/>
     
     <!-- Logs inbound and outbound protocols messages at DEBUG level -->
     <logger name="PROTOCOL_MESSAGE" level="${idp.loglevel.messages}" />
@@ -61,7 +61,7 @@
     <logger name="org.opensaml.saml.saml2.encryption.Decrypter" level="${idp.loglevel.encryption}" />
 
     <!-- Logs system properties during startup at DEBUG level -->
-    <logger name="net.shibboleth.idp.log.LogbackLoggingService" level="${idp.loglevel.props}" />
+    <logger name="net.shibboleth.idp.admin.impl.LogImplementationDetails" level="${idp.loglevel.props}" />
 
     <!-- Especially chatty. -->
     <logger name="org.apache.xml.security" level="${idp.loglevel.xmlsec}" />
