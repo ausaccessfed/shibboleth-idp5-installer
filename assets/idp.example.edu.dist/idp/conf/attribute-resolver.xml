@@ -4,7 +4,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xmlns:aaf="urn:mace:aaf.edu.au:shibboleth:2.0:resolver"
         xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd
-                            urn:mace:aaf.edu.au:shibboleth:2.0:resolver classpath:/schema/aaf-shibv4-ext.xsd">
+                            urn:mace:aaf.edu.au:shibboleth:2.0:resolver">
+
+<!-- Temporary removeal: classpath:/schema/aaf-shibv4-ext.xsd -->
 
 
     <!-- ========================================== -->

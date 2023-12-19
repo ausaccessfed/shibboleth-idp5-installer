@@ -50,7 +50,6 @@
                 <ref bean="SAML2.AttributeQuery" />
                 -->
                 <ref bean="SAML2.ArtifactResolution" />
-                <ref bean="Liberty.SSOS" />
             </list>
         </property>
     </bean>
