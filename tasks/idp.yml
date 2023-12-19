@@ -674,6 +674,3 @@
     owner: root
     group: root
     mode: 0755
-
-- name: 'Stop now'
-  meta: end_play
