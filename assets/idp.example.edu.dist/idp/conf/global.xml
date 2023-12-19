@@ -53,25 +53,10 @@
     -->
 
     <bean id="shibboleth.JPAStorageService"
-        class="org.opensaml.storage.impl.JPAStorageService"
+        parent="shibboleth.JDBCStorageService"
         p:cleanupInterval="%{idp.storage.cleanupInterval:PT10M}"
-        c:factory-ref="shibboleth.JPAStorageService.EntityManagerFactory" />
-  
-    <bean id="shibboleth.JPAStorageService.EntityManagerFactory"
-        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="persistenceUnitName" value="storageservice" />
-        <property name="packagesToScan" value="org.opensaml.storage.impl" />
-        <property name="dataSource" ref="shibboleth.JPAStorageService.DataSource" />
-        <property name="jpaVendorAdapter" ref="shibboleth.JPAStorageService.JPAVendorAdapter" />
-        <property name="jpaDialect">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
-        </property>
-    </bean>
-
-    <bean id="shibboleth.JPAStorageService.JPAVendorAdapter"
-        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-        <property name="database" value="MYSQL" />
-    </bean>
+        p:dataSource-ref="shibboleth.JPAStorageService.DataSource"
+        />
 
     <!-- Two seperate but same Data Sources providing seperate pools of connections that
          will help prevent problems in one component from breaking the other.
