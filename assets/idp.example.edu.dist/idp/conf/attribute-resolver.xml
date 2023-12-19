@@ -3,10 +3,10 @@
         xmlns="urn:mace:shibboleth:2.0:resolver" 
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xmlns:aaf="urn:mace:aaf.edu.au:shibboleth:2.0:resolver"
-        xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd
-                            urn:mace:aaf.edu.au:shibboleth:2.0:resolver">
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd">
+                            
 
-<!-- Temporary removeal: classpath:/schema/aaf-shibv4-ext.xsd -->
+<!-- Temporary removeal: urn:mace:aaf.edu.au:shibboleth:2.0:resolver classpath:/schema/aaf-shibv4-ext.xsd -->
 
 
     <!-- ========================================== -->
@@ -35,9 +35,11 @@
     <!-- ========================================== -->
 
     <!-- auEduPersonSharedToken -->
+<!--
     <AttributeDefinition id="auEduPersonSharedToken" xsi:type="Simple">
         <InputDataConnector ref="sharedToken" attributeNames="auEduPersonSharedToken" />
     </AttributeDefinition>
+-->
 
     <!-- displayName -->
     <AttributeDefinition id="displayName" xsi:type="Simple">
@@ -254,11 +256,13 @@
         <BeanManagedConnection>shibboleth.JPAStorageService.PersistentDataSource</BeanManagedConnection>
     </DataConnector>
 
+<!--
     <DataConnector xsi:type="aaf:SharedToken" id="sharedToken"
         salt="%{idp.aepst.salt}" >
         <InputAttributeDefinition ref="%{idp.persistentId.sourceAttribute}" />
         <aaf:BeanManagedConnection>shibboleth.JPAStorageService.DataSource</aaf:BeanManagedConnection>
     </DataConnector>
+-->
 
     <DataConnector id="computed" xsi:type="ComputedId"
             generatedAttributeID="computedId"
