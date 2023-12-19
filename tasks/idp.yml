@@ -358,9 +358,6 @@
     mode: 0640
     backup: yes
 
-- name: 'Stop now'
-  meta: end_play
-
 - name: 'Set admin/admin.properties'
   template:
     src: 'assets/{{inventory_hostname}}/idp/conf/admin/admin.properties'
@@ -451,16 +448,6 @@
     mode: 0640
     backup: yes
 
-- name: 'Remove attributes/custom/schacHomeOrganization.props'
-  file:
-    path: '{{ shib_idp.home }}/conf/attributes/custom/schacHomeOrganization.props'
-    state: absent
-
-- name: 'Remove attributes/custom/schacHomeOrganizationType.props'
-  file:
-    path: '{{ shib_idp.home }}/conf/attributes/custom/schacHomeOrganizationType.props'
-    state: absent
-
 - name: 'Set authn/authn.properties'
   template:
     src: 'assets/{{inventory_hostname}}/idp/conf/authn/authn.properties'
@@ -483,15 +470,6 @@
   template:
     src: 'assets/{{inventory_hostname}}/idp/conf/authn/authn-events-flow.xml'
     dest: '{{ shib_idp.home }}/conf/authn/authn-events-flow.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-- name: 'Set authn/jaas.config'
-  template:
-    src: 'assets/{{inventory_hostname}}/idp/conf/authn/jaas.config'
-    dest: '{{ shib_idp.home }}/conf/authn/jaas.config'
     owner: root
     group: jetty
     mode: 0640
@@ -696,3 +674,6 @@
     owner: root
     group: root
     mode: 0755
+
+- name: 'Stop now'
+  meta: end_play
