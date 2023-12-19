@@ -161,7 +161,6 @@
     mode: 0640
     backup: yes
   with_items:
-    - admin/unlock-keys.vm
     - client-storage/client-storage-read.vm
     - client-storage/client-storage-write.vm
     - error.vm
