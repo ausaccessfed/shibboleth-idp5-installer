@@ -1,0 +1,11 @@
+---
+# ------------------------------------------------------------------------------
+# EXAMPLE: Additional configuration options both AAF environments
+# ------------------------------------------------------------------------------
+
+# This IdP conforms to the REFEDS Baseline Expectations for Identity Providers
+idp_baseline: "false"
+
+# REFEDS RAF Version
+refeds_raf_version: 2
+
