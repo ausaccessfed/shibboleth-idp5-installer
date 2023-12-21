@@ -93,6 +93,7 @@
     <!-- eduPersonAssurance -->
     <AttributeDefinition id="eduPersonAssurance" xsi:type="ScriptedAttribute">
         <InputDataConnector ref="ldap" attributeNames="eduPersonAssurance" />
+        <InputDataConnector ref="staticAttributes" attributeNames="refedsAssuranceFramework" />
         <Script><![CDATA[
             var HashSet = Java.type("java.util.HashSet");
             var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
