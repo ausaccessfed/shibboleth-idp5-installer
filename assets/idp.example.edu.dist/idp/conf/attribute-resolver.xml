@@ -98,7 +98,7 @@
             var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
             var assurances = new HashSet();
 
-            {% if idp_baseline == false %}
+            {% if idp_baseline == "false" %}
                // Remove all values prefixed with "https://refeds.org/assurance" as this IdP
                // is not meet the Conformance criteria.
                for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
@@ -264,6 +264,7 @@
             <Value>https://refeds.org/assurance/ATP/ePA-1m</Value>
             <Value>https://refeds.org/assurance/profile/cappuccino</Value>
             <Value>https://refeds.org/assurance/profile/espresso</Value>
+            <Value>https://refeds.org/assurance/version/2</Value>
         </Attribute>
     </DataConnector>
 
