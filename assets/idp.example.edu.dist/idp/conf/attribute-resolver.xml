@@ -94,9 +94,36 @@
     <AttributeDefinition id="eduPersonAssurance" xsi:type="ScriptedAttribute">
         <InputDataConnector ref="ldap" attributeNames="eduPersonAssurance" />
         <Script><![CDATA[
-        
-          // TO DO
-       
+            var HashSet = Java.type("java.util.HashSet");
+            var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
+            var assurances = new HashSet();
+
+            {% if idp_baseline == false %}
+               // Remove all values prefixed with "https://refeds.org/assurance" as this IdP
+               // is not meet the Conformance criteria.
+               for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
+                  value = eduPersonAssurance.getValues().get(i);
+                  if (!refedsAssuranceFramework.getValues().contains(value))
+                  {
+                      assurances.add(value);
+                  }
+                  eduPersonAssurance.getValues().clear();
+               }
+            {% else %}
+               // Process the values
+               for { i = 0; i < eduPersonAssurance.getValues().size(); i++){
+                  value = eduPersonAssurance.getValues().get(i);
+                  if (refedsAssuranceFramework.getValues().contains(value))
+                  {
+                      assurances.add(value);
+                  }
+               }
+            {% endif %}
+
+            itr = assurances.iterator();
+            while (itr.hasNext()){
+                eduPersonAssurance.addValue(itr.next());
+            }
         ]]></Script>
     </AttributeDefinition>
 
@@ -222,6 +249,21 @@
         </Attribute>
         <Attribute id="o">
             <Value>{{ organisation_name }}</Value>
+        </Attribute>
+        <!-- Refeds Assurance Framework static value, used in conjunction with scripted attribute filteredEduPersonAssurance -->
+        <Attribute id="refedsAssuranceFramework">
+            <Value>https://refeds.org/assurance</Value>
+            <Value>https://refeds.org/assurance/ID/unique</Value>
+            <Value>https://refeds.org/assurance/ID/eppn-unique-no-reassign</Value>
+            <Value>https://refeds.org/assurance/ID/eppn-unique-reassign-1y</Value>
+            <Value>https://refeds.org/assurance/IAP/local-enterprise</Value>
+            <Value>https://refeds.org/assurance/IAP/low</Value>
+            <Value>https://refeds.org/assurance/IAP/medium</Value>
+            <Value>https://refeds.org/assurance/IAP/high</Value>
+            <Value>https://refeds.org/assurance/ATP/ePA-1d</Value>
+            <Value>https://refeds.org/assurance/ATP/ePA-1m</Value>
+            <Value>https://refeds.org/assurance/profile/cappuccino</Value>
+            <Value>https://refeds.org/assurance/profile/espresso</Value>
         </Attribute>
     </DataConnector>
 
