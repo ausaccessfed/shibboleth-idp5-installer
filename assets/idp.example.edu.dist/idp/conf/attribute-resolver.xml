@@ -107,8 +107,8 @@
                   {
                       assurances.add(value);
                   }
-                  eduPersonAssurance.getValues().clear();
                }
+               eduPersonAssurance.getValues().clear();
             {% else %}
                // Process the values
                for { i = 0; i < eduPersonAssurance.getValues().size(); i++){
