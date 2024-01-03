@@ -110,7 +110,6 @@
                       assurances.add(value);
                   }
                }
-               eduPersonAssurance.getValues().clear();
             {% else %}
                // Process the values
                for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
@@ -139,12 +138,12 @@
                {% endif %}
 
                // Enaure IAP/high also have IAP/medium
-               if (assurance.contains("https://refeds.org/assurance/IAP/high") {
+               if (assurances.contains("https://refeds.org/assurance/IAP/high")) {
                   assurances.add("https://refeds.org/assurance/IAP/medium");
                }
 
                // Ensure IAP/medium also has IAP/low
-               if (assurance.contains("https://refeds.org/assurance/IAP/medium") {
+               if (assurances.contains("https://refeds.org/assurance/IAP/medium")) {
                   assurances.add("https://refeds.org/assurance/IAP/low");
                }
 
@@ -153,9 +152,9 @@
                assurances.add("https://refeds.org/assurance/ATP/ePA-{{ refeds_raf_epa }}");
                {% endif %}
 
-               // Ensure ATP/ePA-1m also has ATP/ePA-1d
-               if (assurances.contains("https://refeds.org/assurance/ATP/ePA-1m") {
-                  assurances.add("https://refeds.org/assurance/ATP/ePA-1d");
+               // Ensure ATP/ePA-1d also has ATP/ePA-1m
+               if (assurances.contains("https://refeds.org/assurance/ATP/ePA-1d")) {
+                  assurances.add("https://refeds.org/assurance/ATP/ePA-1m");
                }
 
                // Set Cappuccino
@@ -166,7 +165,7 @@
                    assurances.contains("https://refeds.org/assurance/ATP/ePA-1m")) {
                   assurances.add("https://refeds.org/assurance/profile/cappuccino");
                } else {
-                   assurances.remove("https://refeds.org/assurance/profile/cappuccino"))
+                   assurances.remove("https://refeds.org/assurance/profile/cappuccino");
                }
 
                // Set Espresso
@@ -178,6 +177,8 @@
                }
 
             {% endif %}
+
+            eduPersonAssurance.getValues().clear();
 
             itr = assurances.iterator();
             while (itr.hasNext()){
