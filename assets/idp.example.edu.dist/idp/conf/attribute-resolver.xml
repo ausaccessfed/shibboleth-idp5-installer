@@ -120,6 +120,8 @@
                       assurances.add(value);
                   }
                }
+               // Indicate REFEDS RAF is supportted by this IdP
+               assurances.add("https://refeds.org/assurance");
 
                {% if refeds_raf_version == "2" %}
                // REFEDS RAF Version 2 in use
@@ -131,9 +133,49 @@
                assurances.add("https://refeds.org/assurance/ID/unique");
                {% endif %}
 
-               {% if refeds_raf_eppn_unique == "no-reassign" || refeds_raf_eppn_unique == "reassign-1y" %}
-               assurances.add("https://refeds.org/assurance/eppn-unique-{{ refeds_raf_eppn_unique }}");
+               {% if refeds_raf_eppn_unique == "no-reassign" or refeds_raf_eppn_unique == "reassign-1y" %}
+               // Set the eppn-unique value
+               assurances.add("https://refeds.org/assurance/ID/eppn-unique-{{ refeds_raf_eppn_unique }}");
                {% endif %}
+
+               // Enaure IAP/high also have IAP/medium
+               if (assurance.contains("https://refeds.org/assurance/IAP/high") {
+                  assurances.add("https://refeds.org/assurance/IAP/medium");
+               }
+
+               // Ensure IAP/medium also has IAP/low
+               if (assurance.contains("https://refeds.org/assurance/IAP/medium") {
+                  assurances.add("https://refeds.org/assurance/IAP/low");
+               }
+
+               {% if refeds_raf_epa == "1m" or refeds_raf_epa == "1d" %}
+               // Set raf freshness
+               assurances.add("https://refeds.org/assurance/ATP/ePA-{{ refeds_raf_epa }}");
+               {% endif %}
+
+               // Ensure ATP/ePA-1m also has ATP/ePA-1d
+               if (assurances.contains("https://refeds.org/assurance/ATP/ePA-1m") {
+                  assurances.add("https://refeds.org/assurance/ATP/ePA-1d");
+               }
+
+               // Set Cappuccino
+               if (assurances.contains("https://refeds.org/assurance") &&
+                   assurances.contains("https://refeds.org/assurance/ID/unique") &&
+                   assurances.contains("https://refeds.org/assurance/IAP/low") &&
+                   assurances.contains("https://refeds.org/assurance/IAP/medium") &&
+                   assurances.contains("https://refeds.org/assurance/ATP/ePA-1m")) {
+                  assurances.add("https://refeds.org/assurance/profile/cappuccino");
+               } else {
+                   assurances.remove("https://refeds.org/assurance/profile/cappuccino"))
+               }
+
+               // Set Espresso
+               if (assurances.contains("https://refeds.org/assurance/profile/cappuccino") &&
+                   assurances.contains("https://refeds.org/assurance/IAP/high")) {
+                  assurances.add("https://refeds.org/assurance/profile/espresso");
+               } else {
+                  assurances.remove("https://refeds.org/assurance/profile/espresso");
+               }
 
             {% endif %}
 
