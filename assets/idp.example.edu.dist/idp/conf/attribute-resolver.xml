@@ -101,8 +101,8 @@
             var refedsValues = refedsAssuranceFramework.getValues();
 
             {% if idp_baseline == "false" %}
-               // Remove all values prefixed with "https://refeds.org/assurance" as this IdP
-               // is not meet the Conformance criteria.
+               // Remove all REFEDS Assurance values prefixed as this IdP
+               // does not meet the Conformance criteria.
                for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
                   value = eduPersonAssurance.getValues().get(i);
                   if (!refedsValues.contains(value))
@@ -113,13 +113,28 @@
                eduPersonAssurance.getValues().clear();
             {% else %}
                // Process the values
-               for { i = 0; i < eduPersonAssurance.getValues().size(); i++){
+               for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
                   value = eduPersonAssurance.getValues().get(i);
-                  if (refedsValues.getValues().contains(value))
+                  if (refedsValues.contains(value))
                   {
                       assurances.add(value);
                   }
                }
+
+               {% if refeds_raf_version == "2" %}
+               // REFEDS RAF Version 2 in use
+               assurances.add("https://refeds.org/assurance/version/2");
+               {% endif %}
+
+               {% if refeds_raf_unique == "true" %}
+               // Identifier uniqueness criteria are meet
+               assurances.add("https://refeds.org/assurance/ID/unique");
+               {% endif %}
+
+               {% if refeds_raf_eppn_unique == "no-reassign" || refeds_raf_eppn_unique == "reassign-1y" %}
+               assurances.add("https://refeds.org/assurance/eppn-unique-{{ refeds_raf_eppn_unique }}");
+               {% endif %}
+
             {% endif %}
 
             itr = assurances.iterator();
