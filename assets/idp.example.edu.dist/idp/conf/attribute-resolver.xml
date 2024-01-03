@@ -98,13 +98,14 @@
             var HashSet = Java.type("java.util.HashSet");
             var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
             var assurances = new HashSet();
+            var refedsValues = refedsAssuranceFramework.getValues();
 
             {% if idp_baseline == "false" %}
                // Remove all values prefixed with "https://refeds.org/assurance" as this IdP
                // is not meet the Conformance criteria.
                for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
                   value = eduPersonAssurance.getValues().get(i);
-                  if (!refedsAssuranceFramework.getValues().contains(value))
+                  if (!refedsValues.contains(value))
                   {
                       assurances.add(value);
                   }
@@ -114,7 +115,7 @@
                // Process the values
                for { i = 0; i < eduPersonAssurance.getValues().size(); i++){
                   value = eduPersonAssurance.getValues().get(i);
-                  if (refedsAssuranceFramework.getValues().contains(value))
+                  if (refedsValues.getValues().contains(value))
                   {
                       assurances.add(value);
                   }
