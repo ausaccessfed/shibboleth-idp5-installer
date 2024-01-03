@@ -8,3 +8,8 @@ idp_baseline: "false"
 # REFEDS RAF Version
 refeds_raf_version: 2
 
+# REFEDS RAF Identifier Unquie
+refeds_raf_unique: "true"
+
+# REFEDS RAF Uniqueness of eduPersonPrincipalName. "no-reassign" or "reassign-1y"
+refeds_raf_eppn_unique: "no-reassign"
