@@ -284,8 +284,12 @@
     <!-- SAML Subject ID Attributes                 -->
     <!-- ========================================== -->
 
-    <AttributeDefinition xsi:type="Scoped" id="samlSubjectID" scope="%{idp.scope}">
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="samlSubjectID">
         <InputDataConnector ref="ldap" attributeNames="%{idp.persistentId.sourceAttribute}"/>
+    <Script><![CDATA[
+        samlSubjectID.addValue(new scopedValueType("%{idp.persistentId.sourceAttribute}", "%{idp.scope}"));
+    ]]></Script>
+
     </AttributeDefinition>
 
     <AttributeDefinition xsi:type="Scoped" id="samlPairwiseID" scope="%{idp.scope}">
