@@ -60,7 +60,7 @@
                 for ( i = 0; i < eduPersonAffiliation.getValues().size(); i++){
                     value = eduPersonAffiliation.getValues().get(i).toLowerCase();
                     if (values.contains(value)) {
-                        newAffiliations.add(new StringAttributeValue(value));
+                        newAffiliations.add(value);
                     }
                 }
             }
@@ -209,6 +209,11 @@
     </AttributeDefinition>
 
     <!-- eduPersonTargetedID -->
+
+    <!-- NOTE: Plans are underway to deprecate the use of this Attribute within the AAF during 2024.
+         Services in eduGAIN may still require it, so it will be maintained beyond 2024 as long 
+         as the Shibboleth IdP continues to support it. The IdP Warning logs will flag SAML2NameID 
+         as DEPRECATED because of this attribute -->
 
     <AttributeDefinition xsi:type="SAML2NameID" id="eduPersonTargetedID"
     nameIdFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">
