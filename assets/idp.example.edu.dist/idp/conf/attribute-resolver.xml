@@ -49,36 +49,31 @@
     <!-- eduPersonAffiliation -->
     <AttributeDefinition xsi:type="ScriptedAttribute" id="eduPersonAffiliation">
         <InputDataConnector ref="ldap" attributeNames="eduPersonAffiliation" />
+        <InputDataConnector ref="staticAttributes" attributeNames="affiliationValues" />
         <Script><![CDATA[
             var HashSet = Java.type("java.util.HashSet");
-            var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
             var newAffiliations = new HashSet();
+
+            var values = affiliationValues.getValues();
 
             if (typeof eduPersonAffiliation != "undefined") {
                 for ( i = 0; i < eduPersonAffiliation.getValues().size(); i++){
                     value = eduPersonAffiliation.getValues().get(i).toLowerCase();
-                    if (value.equals("student") ||
-                        value.equals("faculty") ||
-                        value.equals("staff") ||
-                        value.equals("employee") ||
-                        value.equals("affiliate") ||
-                        value.equals("alum") ||
-                        value.equals("member") ||
-                        value.equals("library-walk-in")) {
-                            newAffiliations.add(new StringAttributeValue(value));
+                    if (values.contains(value)) {
+                        newAffiliations.add(new StringAttributeValue(value));
                     }
                 }
             }
 
-            if (newAffiliations.contains(new StringAttributeValue("student")) ||
-                newAffiliations.contains(new StringAttributeValue("faculty")) ||
-                newAffiliations.contains(new StringAttributeValue("staff")) ||
-                newAffiliations.contains(new StringAttributeValue("employee"))) {
-                    newAffiliations.add(new StringAttributeValue("member"));
+            if (newAffiliations.contains("student") ||
+                newAffiliations.contains("faculty") ||
+                newAffiliations.contains("staff") ||
+                newAffiliations.contains("employee")) {
+                    newAffiliations.add("member");
             }
 
             if (newAffiliations.size() < 1) {
-                newAffiliations.add(new StringAttributeValue("affiliate"));
+                newAffiliations.add("affiliate");
             }
 
             eduPersonAffiliation.getValues().clear();
@@ -96,7 +91,6 @@
         <InputDataConnector ref="staticAttributes" attributeNames="refedsAssuranceFramework" />
         <Script><![CDATA[
             var HashSet = Java.type("java.util.HashSet");
-            var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
             var assurances = new HashSet();
             var refedsValues = refedsAssuranceFramework.getValues();
 
@@ -310,7 +304,19 @@
         <Attribute id="o">
             <Value>{{ organisation_name }}</Value>
         </Attribute>
-        <!-- Refeds Assurance Framework static value, used in conjunction with scripted attribute filteredEduPersonAssurance -->
+        <!-- Approved eduPersonAffiliation values -->
+        <Attribute id="affiliationValues">
+            <Value>student</Value>
+            <Value>faculty</Value>
+            <Value>staff</Value>
+            <Value>employee</Value>
+            <Value>affiliate</Value>
+            <Value>alum</Value>
+            <Value>member</Value>
+            <Value>library-walk-in</Value>
+        </Attribute>
+        <!-- REFEDS Assurance Framework static value, used in conjunction with 
+             scripted attribute filteredEduPersonAssurance -->
         <Attribute id="refedsAssuranceFramework">
             <Value>https://refeds.org/assurance</Value>
             <Value>https://refeds.org/assurance/ID/unique</Value>
