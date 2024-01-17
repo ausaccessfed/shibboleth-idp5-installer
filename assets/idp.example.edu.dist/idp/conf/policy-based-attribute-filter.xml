@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Attribute filter for REFEDS and other Policy based attributes release -->
+
+<AttributeFilterPolicyGroup id="Policy-based-filter"
+        xmlns="urn:mace:shibboleth:2.0:afp"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
+
+<!-- REFEDS Research and Scholarship -->
+<!-- Releases the following attributes for services that are registered as R&S -->
+<!--  *  eduPersonPrincipalName      -->
+<!--  *  email                       -->
+<!--  *  displayName                 -->
+<!--  *  givenName                   -->
+<!--  *  sn                          -->
+<!--  *  eduPersonScopedAffiliation  -->
+<!--                                 -->
+<!--  # eduPersonTargetedID - optionally if the eduPersonPrincipalName is reassigned. -->
+<!-- -->
+<!-- See: http://refeds.org/category/research-and-scholarship  -->
+
+  <AttributeFilterPolicy id="REFEDS-Research-and-Scholarship-V1.3">
+    <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+      attributeName="http://macedir.org/entity-category"
+      attributeValue="http://refeds.org/category/research-and-scholarship"/>
+ 
+    <!-- a fixed subset of the Research & Scholarship Attribute Bundle -->
+    <!-- release of ePPN is REQUIRED -->
+    <AttributeRule attributeID="eduPersonPrincipalName">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+ 
+    <!-- if your deployment of ePPN is non-reassigned, release of ePTID is OPTIONAL -->
+    <!-- Un-comment if the ePPN is reassigned -->
+    <AttributeRule attributeID="eduPersonTargetedID">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+    --> 
+
+    <!-- release of email is REQUIRED -->
+    <AttributeRule attributeID="email">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+ 
+    <!-- either displayName or (givenName and sn) is REQUIRED but all three are RECOMMENDED -->
+    <AttributeRule attributeID="displayName">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+    <AttributeRule attributeID="givenName">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+    <AttributeRule attributeID="sn">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+   
+    <!-- release of ePSA is OPTIONAL -->
+    <AttributeRule attributeID="eduPersonScopedAffiliation">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+  </AttributeFilterPolicy>
+
+<!-- REFEDS Anonymous Access - V1.2 -->
+<!-- Releases the following attributes -->
+<!--  *   schacHomeOrganization      -->
+<!--  *  eduPersonScopedAffiliation  -->
+<!-- -->
+<!-- See: https://refeds.org/category/anonymous -->
+
+  <AttributeFilterPolicy id="REFEDS-Anonymous-Access-V1.2">
+
+    <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+      attributeName="http://macedir.org/entity-category"
+      attributeValue="https://refeds.org/category/anonymous"/>
+ 
+    <!-- release of schacHomeOrganization is REQUIRED -->
+    <AttributeRule attributeID="schacHomeOrganization">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+
+    <!-- release of ePSA is REQUIRED -->
+    <AttributeRule attributeID="eduPersonScopedAffiliation">
+      <PermitValueRule xsi:type="ANY"/>
+    </AttributeRule>
+
+  </AttributeFilterPolicy>
+
+</AttributeFilterPolicyGroup>

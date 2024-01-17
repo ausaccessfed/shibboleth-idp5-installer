@@ -539,8 +539,8 @@
 
 - name: 'Set eduGAIN attribute filter'
   template:
-    src: 'assets/{{inventory_hostname}}/idp/conf/edugain-attribute-filter.xml'
-    dest: '{{ shib_idp.home }}/conf/edugain-attribute-filter.xml'
+    src: 'assets/{{inventory_hostname}}/idp/conf/policy-based-attribute-filter.xml'
+    dest: '{{ shib_idp.home }}/conf/policy-based-attribute-filter.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -617,7 +617,7 @@
   - conf/attribute-resolver.xml
   - conf/audit.xml
   - conf/credentials.xml
-  - conf/edugain-attribute-filter.xml
+  - conf/policy-based-attribute-filter.xml
   - conf/errors.xml
   - conf/global.xml
   - conf/ldap.properties
