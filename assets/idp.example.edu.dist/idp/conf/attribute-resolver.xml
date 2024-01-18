@@ -94,7 +94,7 @@
             var assurances = new HashSet();
             var refedsValues = refedsAssuranceFramework.getValues();
 
-            {% if idp_baseline == "false" %}
+            {% if refeds_baseline_idp == "false" or refeds_assurance_v2 == "false" %}
                // Remove all REFEDS Assurance values prefixed as this IdP
                // does not meet the Conformance criteria.
                for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
@@ -116,7 +116,7 @@
                // Indicate REFEDS RAF is supportted by this IdP
                assurances.add("https://refeds.org/assurance");
 
-               {% if refeds_raf_version == "2" %}
+               {% if  refeds_assurance_v2 == "true" %}
                // REFEDS RAF Version 2 in use
                assurances.add("https://refeds.org/assurance/version/2");
                {% endif %}
