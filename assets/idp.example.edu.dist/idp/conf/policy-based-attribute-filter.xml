@@ -7,6 +7,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
 
+{% if refeds_r_and_s_v1_3 == "true" %}
 <!-- REFEDS Research and Scholarship -->
 <!-- Releases the following attributes for services that are registered as R&S -->
 <!--  *  eduPersonPrincipalName      -->
@@ -33,6 +34,7 @@
  
     <!-- if your deployment of ePPN is non-reassigned, release of ePTID is OPTIONAL -->
     <!-- Un-comment if the ePPN is reassigned -->
+    <!--
     <AttributeRule attributeID="eduPersonTargetedID">
       <PermitValueRule xsi:type="ANY"/>
     </AttributeRule>
@@ -59,7 +61,10 @@
       <PermitValueRule xsi:type="ANY"/>
     </AttributeRule>
   </AttributeFilterPolicy>
+{% endif %}
 
+
+{% if refeds_anonymous_v2 == "true" %}
 <!-- REFEDS Anonymous Access - V1.2 -->
 <!-- Releases the following attributes -->
 <!--  *  schacHomeOrganization       -->
@@ -84,7 +89,9 @@
     </AttributeRule>
 
   </AttributeFilterPolicy>
+{% endif %}
 
+{% if refeds_pseudonymous_v2 == "true" %}
 <!-- REFEDS Pesudonymous Access - V1.2 -->
 <!-- Releases the following attributes -->
 <!--  *  schacHomeOrganization       -->
@@ -121,8 +128,10 @@
     </AttributeRule>
 
   </AttributeFilterPolicy>
+{% endif %}
 
-<!-- REFEDS Personalized Access - V1.2 -->
+{% if refeds_personalized_v2 == "true" %}
+<!-- REFEDS Personalized Access - V1.2 ->
 <!-- Releases the following attributes -->
 <!--  *  schacHomeOrganization       -->
 <!--  *  samlSubjectID               -->
@@ -182,7 +191,9 @@
     </AttributeRule>
 
   </AttributeFilterPolicy>
+{% endif %}
 
+{% if refeds_code-of-conduct_v2 == "true" %}
 <!-- REFEDS Data Protection Code of Conduct - V2.0 -->
 <!-- Releases the following attributes -->
 <!--  *  eduPersonAffiliation        -->
@@ -199,7 +210,6 @@
 <!--  *  sn                          -->
 <!--  *  givenName                   -->
 <!--  *  mail                        -->
-
 <!-- -->
 <!-- See: https://refeds.org/category/code-of-conduct/v2 -->
 
@@ -265,5 +275,6 @@
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="ture"/>
         </AttributeRule>
   </AttributeFilterPolicy>
+{% endif %}
 
 </AttributeFilterPolicyGroup>
