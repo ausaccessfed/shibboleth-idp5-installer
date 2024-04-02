@@ -48,7 +48,7 @@ function ensure_mandatory_variables_set {
   for var in HOST_NAME ENVIRONMENT ORGANISATION_NAME ORGANISATION_BASE_DOMAIN \
     HOME_ORG_TYPE SOURCE_ATTRIBUTE_ID INSTALL_BASE OS_UPDATE FIREWALL \
     ENABLE_BACKCHANNEL ENABLE_EDUGAIN IDP_BEHIND_PROXY DEFAULT_ENCRYPTION \
-    REFEDS_BASELINE_IDP_V1 REFEDS_ASSURANCE_v2 REFEDS_RAF_UNIQUE REFEDS_RAF_EPPN_UNIQUE \
+    REFEDS_BASELINE_IDP_V1 REFEDS_ASSURANCE_V2 REFEDS_RAF_UNIQUE REFEDS_RAF_EPPN_UNIQUE \
     REFEDS_RAF_EPA REFEDS_R_AND_S_V1_3 REFEDS_ANONYMOUS_V2 REFEDS_PSEUDONYMOUS_V2 \
     REFEDS_PERSONALIZED_V2 REFEDS_CODE_OF_CONDUCT_V2; do
     if [ ! -n "${!var:-}" ]; then
@@ -108,7 +108,7 @@ function ensure_mandatory_variables_set {
      exit 1
   fi
 
-  if [ $REFEDS_ASSURANCE_v2 != "true" ] && [ $REFEDS_ASSURANCE_V2 != "false" ]
+  if [ $REFEDS_ASSURANCE_V2 != "true" ] && [ $REFEDS_ASSURANCE_V2 != "false" ]
   then
      echo "Variable REFEDS_ASSURANCE_V2 must be either true or false"
      exit 1
@@ -387,7 +387,7 @@ function set_ansible_host_vars {
     $ANSIBLE_HOST_VARS
   replace_property 'refeds_personalized_v2:' "\"$REFEDS_PERSONALIZED_V2\"" \
     $ANSIBLE_HOST_VARS
-  replace_property 'refeds_code-of-conduct_v2:REFEDS_CODE-OF-CONDUCT_V2\"" \
+  replace_property 'refeds_code-of-conduct_v2:' "\"$REFEDS_CODE-OF-CONDUCT_V2\"" \
     $ANSIBLE_HOST_VARS
 }
 
@@ -633,7 +633,6 @@ function bootstrap {
     set_ldap_properties
   fi
 
-  set_policy
   create_self_signed_certs
   run_ansible
   backup_shibboleth_credentials
