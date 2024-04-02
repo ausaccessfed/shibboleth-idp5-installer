@@ -7,10 +7,10 @@ set -e
 # Supported Operating Systems
 #
 # Fedora like
-#   rhel    - REDHat Linux 7 and 8
+#   rhel    - REDHat Linux 7, 8 and 9
 #   centos  - CentOS 7, 8 and Stream
-#   ol      - ORACLE Linux 7 and 8
-#   rocky   - Rocky Linux 8
+#   ol      - ORACLE Linux 7, 8 and 9
+#   rocky   - Rocky Linux 8 and 9
 #
 # Debian like
 #   ubuntu - Ubuntu 20.04 (Focal Fossa)
@@ -47,7 +47,10 @@ function set_internal_variables {
 function ensure_mandatory_variables_set {
   for var in HOST_NAME ENVIRONMENT ORGANISATION_NAME ORGANISATION_BASE_DOMAIN \
     HOME_ORG_TYPE SOURCE_ATTRIBUTE_ID INSTALL_BASE OS_UPDATE FIREWALL \
-    ENABLE_BACKCHANNEL ENABLE_EDUGAIN IDP_BEHIND_PROXY DEFAULT_ENCRYPTION; do
+    ENABLE_BACKCHANNEL ENABLE_EDUGAIN IDP_BEHIND_PROXY DEFAULT_ENCRYPTION \
+    REFEDS_BASELINE_IDP_V1 REFEDS_ASSURANCE_v2 REFEDS_RAF_UNIQUE REFEDS_RAF_EPPN_UNIQUE \
+    REFEDS_RAF_EPA REFEDS_R_AND_S_V1_3 REFEDS_ANONYMOUS_V2 REFEDS_PSEUDONYMOUS_V2 \
+    REFEDS_PERSONALIZED_V2 REFEDS_CODE_OF_CONDUCT_V2; do
     if [ ! -n "${!var:-}" ]; then
       echo "Variable '$var' is not set! Set this in `basename $0`"
       exit 1
@@ -96,6 +99,67 @@ function ensure_mandatory_variables_set {
   if [ $DEFAULT_ENCRYPTION != "GCM" ] && [ $DEFAULT_ENCRYPTION != "CBC" ]
   then
      echo "Variable DEFAULT_ENCRYPTION must be either GCM or CBC"
+     exit 1
+  fi
+
+  if [ $REFEDS_BASELINE_IDP_V1 != "true" ] && [ $REFEDS_BASELINE_IDP_V1 != "false" ]
+  then
+     echo "Variable REFEDS_BASELINE_IDP_V1 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_ASSURANCE_v2 != "true" ] && [ $REFEDS_ASSURANCE_V2 != "false" ]
+  then
+     echo "Variable REFEDS_ASSURANCE_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_RAF_UNIQUE != "true" ] && [ $REFEDS_RAF_UNIQUE != "false" ]
+  then
+     echo "Variable REFEDS_RAF_UNIQUE must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_RAF_EPPN_UNIQUE != "no-reassign" ] && [ $REFEDS_RAF_EPPN_UNIQUE != "reassign-1y" ]
+
+  then
+     echo "Variable REFEDS_RAF_EPPN_UNIQUE must be either no-reassign or reassign-1y"
+     exit 1
+  fi
+
+  if [ $REFEDS_RAF_EPA != "1d" ] && [ $REFEDS_RAF_EPA != "1m" ]
+
+  then
+     echo "Variable REFEDS_RAF_EPA must be either 1d or 1m"
+     exit 1
+  fi
+  if [ $REFEDS_R_AND_S_V1_3 != "true" ] && [ $REFEDS_R_AND_S_V1_3 != "false" ]
+  then
+     echo "Variable REFEDS_R_AND_S_V1_3 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_ANONYMOUS_V2 != "true" ] && [ $REFEDS_ANONYMOUS_V2 != "false" ]
+  then
+     echo "Variable REFEDS_ANONYMOUS_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_PSEUDONYMOUS_V2 != "true" ] && [ $REFEDS_PSEUDONYMOUS_V2 != "false" ]
+  then
+     echo "Variable REFEDS_PSEUDONYMOUS_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_PERSONALIZED_V2 != "true" ] && [ $REFEDS_PERSONALIZED_V2 != "false" ]
+  then
+     echo "Variable REFEDS_PERSONALIZED_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_CODE_OF_CONDUCT_V2 != "true" ] && [ $REFEDS_CODE_OF_CONDUCT_V2 != "false" ]
+  then
+     echo "Variable REFEDS_CODE_OF_CONDUCT_V2 must be either true or false"
      exit 1
   fi
 }
@@ -304,6 +368,27 @@ function set_ansible_host_vars {
   if [ -n "$FTICKS_SECRET_KEY" ]; then
      replace_property 'fticks_secret_key:' "\"$FTICKS_SECRET_KEY"\" $ANSIBLE_HOST_VARS
   fi
+
+  replace_property 'refeds_baseline_idp_v1:' "\"$REFEDS_BASELINE_IDP_V1\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_assurance_v2:' "\"$REFEDS_ASSURANCE_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_raf_unique:' "\"$REFEDS_RAF_UNIQUE\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_raf_eppn_unique:' "\"$REFEDS_RAF_EPPN_UNIQUE\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_raf_epa:' "\"$REFEDS_RAF_EPA\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_r_and_s_v1_3:' "\"$REFEDS_R_AND_S_V1_3\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_anonymous_v2:' "\"$REFEDS_ANONYMOUS_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_pseudonymous_v2:' "\"$REFEDS_PSEUDONYMOUS_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_personalized_v2:' "\"$REFEDS_PERSONALIZED_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_code-of-conduct_v2:REFEDS_CODE-OF-CONDUCT_V2\"" \
+    $ANSIBLE_HOST_VARS
 }
 
 function set_ansible_cfg_log_path {
@@ -525,6 +610,7 @@ function bootstrap {
   get_cfg_section main
   get_cfg_section logging
   get_cfg_section ldap
+  get_cfg_section policy
   get_cfg_section advanced
   set_internal_variables 
   ensure_mandatory_variables_set
@@ -547,6 +633,7 @@ function bootstrap {
     set_ldap_properties
   fi
 
+  set_policy
   create_self_signed_certs
   run_ansible
   backup_shibboleth_credentials

@@ -25,6 +25,9 @@ refeds_raf_unique: "true"
 # REFEDS RAF Uniqueness of eduPersonPrincipalName. "no-reassign" or "reassign-1y"
 refeds_raf_eppn_unique: "no-reassign"
 
+# REFEDS RAF Freshness. "1d" or "1m"
+refeds_raf_epa: "1d"
+
 # This IdP conforms to the REFEDS Research and Scholarship (R&S) v1.3
 # Ref: http://refeds.org/category/research-and-scholarship
 #
