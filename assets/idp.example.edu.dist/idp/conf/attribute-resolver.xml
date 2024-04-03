@@ -94,7 +94,7 @@
             var assurances = new HashSet();
             var refedsValues = refedsAssuranceFramework.getValues();
 
-            {% if refeds_baseline_idp == "false" or refeds_assurance_v2 == "false" %}
+            {% if refeds_baseline_idp_v1 == "false" or refeds_assurance_v2 == "false" %}
                // Remove all REFEDS Assurance values prefixed as this IdP
                // does not meet the Conformance criteria.
                for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
@@ -287,6 +287,8 @@
     <AttributeDefinition xsi:type="ScriptedAttribute" id="samlSubjectID">
         <InputDataConnector ref="ldap" attributeNames="%{idp.persistentId.sourceAttribute}"/>
     <Script><![CDATA[
+        scopedValueType =  Java.type("net.shibboleth.idp.attribute.ScopedStringAttributeValue");
+
         samlSubjectID.addValue(new scopedValueType("%{idp.persistentId.sourceAttribute}", "%{idp.scope}"));
     ]]></Script>
 

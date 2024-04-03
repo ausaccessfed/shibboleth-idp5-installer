@@ -151,7 +151,7 @@
   </AttributeFilterPolicy>
 {% endif %}
 
-{% if refeds_code-of-conduct_v2 == "true" %}
+{% if refeds_code_of_conduct_v2 == "true" %}
 <!-- REFEDS Data Protection Code of Conduct - V2.0 -->
 <!-- Releases the following attributes -->
 <!--  *  eduPersonAffiliation        -->

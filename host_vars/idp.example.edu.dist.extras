@@ -51,4 +51,4 @@ refeds_personalized_v2: "false"
 # This IdP conforms to the REFEDS Code of Conduct v.2
 # Ref: https://refeds.org/category/code-of-conduct/v2
 #
-refeds_code-of-conduct_v2: "false"
+refeds_code_of_conduct_v2: "false"

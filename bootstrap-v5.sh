@@ -387,7 +387,7 @@ function set_ansible_host_vars {
     $ANSIBLE_HOST_VARS
   replace_property 'refeds_personalized_v2:' "\"$REFEDS_PERSONALIZED_V2\"" \
     $ANSIBLE_HOST_VARS
-  replace_property 'refeds_code-of-conduct_v2:' "\"$REFEDS_CODE-OF-CONDUCT_V2\"" \
+  replace_property 'refeds_code_of_conduct_v2:' "\"$REFEDS_CODE_OF_CONDUCT_V2\"" \
     $ANSIBLE_HOST_VARS
 }
 
