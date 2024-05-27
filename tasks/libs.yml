@@ -67,10 +67,10 @@
     src: '{{ shib_idp.libs }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar'
     state: link
 
-- name: 'Install aaf-shib-ext library'
+- name: 'Install aaf-shibext library'
   get_url:
     url: '{{ urls.aaf_shib_ext.url }}'
-    dest: '{{ shib_idp.libs }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar'
+    dest: '{{ shib_idp.libs }}/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar'
     checksum: 'sha256:{{ download.aaf_shib_ext.sha256sum }}'
     mode: 0640
     owner: root
@@ -78,8 +78,8 @@
 
 - name: 'Link to aaf-shib-ext library'
   file:
-    name: '{{ jetty.base }}/lib/ext/aaf-shib-ext.jar'
-    src: '{{ shib_idp.libs }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar'
+    name: '{{ jetty.base }}/lib/ext/aaf-shibext.jar'
+    src: '{{ shib_idp.libs }}/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar'
     state: link
 
 - name: 'Install mysql connector library'

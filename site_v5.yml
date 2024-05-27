@@ -32,8 +32,8 @@
         sha256sum: 089a4949e22e14d89db82a624a86b9daf6089dc5a7e7fb4c120315b25242732d
       shib_idp:
         baseurl: "{{ aaf_binaries.baseurl }}/shibboleth"
-        version: 5.0.0
-        sha256sum: 7e782a0e82d01d724b4889700d4db603b17d9a912b21f7c0fcedf18527f9efff
+        version: 5.1.2
+        sha256sum: 9c591e9eeef1fded1d07c53118d6729e681525fd4115d53bfd000af608ac0e1f
       mysql_connector:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/Connector-J"
         version: 8.0.28
@@ -43,8 +43,8 @@
         version: 1.0.0
         sha256sum: 5e5de66e3517d30ff19ef66cf7a4aa5443b861d83e36a75e85845b007a03afbf
       aaf_shib_ext:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf_shib_ext"
-        version: 2.0.0
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf_shibext"
+        version: 5.1.2
         sha256sum: 5244b2c2565ed40fe66ee8d551ad5e5f1aac0c26c06eace521658792297d464c
       keystore:
         baseurl: "{{ aaf_binaries.baseurl }}/keystore"
