@@ -82,7 +82,7 @@
       dta_ssl:
         url: "{{ download.dta_ssl.baseurl }}/jetty94-dta-ssl-{{download.dta_ssl.version}}.jar"
       aaf_shib_ext:
-        url: "{{ download.aaf_shib_ext.baseurl }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar"
+        url: "{{ download.aaf_shib_ext.baseurl }}/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar"
       keystore:
         url: "{{ download.keystore.baseurl }}/keystore"
       logback_classic:
