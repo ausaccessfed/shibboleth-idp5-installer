@@ -105,7 +105,31 @@
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
 
+- name: 'Directories for libraries to be loaded'
+  file:
+    name: '{{ item }}'
+    state: directory
+    owner: root
+    group: jetty
+    mode: 0750
+  with_items:
+    - '{{ shib_idp.home }}/edit-webapp/WEB-INF/'
+    - '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib'
+
 - include_tasks: libs.yml
+
+- name: 'Prepare for Re-Run of the IdP Install'
+  file:
+    name: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
+    src: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties.backup'
+    owner: root
+    group: root
+    mode: 0700
+
+- name: 'Re-Run IdP install to include the local libraries in idp.war'
+  shell: |
+    umask 0022
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
 
 - name: 'Set customised messages.properties'
   template:

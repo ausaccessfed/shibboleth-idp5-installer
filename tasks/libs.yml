@@ -70,8 +70,17 @@
 - name: 'Install aaf-shibext library'
   get_url:
     url: '{{ urls.aaf_shib_ext.url }}'
-    dest: '{{ shib_idp.libs }}/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar'
+    dest: '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar'
     checksum: 'sha256:{{ download.aaf_shib_ext.sha256sum }}'
+    mode: 0640
+    owner: root
+    group: jetty
+
+- name: 'Install spring-jdbc library'
+  get_url:
+    url: '{{ urls.spring_jdbc.url }}'
+    dest: '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib/spring-jdbc-{{ download.spring_jdbc.version }}.jar'
+    checksum: 'sha256:{{ download.spring_jdbc.sha256sum }}'
     mode: 0640
     owner: root
     group: jetty
