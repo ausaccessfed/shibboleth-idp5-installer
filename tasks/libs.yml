@@ -85,12 +85,6 @@
     owner: root
     group: jetty
 
-- name: 'Link to aaf-shib-ext library'
-  file:
-    name: '{{ jetty.base }}/lib/ext/aaf-shibext.jar'
-    src: '{{ shib_idp.libs }}/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar'
-    state: link
-
 - name: 'Install mysql connector library'
   get_url:
     url: '{{ urls.mysql_connector.url }}'

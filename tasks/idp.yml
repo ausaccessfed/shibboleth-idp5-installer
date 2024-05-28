@@ -119,8 +119,8 @@
 - include_tasks: libs.yml
 
 - name: 'Prepare for Re-Run of the IdP Install'
-  file:
-    name: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
+  copy:
+    dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
     src: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties.backup'
     owner: root
     group: root
