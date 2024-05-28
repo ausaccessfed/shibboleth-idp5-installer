@@ -96,7 +96,7 @@
       jcl_over_slf4j:
         url: "{{ download.jcl_over_slf4j.baseurl }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar"
       spring_jdbc:
-        url: "{{ download.spring_jdbc.baseurl }}/spring-jdbc-{{ download.sprint_jdbc.version }}.jar"
+        url: "{{ download.spring_jdbc.baseurl }}/spring-jdbc-{{ download.spring_jdbc.version }}.jar"
       plugins:
         nashorn:
           url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/truststore.asc.{{ download.plugins.nashorn.version }}"
