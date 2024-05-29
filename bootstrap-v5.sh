@@ -39,8 +39,8 @@ function set_internal_variables {
     GIT_BRANCH=main
     GIT_BRANCH=feature-move-to-v5
 
-    FR_TEST_REG=https://manager.test.aaf.edu.au/federationregistry/registration/idp
-    FR_PROD_REG=https://manager.aaf.edu.au/federationregistry/registration/idp
+    FM_TEST_REG=https://manager.test.aaf.edu.au/
+    FM_PROD_REG=https://manager.aaf.edu.au/
 }
 
 
@@ -462,11 +462,11 @@ function backup_shibboleth_credentials {
   
 }
 
-function display_fr_idp_registration_link {
+function display_fm_idp_registration_link {
   if [ "$ENVIRONMENT" == "test" ]; then
-    echo "$FR_TEST_REG"
+    echo "$FM_TEST_REG"
   else
-    echo "$FR_PROD_REG"
+    echo "$FM_PROD_REG"
   fi
 }
 
@@ -477,8 +477,8 @@ Bootstrap finished!
 
 To make your IdP functional follow these steps:
 
-1. Register your IdP in Federation Registry:
-   `display_fr_idp_registration_link`
+1. Register your IdP in Federation Manager:
+   `display_fm_idp_registration_link`
 
    - For 'Step 3. SAML Configuration' we suggest using the "Easy registration
      using defaults" with the value 'https://$HOST_NAME'

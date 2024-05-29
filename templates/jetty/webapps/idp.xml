@@ -3,7 +3,7 @@
 <!-- =============================================================== -->
 <!-- Configure the Shibboleth IdP webapp                             -->
 <!-- =============================================================== -->
-<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+<Configure class="org.eclipse.jetty.ee9.webapp.WebAppContext">
   <Set name="war"><Property name="idp.war.path" default="{{ shib_idp.current }}/war/idp.war" /></Set>
   <Set name="contextPath"><Property name="idp.context.path" default="/idp" /></Set>
   <Set name="extractWAR">false</Set>
