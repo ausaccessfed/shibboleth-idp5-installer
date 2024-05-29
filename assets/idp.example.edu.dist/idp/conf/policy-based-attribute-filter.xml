@@ -105,7 +105,7 @@
 {% endif %}
 
 {% if refeds_personalized_v2 == "true" %}
-<!-- REFEDS Personalized Access - V1.2 ->
+<!-- REFEDS Personalized Access - V1.2 -->
 <!-- Releases the following attributes -->
 <!--  *  schacHomeOrganization       -->
 <!--  *  samlSubjectID               -->
@@ -133,10 +133,10 @@
     <!-- release of displayName is REQUIRED -->
     <AttributeRule attributeID="displayName" permitAny="true"/>
 
-    <!== release of givenName is REQUIRED -->
+    <!-- release of givenName is REQUIRED -->
     <AttributeRule attributeID="givenName" permitAny="true"/>
 
-    <!== release of sn is REQUIRED -->
+    <!-- release of sn is REQUIRED -->
     <AttributeRule attributeID="sn" permitAny="true"/>
 
     <!-- release of mail is REQUIRED -->
@@ -206,11 +206,11 @@
         </AttributeRule>
 
         <AttributeRule attributeID="eduPersonUniqueID">
-            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="ture"/>
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
         </AttributeRule>
 
         <AttributeRule attributeID="eduPersonOrcid">
-            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="ture"/>
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
         </AttributeRule>
 
         <AttributeRule attributeID="displayName">
@@ -218,7 +218,7 @@
         </AttributeRule>
 
         <AttributeRule attributeID="cn">
-            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="ture"/>
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
         </AttributeRule>
 
         <AttributeRule attributeID="sn">
@@ -226,11 +226,11 @@
         </AttributeRule>
         
         <AttributeRule attributeID="givenName">
-            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="ture"/>
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
         </AttributeRule>
 
         <AttributeRule attributeID="mail">
-            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="ture"/>
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
         </AttributeRule>
   </AttributeFilterPolicy>
 {% endif %}
