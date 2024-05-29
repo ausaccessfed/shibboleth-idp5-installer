@@ -7,9 +7,9 @@ set -e
 # Supported Operating Systems
 #
 # Fedora like
-#   rhel    - REDHat Linux 7, 8 and 9
-#   centos  - CentOS 7, 8 and Stream
-#   ol      - ORACLE Linux 7, 8 and 9
+#   rhel    - REDHat Linux 8 and 9
+#   centos  - CentOS 8 and Stream
+#   ol      - ORACLE Linux 8 and 9
 #   rocky   - Rocky Linux 8 and 9
 #
 # Debian like
