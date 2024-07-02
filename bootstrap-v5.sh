@@ -225,6 +225,10 @@ function install_apt_dependencies {
 }
 
 function install_yum_dependencies {
+  echo ""
+  echo "Install glibc-langpack-en"
+  yum -y -q -e0 install glibc-langpack-en
+
   if [ $OS_UPDATE == "true" ]
   then
     yum -y update
@@ -389,6 +393,13 @@ function set_ansible_host_vars {
     $ANSIBLE_HOST_VARS
   replace_property 'refeds_code_of_conduct_v2:' "\"$REFEDS_CODE_OF_CONDUCT_V2\"" \
     $ANSIBLE_HOST_VARS
+  if [ -n "$WEB_PROXYHOST" ]; then
+     replace_property 'web_proxyhost:' "\"$WEB_PROXYHOST"\" $ANSIBLE_HOST_VARS
+  fi
+  if [ -n "$WEB_PROXYPORT" ]; then
+     replace_property 'web_proxyport:' "\"$WEB_PROXYPORT"\" $ANSIBLE_HOST_VARS
+  fi
+
 }
 
 function set_ansible_cfg_log_path {

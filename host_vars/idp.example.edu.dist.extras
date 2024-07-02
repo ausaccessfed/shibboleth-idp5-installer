@@ -52,3 +52,10 @@ refeds_personalized_v2: "false"
 # Ref: https://refeds.org/category/code-of-conduct/v2
 #
 refeds_code_of_conduct_v2: "false"
+
+# Web Proxy configuration. Only required if the IdP utilizes
+# a web proxy to access files on the Internet such as the
+# federation metadata
+web_proxyhost:
+
+web_proxyport:

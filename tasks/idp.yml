@@ -63,6 +63,14 @@
   args:
     creates: '{{ shib_idp.home }}'
 
+- name: 'Set web_proxy.xml bean file"
+  template:
+    src: 'assets/{{inventory_hostname}}/idp/conf/web_proxy.xml"
+    dest: '{{ shib_idp.home }}/conf/web_proxy.xml"
+    owner: root
+    group: jetty
+    mode: 0640
+    
 - name: 'Directories for plugin keys'
   file:
     name: '{{ item }}'
@@ -97,6 +105,17 @@
     {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
+  when: ((web_proxyhost == "") and
+         (web_proxyport == ""))
+
+- name: 'Install plugin - nashorn' using web-proxy
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} {{ shib_idp.home }}/conf/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
+  when: ((web_proxyhost != "") and
+         (web_proxyport != ""))
 
 - name: 'Install plugin - storage.jdbc'
   shell: |
@@ -104,6 +123,17 @@
     {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
+  when: ((web_proxyhost == "") and
+         (web_proxyport == ""))
+
+- name: 'Install plugin - storage.jdbc' using web-proxy
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} {{ shib_idp.home }}/conf/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
+  when: ((web_proxyhost != "") and
+         (web_proxyport != ""))
 
 - name: 'Directories for libraries to be loaded'
   file:
