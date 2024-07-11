@@ -114,7 +114,7 @@
 
 # Files in jetty.base/modules
 
-- name: 'Set http.mod'
+- name: 'Set idp.mod'
   template:
     dest: '{{ jetty.base }}/modules/idp.mod'
     src: 'templates/jetty/modules/idp.mod'
