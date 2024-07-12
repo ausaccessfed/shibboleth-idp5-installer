@@ -41,13 +41,15 @@ get_nodes
 echo ${nodes[*]}
 
 dry=false
-while getopts ":dhv" opt; do
+auto=false
+while getopts ":dhvy" opt; do
   case $opt in
     h) # Show basic help
      echo "Usage:"
      echo "    deploy -h            Displays this help message."
      echo "    deploy -v            Displays the version of the installer."
      echo "    deploy -d            Performs a Dry Run of the deployment."
+     echo "    deploy -y            automatically answer yes for all questions."
      echo "    deploy               Deploys changes the IdP."
      echo
      exit 0
@@ -58,6 +60,9 @@ while getopts ":dhv" opt; do
      ;;
     d) # Setup for a Dry run
      dry=true
+     ;;
+    y) # Setup for auto answer y
+     auto=true
      ;;
     \? ) echo "Usage: deploy [-h] [-v] [-d]"
      exit 1
@@ -91,13 +96,18 @@ echo -e "  3. RESTART all dependant processes.\n"
 echo "You MUST have a tested rollback plan in place before continuing."
 echo -e "\n-----\n"
 
-if [[ $dry = true ]]
+if [[ $auto = true ]]
 then
-  read -r -p "Are you sure you wish to continue with the dry run? [y/n] " response
+    response="y"
 else
-  read -r -p "Are you sure you wish to continue with the process as detailed above? [y/n] " response
+    if [[ $dry = true ]]
+    then
+      read -r -p "Are you sure you wish to continue with the dry run? [y/n] " response
+    else
+      read -r -p "Are you sure you wish to continue with the process as detailed above? [y/n] " response
+    fi
+    response=${response,,}
 fi
-response=${response,,}
 
 if [[ $response =~ ^(yes|y)$ ]]
 then

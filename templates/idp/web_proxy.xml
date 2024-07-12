@@ -11,8 +11,8 @@
         default-init-method="initialize" default-destroy-method="destroy">
 
     <bean id="customHttpClient" parent="shibboleth.HttpClientFactory"
-        p:connectionProxyHost={{ web_proxyhost }}
-        p:connectionProxyPort={{ web_proxyport }} />
+        p:connectionProxyHost="{{ web_proxyhost }}"
+        p:connectionProxyPort="{{ web_proxyport }}" />
 
 </beans>
 
