@@ -10,8 +10,14 @@
 
     <AttributeFilterPolicy id="{{ federation_id }}-fed-policy">
 
-        <PolicyRequirementRule xsi:type="InEntityGroup"
-                               groupID="{{ federation_group_id }}" />
+        <PolicyRequirementRule xsi:type="OR">
+
+            <Rule xsi:type="InEntityGroup" groupID="{{ federation_group_id }}" />
+            <Rule xsi:type="EntityAttributeExactMatch" 
+               attributeName="http://macedir.org/entity-category"
+               attributeValue="http://aaf.edu.au/aaf-approved"/>
+
+        </PolicyRequirementRule>
 
         <AttributeRule attributeID="persistentID">
             <PermitValueRule xsi:type="ANY"/>

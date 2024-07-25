@@ -26,10 +26,10 @@
       xsi:type="FileBackedHTTPMetadataProvider"
       refreshDelayFactor="0.75"
       maxRefreshDelay="PT4H"
-{% if web_prosyhost != "" }}
+{% if (web_proxyhost is not none) and (web_proxyhost != "") %}
       proxyHost= "{{ web_proxyhost }}"
 {% endif %}
-{% if web_proxyport != "" %}
+{% if (web_proxyport is not none) and (web_proxyport != "") %}
       proxyPort= "{{ web_proxyport }}"
 {% endif %}
       backingFile="{{ shib_idp.home }}/metadata/{{ metadata_file_name }}"
@@ -53,10 +53,10 @@
       xsi:type="FileBackedHTTPMetadataProvider"
       refreshDelayFactor="0.75"
       maxRefreshDelay="PT4H"
-{% if web_prosyhost != "" }}
+{% if (web_proxyhost is not none) and (web_proxyhost != "") %}
       proxyHost= "{{ web_proxyhost }}"
 {% endif %}
-{% if web_proxyport != "" %}
+{% if (web_proxyport is not none) and (web_proxyport != "") %}
       proxyPort= "{{ web_proxyport }}"
 {% endif %}
       backingFile="{{ shib_idp.home }}/metadata/{{ edugain_metadata_file_name }}"

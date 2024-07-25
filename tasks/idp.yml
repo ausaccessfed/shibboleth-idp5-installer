@@ -70,6 +70,9 @@
     owner: root
     group: jetty
     mode: 0640
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
     
 - name: 'Directories for plugin keys'
   file:
@@ -105,8 +108,8 @@
     {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
-  when: ((web_proxyhost == "") and
-         (web_proxyport == ""))
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
 - name: 'Install plugin - nashorn using web-proxy'
   shell: |
@@ -114,8 +117,8 @@
     {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} -hc customHttpClient {{ shib_idp.home }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
-  when: ((web_proxyhost != "") and
-         (web_proxyport != ""))
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
 - name: 'Install plugin - storage.jdbc'
   shell: |
@@ -123,8 +126,8 @@
     {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
-  when: ((web_proxyhost == "") and
-         (web_proxyport == ""))
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
 - name: 'Install plugin - storage.jdbc using web-proxy'
   shell: |
@@ -132,8 +135,8 @@
     {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} -hc customHttpClient {{ shib_idp.home }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
-  when: ((web_proxyhost != "") and
-         (web_proxyport != ""))
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
 - name: 'Directories for libraries to be loaded'
   file:
