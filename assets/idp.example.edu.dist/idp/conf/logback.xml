@@ -25,7 +25,7 @@
     
     <!-- Logging level shortcuts. -->
     <variable name="idp.loglevel.idp" value="${idp.loglevel.idp:-INFO}" />
-    <variable name="idp.loglevel.ldap" value="${idp.loglevel.ldap:-WARN}" />
+    <variable name="idp.loglevel.ldap" value="${idp.loglevel.ldap:-INFO}" />
     <variable name="idp.loglevel.messages" value="${idp.loglevel.messages:-INFO}" />
     <variable name="idp.loglevel.encryption" value="${idp.loglevel.encryption:-INFO}" />
     <variable name="idp.loglevel.opensaml" value="${idp.loglevel.opensaml:-INFO}" />

@@ -19,6 +19,16 @@
     mode: 0700
     state: directory
 
+- name: 'Set web_proxy.xml bean file'
+  template:
+    src: 'templates/idp/web_proxy.xml'
+    dest: '{{ shib_idp.home_root }}/web_proxy.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
 - name: 'Download Shibboleth IdP distribution'
   get_url:
     url: '{{ urls.shib_idp.url }}'
@@ -62,17 +72,17 @@
     {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
   args:
     creates: '{{ shib_idp.home }}'
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
-- name: 'Set web_proxy.xml bean file'
-  template:
-    src: 'templates/idp/web_proxy.xml'
-    dest: '{{ shib_idp.home }}/web_proxy.xml'
-    owner: root
-    group: jetty
-    mode: 0640
+- name: 'Run IdP install with proxy'
+  shell: |
+    umask 0022
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
+  args:
+    creates: '{{ shib_idp.home }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
              (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
-
     
 - name: 'Directories for plugin keys'
   file:
@@ -114,7 +124,7 @@
 - name: 'Install plugin - nashorn using web-proxy'
   shell: |
     umask 0022
-    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} -hc customHttpClient {{ shib_idp.home }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -132,7 +142,7 @@
 - name: 'Install plugin - storage.jdbc using web-proxy'
   shell: |
     umask 0022
-    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} -hc customHttpClient {{ shib_idp.home }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -163,6 +173,15 @@
   shell: |
     umask 0022
     {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
+- name: 'Re-Run IdP install to include the local libraries in idp.war with proxy'
+  shell: |
+    umask 0022
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
 - name: 'Set customised messages.properties'
   template:
