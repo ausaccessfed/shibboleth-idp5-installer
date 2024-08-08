@@ -1,6 +1,7 @@
 # What's new in the AAF IdP Installer
 
 ## Overview
+
 This is a brief note of the new features and functionality provided in the AAF Installer.
 
 ## New Features
