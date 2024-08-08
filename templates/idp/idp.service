@@ -1,5 +1,5 @@
 [Unit]
-Description=Shibboleth V4 Identity Provider
+Description=Shibboleth V5 Identity Provider
 After=syslog.target network.target mariadb.target
 
 [Service]

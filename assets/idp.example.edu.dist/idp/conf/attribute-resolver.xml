@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xmlns:aaf="urn:mace:aaf.edu.au:shibboleth:2.0:resolver"
         xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd
-                            urn:mace:aaf.edu.au:shibboleth:2.0:resolver classpath:/schema/aaf-shibv4-ext.xsd">
+                            urn:mace:aaf.edu.au:shibboleth:2.0:resolver classpath:/schema/aaf-shibv5-ext.xsd">
 
 
     <!-- ========================================== -->
@@ -45,36 +45,31 @@
     <!-- eduPersonAffiliation -->
     <AttributeDefinition xsi:type="ScriptedAttribute" id="eduPersonAffiliation">
         <InputDataConnector ref="ldap" attributeNames="eduPersonAffiliation" />
+        <InputDataConnector ref="staticAttributes" attributeNames="affiliationValues" />
         <Script><![CDATA[
             var HashSet = Java.type("java.util.HashSet");
-            var StringAttributeValue = Java.type("net.shibboleth.idp.attribute.StringAttributeValue");
             var newAffiliations = new HashSet();
+
+            var values = affiliationValues.getValues();
 
             if (typeof eduPersonAffiliation != "undefined") {
                 for ( i = 0; i < eduPersonAffiliation.getValues().size(); i++){
                     value = eduPersonAffiliation.getValues().get(i).toLowerCase();
-                    if (value.equals("student") ||
-                        value.equals("faculty") ||
-                        value.equals("staff") ||
-                        value.equals("employee") ||
-                        value.equals("affiliate") ||
-                        value.equals("alum") ||
-                        value.equals("member") ||
-                        value.equals("library-walk-in")) {
-                            newAffiliations.add(new StringAttributeValue(value));
+                    if (values.contains(value)) {
+                        newAffiliations.add(value);
                     }
                 }
             }
 
-            if (newAffiliations.contains(new StringAttributeValue("student")) ||
-                newAffiliations.contains(new StringAttributeValue("faculty")) ||
-                newAffiliations.contains(new StringAttributeValue("staff")) ||
-                newAffiliations.contains(new StringAttributeValue("employee"))) {
-                    newAffiliations.add(new StringAttributeValue("member"));
+            if (newAffiliations.contains("student") ||
+                newAffiliations.contains("faculty") ||
+                newAffiliations.contains("staff") ||
+                newAffiliations.contains("employee")) {
+                    newAffiliations.add("member");
             }
 
             if (newAffiliations.size() < 1) {
-                newAffiliations.add(new StringAttributeValue("affiliate"));
+                newAffiliations.add("affiliate");
             }
 
             eduPersonAffiliation.getValues().clear();
@@ -87,11 +82,101 @@
     </AttributeDefinition>
 
     <!-- eduPersonAssurance -->
-    <AttributeDefinition id="eduPersonAssurance" xsi:type="Simple">
-        <InputDataConnector ref="staticAttributes" attributeNames="eduPersonAssurance" />
+    <AttributeDefinition id="eduPersonAssurance" xsi:type="ScriptedAttribute">
+        <InputDataConnector ref="ldap" attributeNames="eduPersonAssurance" />
+        <InputDataConnector ref="staticAttributes" attributeNames="refedsAssuranceFramework" />
+        <Script><![CDATA[
+            var HashSet = Java.type("java.util.HashSet");
+            var assurances = new HashSet();
+            var refedsValues = refedsAssuranceFramework.getValues();
+
+            {% if refeds_baseline_idp_v1 == "false" or refeds_assurance_v2 == "false" %}
+               // Remove all REFEDS Assurance values prefixed as this IdP
+               // does not meet the Conformance criteria.
+               for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
+                  value = eduPersonAssurance.getValues().get(i);
+                  if (!refedsValues.contains(value))
+                  {
+                      assurances.add(value);
+                  }
+               }
+            {% else %}
+               // Process the values
+               for ( i = 0; i < eduPersonAssurance.getValues().size(); i++){
+                  value = eduPersonAssurance.getValues().get(i);
+                  if (refedsValues.contains(value))
+                  {
+                      assurances.add(value);
+                  }
+               }
+               // Indicate REFEDS RAF is supportted by this IdP
+               assurances.add("https://refeds.org/assurance");
+
+               {% if  refeds_assurance_v2 == "true" %}
+               // REFEDS RAF Version 2 in use
+               assurances.add("https://refeds.org/assurance/version/2");
+               {% endif %}
+
+               {% if refeds_raf_unique == "true" %}
+               // Identifier uniqueness criteria are meet
+               assurances.add("https://refeds.org/assurance/ID/unique");
+               {% endif %}
+
+               {% if refeds_raf_eppn_unique == "no-reassign" or refeds_raf_eppn_unique == "reassign-1y" %}
+               // Set the eppn-unique value
+               assurances.add("https://refeds.org/assurance/ID/eppn-unique-{{ refeds_raf_eppn_unique }}");
+               {% endif %}
+
+               // Enaure IAP/high also have IAP/medium
+               if (assurances.contains("https://refeds.org/assurance/IAP/high")) {
+                  assurances.add("https://refeds.org/assurance/IAP/medium");
+               }
+
+               // Ensure IAP/medium also has IAP/low
+               if (assurances.contains("https://refeds.org/assurance/IAP/medium")) {
+                  assurances.add("https://refeds.org/assurance/IAP/low");
+               }
+
+               {% if refeds_raf_epa == "1m" or refeds_raf_epa == "1d" %}
+               // Set raf freshness
+               assurances.add("https://refeds.org/assurance/ATP/ePA-{{ refeds_raf_epa }}");
+               {% endif %}
+
+               // Ensure ATP/ePA-1d also has ATP/ePA-1m
+               if (assurances.contains("https://refeds.org/assurance/ATP/ePA-1d")) {
+                  assurances.add("https://refeds.org/assurance/ATP/ePA-1m");
+               }
+
+               // Set Cappuccino
+               if (assurances.contains("https://refeds.org/assurance") &&
+                   assurances.contains("https://refeds.org/assurance/ID/unique") &&
+                   assurances.contains("https://refeds.org/assurance/IAP/low") &&
+                   assurances.contains("https://refeds.org/assurance/IAP/medium") &&
+                   assurances.contains("https://refeds.org/assurance/ATP/ePA-1m")) {
+                  assurances.add("https://refeds.org/assurance/profile/cappuccino");
+               } else {
+                   assurances.remove("https://refeds.org/assurance/profile/cappuccino");
+               }
+
+               // Set Espresso
+               if (assurances.contains("https://refeds.org/assurance/profile/cappuccino") &&
+                   assurances.contains("https://refeds.org/assurance/IAP/high")) {
+                  assurances.add("https://refeds.org/assurance/profile/espresso");
+               } else {
+                  assurances.remove("https://refeds.org/assurance/profile/espresso");
+               }
+
+            {% endif %}
+
+            eduPersonAssurance.getValues().clear();
+
+            itr = assurances.iterator();
+            while (itr.hasNext()){
+                eduPersonAssurance.addValue(itr.next());
+            }
+        ]]></Script>
     </AttributeDefinition>
 
-    
     <!-- eduPersonEntitlement -->
     <AttributeDefinition id="eduPersonEntitlement" xsi:type="Simple">
        <InputDataConnector ref="ldap" attributeNames="eduPersonEntitlement" />
@@ -121,6 +206,11 @@
 
     <!-- eduPersonTargetedID -->
 
+    <!-- NOTE: Plans are underway to deprecate the use of this Attribute within the AAF during 2024.
+         Services in eduGAIN may still require it, so it will be maintained beyond 2024 as long 
+         as the Shibboleth IdP continues to support it. The IdP Warning logs will flag SAML2NameID 
+         as DEPRECATED because of this attribute -->
+
     <AttributeDefinition xsi:type="SAML2NameID" id="eduPersonTargetedID"
     nameIdFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">
         <InputDataConnector ref="StoredIDConnector" attributeNames="StoredID" />
@@ -141,21 +231,6 @@
     <!-- sn (surname) -->
     <AttributeDefinition id="sn" xsi:type="Simple">
        <InputDataConnector ref="ldap" attributeNames="sn" />
-    </AttributeDefinition>
-
-    <!-- schacHomeOrganisation -->
-    <AttributeDefinition id="schacHomeOrganization" xsi:type="Simple">
-        <InputDataConnector ref="staticAttributes" attributeNames="schacHomeOrganization" />
-    </AttributeDefinition>
-
-    <!-- schacHomeOrganisationType -->
-    <AttributeDefinition id="schacHomeOrganizationType" xsi:type="Simple">
-        <InputDataConnector ref="staticAttributes" attributeNames="schacHomeOrganizationType" />
-    </AttributeDefinition>
-
-    <!-- o (Organisation) -->
-    <AttributeDefinition xsi:type="Simple" id="o">
-        <InputDataConnector ref="staticAttributes" attributeNames="o" />
     </AttributeDefinition>
 
     <!-- eduPersonOrcid -->
@@ -205,8 +280,14 @@
     <!-- SAML Subject ID Attributes                 -->
     <!-- ========================================== -->
 
-    <AttributeDefinition xsi:type="Scoped" id="samlSubjectID" scope="%{idp.scope}">
+    <AttributeDefinition xsi:type="ScriptedAttribute" id="samlSubjectID">
         <InputDataConnector ref="ldap" attributeNames="%{idp.persistentId.sourceAttribute}"/>
+    <Script><![CDATA[
+        scopedValueType =  Java.type("net.shibboleth.idp.attribute.ScopedStringAttributeValue");
+
+        samlSubjectID.addValue(new scopedValueType(%{idp.persistentId.sourceAttribute}.getValues().get(0).toLower(), "%{idp.scope}"));
+    ]]></Script>
+
     </AttributeDefinition>
 
     <AttributeDefinition xsi:type="Scoped" id="samlPairwiseID" scope="%{idp.scope}">
@@ -219,7 +300,8 @@
     <!--      Data Connectors                       -->
     <!-- ========================================== -->
 
-    <DataConnector id="staticAttributes" xsi:type="Static">
+    <DataConnector id="staticAttributes" xsi:type="Static" 
+                   exportAttributes="schacHomeOrganization schacHomeOrganizationType o">
         <Attribute id="schacHomeOrganization">
             <Value>{{ home_organisation }}</Value>
         </Attribute>
@@ -229,9 +311,33 @@
         <Attribute id="o">
             <Value>{{ organisation_name }}</Value>
         </Attribute>
-        <Attribute id="eduPersonAssurance">
-            <Value>urn:mace:aaf.edu.au:iap:id:1</Value>
-            <Value>urn:mace:aaf.edu.au:iap:authn:1</Value>
+        <!-- Approved eduPersonAffiliation values -->
+        <Attribute id="affiliationValues">
+            <Value>student</Value>
+            <Value>faculty</Value>
+            <Value>staff</Value>
+            <Value>employee</Value>
+            <Value>affiliate</Value>
+            <Value>alum</Value>
+            <Value>member</Value>
+            <Value>library-walk-in</Value>
+        </Attribute>
+        <!-- REFEDS Assurance Framework static value, used in conjunction with 
+             scripted attribute filteredEduPersonAssurance -->
+        <Attribute id="refedsAssuranceFramework">
+            <Value>https://refeds.org/assurance</Value>
+            <Value>https://refeds.org/assurance/ID/unique</Value>
+            <Value>https://refeds.org/assurance/ID/eppn-unique-no-reassign</Value>
+            <Value>https://refeds.org/assurance/ID/eppn-unique-reassign-1y</Value>
+            <Value>https://refeds.org/assurance/IAP/local-enterprise</Value>
+            <Value>https://refeds.org/assurance/IAP/low</Value>
+            <Value>https://refeds.org/assurance/IAP/medium</Value>
+            <Value>https://refeds.org/assurance/IAP/high</Value>
+            <Value>https://refeds.org/assurance/ATP/ePA-1d</Value>
+            <Value>https://refeds.org/assurance/ATP/ePA-1m</Value>
+            <Value>https://refeds.org/assurance/profile/cappuccino</Value>
+            <Value>https://refeds.org/assurance/profile/espresso</Value>
+            <Value>https://refeds.org/assurance/version/2</Value>
         </Attribute>
     </DataConnector>
 
@@ -266,13 +372,13 @@
         <BeanManagedConnection>shibboleth.JPAStorageService.PersistentDataSource</BeanManagedConnection>
     </DataConnector>
 
-    <DataConnector xsi:type="aaf:SharedToken" id="sharedToken"
+    <DataConnector xsi:type="aaf:SharedToken" 
+        id="sharedToken"
         salt="%{idp.aepst.salt}" >
         <InputAttributeDefinition ref="%{idp.persistentId.sourceAttribute}" />
         <aaf:BeanManagedConnection>shibboleth.JPAStorageService.DataSource</aaf:BeanManagedConnection>
     </DataConnector>
 
-{% if source_persistent_id != "" %}
     <DataConnector id="computed" xsi:type="ComputedId"
             generatedAttributeID="computedId"
             salt="%{idp.persistentId.salt}"
@@ -281,7 +387,5 @@
 
         <InputDataConnector ref="ldap" attributeNames="%{idp.newPersistentId.sourceAttribute}" />
     </DataConnector>
-{% endif %}
-
 
 </AttributeResolver>

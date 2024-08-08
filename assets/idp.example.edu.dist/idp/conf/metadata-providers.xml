@@ -24,8 +24,14 @@
     <!-- Federation metadata -->
     <MetadataProvider id="FederationMetadata"
       xsi:type="FileBackedHTTPMetadataProvider"
-      refreshDelayFactor="0.125"
-      maxRefreshDelay="PT2H"
+      refreshDelayFactor="0.75"
+      maxRefreshDelay="PT4H"
+{% if (web_proxyhost is not none) and (web_proxyhost != "") %}
+      proxyHost= "{{ web_proxyhost }}"
+{% endif %}
+{% if (web_proxyport is not none) and (web_proxyport != "") %}
+      proxyPort= "{{ web_proxyport }}"
+{% endif %}
       backingFile="{{ shib_idp.home }}/metadata/{{ metadata_file_name }}"
       metadataURL="{{ metadata_url }}">
 
@@ -45,8 +51,14 @@
     <!-- eduGAIN metadata -->
     <MetadataProvider id="eduGAINMetadata"
       xsi:type="FileBackedHTTPMetadataProvider"
-      refreshDelayFactor="0.125"
-      maxRefreshDelay="PT2H"
+      refreshDelayFactor="0.75"
+      maxRefreshDelay="PT4H"
+{% if (web_proxyhost is not none) and (web_proxyhost != "") %}
+      proxyHost= "{{ web_proxyhost }}"
+{% endif %}
+{% if (web_proxyport is not none) and (web_proxyport != "") %}
+      proxyPort= "{{ web_proxyport }}"
+{% endif %}
       backingFile="{{ shib_idp.home }}/metadata/{{ edugain_metadata_file_name }}"
       metadataURL="{{ edugain_metadata_url }}">
 

@@ -9,3 +9,5 @@ JETTY_HOST=0.0.0.0
 JETTY_START_LOG={{ jetty.base }}/logs/jetty-start.log
 JETTY_ARGS="jetty.logs={{ jetty.base }}/logs"
 JETTY_BASE={{ jetty.base }}
+JETTY_START_TIMEOUT=500
+JETTY_PID=/var/run/jetty/jetty.pid

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "https://www.eclipse.org/jetty/configure_10_0.dtd">
+<!-- =============================================================== -->
+<!-- Configure the Shibboleth IdP webapp                             -->
+<!-- =============================================================== -->
+<Configure class="org.eclipse.jetty.ee9.webapp.WebAppContext">
+  <Set name="war"><Property name="idp.war.path" default="{{ shib_idp.current }}/war/idp.war" /></Set>
+  <Set name="contextPath"><Property name="idp.context.path" default="/idp" /></Set>
+  <Set name="extractWAR">false</Set>
+  <Set name="copyWebDir">false</Set>
+  <Set name="copyWebInf">true</Set>
+</Configure>
+

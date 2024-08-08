@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8">
     <title><spring:message code="root.title" text="Shibboleth IdP" /></title>
-    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath()%>/css/main.css">
+    <link rel="stylesheet" type="text/css" href="<%= request.getContextPath()%><spring:message code="root.css" text="/css/placeholder.css" />">
   </head>
 
   <body>

@@ -18,23 +18,22 @@
     state: permissive
   when: selinux_available.stat.exists == true
 
-- name: 'Install required packages (Version 7 and 8)'
+- name: 'Install required packages (Version 8)'
   yum:
     name:
-      - java-11-openjdk-devel
+      - java-17-openjdk-devel
       - mariadb-devel
       - mariadb
       - mariadb-server
       - chrony
     state: installed
-  when: (((ansible_distribution_major_version == "7") or 
-          (ansible_distribution_major_version == "8")) and 
+  when: ((ansible_distribution_major_version == "8") and 
          (patch_with=="yum"))
 
 - name: 'Install required packages (Version 9)'
   yum:
     name:
-      - java-11-openjdk-devel
+      - java-17-openjdk-devel
       - mariadb-devel
       - mariadb
       - mariadb-server
@@ -47,20 +46,12 @@
 - name: 'Install required packages - apt'
   apt:
     name:
-      - openjdk-11-jdk
+      - openjdk-17-jdk
       - mariadb-server
       - chrony
     state: present
     update_cache: yes
   when: patch_with=="apt"
-
-- name: 'Install required packages - OS Version 7'
-  yum:
-    name:
-      - pyOpenSSL
-      - MySQL-python
-    state: installed
-  when: ((ansible_distribution_major_version == "7") and (patch_with=="yum"))
 
 - name: 'Install required packages - OS Version 8'
   yum:
