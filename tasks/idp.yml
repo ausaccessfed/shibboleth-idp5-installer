@@ -19,6 +19,16 @@
     mode: 0700
     state: directory
 
+- name: 'Set web_proxy.xml bean file'
+  template:
+    src: 'templates/idp/web_proxy.xml'
+    dest: '{{ shib_idp.home_root }}/web_proxy.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
 - name: 'Download Shibboleth IdP distribution'
   get_url:
     url: '{{ urls.shib_idp.url }}'
@@ -40,15 +50,6 @@
     group: jetty
     mode: 0750
 
-# Wraps the Shibboleth IdP installer
-- name: 'Create installer script'
-  template:
-    dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.sh'
-    src: 'templates/idp/install.sh'
-    owner: root
-    group: root
-    mode: 0700
-
 - name: 'Create installer properties'
   template:
     dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
@@ -57,21 +58,130 @@
     group: root
     mode: 0700
 
+- name: 'Create installer properties - backup'
+  template:
+    dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties.backup'
+    src: 'templates/idp/install.properties'
+    owner: root
+    group: root
+    mode: 0700
+
 - name: 'Run IdP install'
   shell: |
     umask 0022
-    {{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.sh
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
   args:
     creates: '{{ shib_idp.home }}'
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
-- name: 'Enable the Consent module'
+- name: 'Run IdP install with proxy'
   shell: |
     umask 0022
-    {{ shib_idp.home }}/bin/module.sh -e idp.intercept.Consent
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
   args:
-    creates: '{{ shib_idp.home }}/views/intercept'
+    creates: '{{ shib_idp.home }}'
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+    
+- name: 'Directories for plugin keys'
+  file:
+    name: '{{ item }}'
+    state: directory
+    owner: root
+    group: jetty
+    mode: 0750
+  with_items:
+    - '{{ shib_idp.home }}/plugins'
+    - '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}'
+    - '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}'
+
+- name: 'Keys for plugings - nashorn'
+  get_url:
+    url: '{{ urls.plugins.nashorn.url }}'
+    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}/truststore.asc'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Keys for plugings - storage.jdbc'
+  get_url:
+    url: '{{ urls.plugins.storage_jdbc.url }}'
+    dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}/truststore.asc'
+    owner: root
+    group: jetty
+    mode: 0640
+
+- name: 'Install plugin - nashorn'
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
+- name: 'Install plugin - nashorn using web-proxy'
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
+- name: 'Install plugin - storage.jdbc'
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
+- name: 'Install plugin - storage.jdbc using web-proxy'
+  shell: |
+    umask 0022
+    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
+  args:
+    creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
+- name: 'Directories for libraries to be loaded'
+  file:
+    name: '{{ item }}'
+    state: directory
+    owner: root
+    group: jetty
+    mode: 0750
+  with_items:
+    - '{{ shib_idp.home }}/edit-webapp/WEB-INF/'
+    - '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib'
 
 - include_tasks: libs.yml
+
+- name: 'Prepare for Re-Run of the IdP Install'
+  copy:
+    dest: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties'
+    src: '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties.backup'
+    owner: root
+    group: root
+    mode: 0700
+
+- name: 'Re-Run IdP install to include the local libraries in idp.war'
+  shell: |
+    umask 0022
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
+  when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+         (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
+
+- name: 'Re-Run IdP install to include the local libraries in idp.war with proxy'
+  shell: |
+    umask 0022
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
+  when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
+             (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
 - name: 'Set customised messages.properties'
   template:
@@ -90,14 +200,6 @@
     group: jetty
     mode: 0640
     backup: no 
-
-- name: 'Remove "dummy" IdP branding'
-  file:
-    path: '{{ shib_idp.home }}/edit-webapp/images/{{ item }}'
-    state: absent
-  with_items:
-    - dummylogo-mobile.png
-    - dummylogo.png
 
 - name: 'Copy customised IdP branding (images)'
   copy:
@@ -135,23 +237,21 @@
     mode: 0640
     backup: yes
   with_items:
-    - admin/unlock-keys.vm
     - client-storage/client-storage-read.vm
     - client-storage/client-storage-write.vm
-    - duo.vm
     - error.vm
+    - intercept/attribute-release.vm
+    - intercept/terms-of-use.vm
     - login-error.vm
     - login.vm
     - logout-complete.vm
     - logout-propagate.vm
     - logout.vm
-    - user-prefs.js
-    - user-prefs.vm
 
-- name: 'Re-run IdP install.sh to install aaf-shib-ext and IdP branding'
+- name: "Rebuild the idp.war file"
   shell: |
     umask 0022
-    {{ shib_idp.src_root }}/install-{{ download.shib_idp.version}}.sh
+    {{ shib_idp.home }}/bin/build.sh 
 
 - name: 'Symlink IdP log directory'
   file:
@@ -423,16 +523,6 @@
     mode: 0640
     backup: yes
 
-- name: 'Remove attributes/custom/schacHomeOrganization.props'
-  file:
-    path: '{{ shib_idp.home }}/conf/attributes/custom/schacHomeOrganization.props'
-    state: absent
-
-- name: 'Remove attributes/custom/schacHomeOrganizationType.props'
-  file:
-    path: '{{ shib_idp.home }}/conf/attributes/custom/schacHomeOrganizationType.props'
-    state: absent
-
 - name: 'Set authn/authn.properties'
   template:
     src: 'assets/{{inventory_hostname}}/idp/conf/authn/authn.properties'
@@ -455,15 +545,6 @@
   template:
     src: 'assets/{{inventory_hostname}}/idp/conf/authn/authn-events-flow.xml'
     dest: '{{ shib_idp.home }}/conf/authn/authn-events-flow.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-- name: 'Set authn/jaas.config'
-  template:
-    src: 'assets/{{inventory_hostname}}/idp/conf/authn/jaas.config'
-    dest: '{{ shib_idp.home }}/conf/authn/jaas.config'
     owner: root
     group: jetty
     mode: 0640
@@ -534,8 +615,8 @@
 
 - name: 'Set eduGAIN attribute filter'
   template:
-    src: 'assets/{{inventory_hostname}}/idp/conf/edugain-attribute-filter.xml'
-    dest: '{{ shib_idp.home }}/conf/edugain-attribute-filter.xml'
+    src: 'assets/{{inventory_hostname}}/idp/conf/policy-based-attribute-filter.xml'
+    dest: '{{ shib_idp.home }}/conf/policy-based-attribute-filter.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -612,7 +693,7 @@
   - conf/attribute-resolver.xml
   - conf/audit.xml
   - conf/credentials.xml
-  - conf/edugain-attribute-filter.xml
+  - conf/policy-based-attribute-filter.xml
   - conf/errors.xml
   - conf/global.xml
   - conf/ldap.properties

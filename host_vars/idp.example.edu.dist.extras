@@ -1,0 +1,61 @@
+# ------------------------------------------------------------------------------
+# Additional configuration options both AAF environments
+# ------------------------------------------------------------------------------
+
+# Supporting REFEDS and AAF Specifications
+#   - true if supported, otherwise false
+#
+# By default all as set to false, not supported.
+
+# This IdP conforms to the REFEDS Baseline Expectations v1 for Identity Providers
+# Ref: https://refeds.org/baseline-expectations
+#
+refeds_baseline_idp_v1: "false"
+
+# This IdP conforms to the REFEDS Assurance Frame V2.
+# To conform to this framework, the IdP must also conform to the REFEDS Baseline
+# Expectations v1 (see above).
+# Ref: https://refeds.org/assurance
+#
+refeds_assurance_v2: "false"
+
+# REFEDS RAF Identifier Unquie
+refeds_raf_unique: "true"
+
+# REFEDS RAF Uniqueness of eduPersonPrincipalName. "no-reassign" or "reassign-1y"
+refeds_raf_eppn_unique: "no-reassign"
+
+# REFEDS RAF Freshness. "1d" or "1m"
+refeds_raf_epa: "1d"
+
+# This IdP conforms to the REFEDS Research and Scholarship (R&S) v1.3
+# Ref: http://refeds.org/category/research-and-scholarship
+#
+refeds_r_and_s_v1_3: "false"
+
+# This IdP conforms to the REFEDS Anonymous Access v.2
+# Ref: https://refeds.org/category/anonymous
+#
+refeds_anonymous_v2: "false"
+
+# This IdP conforms to the REFEDS Pseudonymous Access v.2
+# Ref: https://refeds.org/category/pseudonymous
+#
+refeds_pseudonymous_v2: "false"
+
+# This IdP conforms to the REFEDS Personalized Access v.2
+# Ref: https://refeds.org/category/personalized
+#
+refeds_personalized_v2: "false"
+
+# This IdP conforms to the REFEDS Code of Conduct v.2
+# Ref: https://refeds.org/category/code-of-conduct/v2
+#
+refeds_code_of_conduct_v2: "false"
+
+# Web Proxy configuration. Only required if the IdP utilizes
+# a web proxy to access files on the Internet such as the
+# federation metadata
+web_proxyhost:
+
+web_proxyport:

@@ -19,7 +19,7 @@ function git_update_details {
 }
 
 the_install_base=/opt
-working_dir=$the_install_base/shibboleth-idp4-installer/repository
+working_dir=$the_install_base/shibboleth-idp5-installer/repository
 
 cd $working_dir || exit
 

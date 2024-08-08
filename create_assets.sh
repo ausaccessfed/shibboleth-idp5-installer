@@ -19,6 +19,7 @@ function create_assets {
 function create_host_var {
   if [ ! -f $HOST_VAR ]; then
     cp host_vars/$TEMPLATE_HOST.$ENVIRONMENT $HOST_VAR
+    cat host_vars/$TEMPLATE_HOST.extras >> $HOST_VAR 
   else
     echo "$HOST_VAR already exists, skipping"
   fi

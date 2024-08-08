@@ -1,7 +1,7 @@
 ---
 - name: 'Set shared facts'
   set_fact:
-    jetty_dist_archive_path='{{ installer.path }}/jetty-distribution-{{ download.jetty.version }}.tar.gz'
+    jetty_dist_archive_path='{{ installer.path }}/jetty-home-{{ download.jetty.version }}.tar.gz'
 
 - name: 'Create jetty user'
   user: name=jetty
@@ -13,6 +13,14 @@
     group: jetty
     state: directory
     mode: 0750
+
+- name: 'Create /var/run/jetty'
+  file:
+    dest: /var/run/jetty
+    state: directory
+    owner: jetty
+    group: jetty
+    mode: 0755
 
 - name: 'Download jetty distribution'
   get_url:
@@ -27,11 +35,6 @@
     chown -R root {{ jetty.home }};
     chgrp -R jetty {{ jetty.home }}
     creates={{ jetty.home }}
-
-- name: 'Remove demo-base'
-  file:
-    path: '{{ jetty.home }}/demo-base'
-    state: absent
 
 - name: 'Symlink jetty to installed distribution'
   file:
@@ -55,11 +58,11 @@
     - '{{ jetty.base }}/etc'
     - '{{ jetty.base }}/lib'
     - '{{ jetty.base }}/lib/ext'
-    - '{{ jetty.base }}/lib/logback'
-    - '{{ jetty.base }}/lib/slf4j'
+    - '{{ jetty.base }}/lib/logging'
     - '{{ jetty.base }}/modules'
     - '{{ jetty.base }}/resources'
     - '{{ jetty.base }}/start.d'
+    - '{{ jetty.base }}/tmp'
     - '{{ jetty.base }}/webapps'
     - '{{ jetty.base }}/webapps/root'
     - '{{ jetty.base }}/webapps/root/WEB-INF'
@@ -68,17 +71,8 @@
 
 - name: 'Create Logback access configuration'
   template:
-    dest: '{{ jetty.base }}/etc/jetty-logback-access.xml'
-    src: 'templates/jetty/jetty-logback-access.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-- name: 'Create SSL Tweak configuration'
-  template:
-    dest: '{{ jetty.base }}/etc/tweak-ssl.xml'
-    src: 'templates/jetty/tweak-ssl.xml'
+    dest: '{{ jetty.base }}/etc/jetty-requestlog.xml'
+    src: 'templates/jetty/etc/jetty-requestlog.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -87,7 +81,7 @@
 - name: 'Set idp-backchannel.xml when backchannel enabled'
   template:
     dest: '{{ jetty.base }}/etc/idp-backchannel.xml'
-    src: 'templates/jetty/idp-backchannel.xml'
+    src: 'templates/jetty/etc/idp-backchannel.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -100,21 +94,30 @@
     state: absent
   when: enable_backchannel is defined and enable_backchannel=="false"
 
-# Files in jetty.base/modules
-
-- name: 'Set http.mod'
+- name: 'Set jetty-ssl-context.xml'
   template:
-    dest: '{{ jetty.base }}/modules/http.mod'
-    src: 'templates/jetty/http.mod'
+    dest: '{{ jetty.base }}/etc/jetty-ssl-context.xml'
+    src: 'templates/jetty/etc/jetty-ssl-context.xml'
     owner: root
     group: jetty
     mode: 0640
     backup: yes
 
+- name: 'Set tweak-ssl.xml'
+  template:
+    dest: '{{ jetty.base }}/etc/tweak-ssl.xml'
+    src: 'templates/jetty/etc/tweak-ssl.xml'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+# Files in jetty.base/modules
+
 - name: 'Set idp.mod'
   template:
     dest: '{{ jetty.base }}/modules/idp.mod'
-    src: 'templates/jetty/idp.mod'
+    src: 'templates/jetty/modules/idp.mod'
     owner: root
     group: jetty
     mode: 0640
@@ -123,7 +126,7 @@
 - name: 'Set idp-backchannel.mod when backchannel enabled'
   template:
     dest: '{{ jetty.base }}/modules/idp-backchannel.mod'
-    src: 'templates/jetty/idp-backchannel.mod'
+    src: 'templates/jetty/modules/idp-backchannel.mod'
     owner: root
     group: jetty
     mode: 0640
@@ -138,19 +141,10 @@
 
 # Files in jetty.base/resources
 
-- name: 'Set logback-access configuration'
-  template:
-    dest: '{{ jetty.base }}/resources/logback-access.xml'
-    src: 'templates/jetty/logback-access.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
 - name: 'Set logback configuration'
   template:
     dest: '{{ jetty.base }}/resources/logback.xml'
-    src: 'templates/jetty/logback.xml'
+    src: 'templates/jetty/resources/logback.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -158,10 +152,28 @@
 
 # Files in jetty.base/start.d
 
+- name: 'Set start.ini configuration'
+  template:
+    dest: '{{ jetty.base }}/start.d/start.ini'
+    src: 'templates/jetty/start.d/start.ini'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+   
 - name: 'Set idp.ini configuration'
   template:
     dest: '{{ jetty.base }}/start.d/idp.ini'
-    src: 'templates/jetty/idp.ini'
+    src: 'templates/jetty/start.d/idp.ini'
+    owner: root
+    group: jetty
+    mode: 0640
+    backup: yes
+
+- name: 'Set idp-system.ini configuration'
+  template:
+    dest: '{{ jetty.base }}/start.d/idp-system.ini'
+    src: 'templates/jetty/start.d/idp-system.ini'
     owner: root
     group: jetty
     mode: 0640
@@ -170,7 +182,7 @@
 - name: 'Set idp-backchannel.ini when backchannel enabled'
   template:
     dest: '{{ jetty.base }}/start.d/idp-backchannel.ini'
-    src: 'templates/jetty/idp-backchannel.ini'
+    src: 'templates/jetty/start.d/idp-backchannel.ini'
     owner: root
     group: jetty
     mode: 0640
@@ -188,27 +200,7 @@
 - name: 'Set idp.xml'
   template:
     dest: '{{ jetty.base }}/webapps/idp.xml'
-    src: 'templates/jetty/idp.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-- name: 'Set static.xml'
-  template:
-    dest: '{{ jetty.base }}/webapps/static.xml'
-    src: 'templates/jetty/static.xml'
-    owner: root
-    group: jetty
-    mode: 0640
-    backup: yes
-
-# Files in jetty.base
-
-- name: 'Set start.ini'
-  template:
-    dest: '{{ jetty.base }}/start.ini'
-    src: 'templates/jetty/start.ini'
+    src: 'templates/jetty/webapps/idp.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -219,7 +211,7 @@
 - name: 'Set 404'
   template:
     dest: '{{ jetty.base }}/webapps/root/404'
-    src: 'templates/jetty/404'
+    src: 'templates/jetty/webapps/root/404'
     owner: root
     group: jetty
     mode: 0640
@@ -227,7 +219,7 @@
 - name: 'Set index.html'
   template:
     dest: '{{ jetty.base }}/webapps/root/index.html'
-    src: 'templates/jetty/index.html'
+    src: 'templates/jetty/webapps/root/index.html'
     owner: root
     group: jetty
     mode: 0640
@@ -250,7 +242,7 @@
 
 - name: 'Add robots.txt to site'
   copy:
-    src: 'templates/jetty/robots.txt'
+    src: 'templates/jetty/webapps/root/robots.txt'
     dest: '{{ jetty.base }}/webapps/root/robots.txt'
     owner: jetty
     group: jetty
@@ -259,7 +251,7 @@
 - name: 'Set web.xml'
   template:
     dest: '{{ jetty.base }}/webapps/root/WEB-INF/web.xml'
-    src: 'templates/jetty/web.xml'
+    src: 'templates/jetty/webapps/root/WEB-INF/web.xml'
     owner: root
     group: jetty
     mode: 0640
@@ -308,10 +300,8 @@
   with_items:
   - '{{ jetty.home }}'
   - '{{ jetty.home }}/modules'
-  - '{{ jetty.home }}/resources'
   - '{{ jetty.home }}/etc'
   - '{{ jetty.home }}/lib'
-  - '{{ jetty.home }}/webapps'
   - '{{ jetty.home }}/bin'
 
 - name: 'Set executable files for jetty'
