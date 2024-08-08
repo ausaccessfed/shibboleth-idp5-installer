@@ -31,6 +31,10 @@
                 <ref bean="shibboleth.metrics.AttributeFilterGaugeSet" />
                 <ref bean="shibboleth.metrics.CASServiceRegistryGaugeSet" />
                 <ref bean="shibboleth.metrics.ManagedBeanGaugeSet" />
+                <ref bean="shibboleth.metrics.ModuleGaugeSet" />
+                
+                <!-- Note that this accesses remote "state" regarding IdP and plugin updates. -->
+                <ref bean="shibboleth.metrics.InstallableComponents" />
 
                 <!--
                 <bean class="com.codahale.metrics.jvm.CachedThreadStatesGaugeSet"
@@ -55,6 +59,7 @@
     <util:map id="shibboleth.metrics.MetricGroups">
         <entry key="core" value-ref="shibboleth.metrics.CoreGaugeSet" />
         <entry key="idp" value-ref="shibboleth.metrics.IdPGaugeSet" />
+        <entry key="updates" value-ref="shibboleth.metrics.InstallableComponents" />
         <entry key="logging" value-ref="shibboleth.metrics.LoggingGaugeSet" />
         <entry key="access" value-ref="shibboleth.metrics.AccessControlGaugeSet" />
         <entry key="metadata" value-ref="shibboleth.metrics.MetadataGaugeSet" />

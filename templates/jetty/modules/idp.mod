@@ -2,16 +2,16 @@
 Shibboleth IdP
 
 [depend]
-annotations
-deploy
+ee9-annotations
+ee9-deploy
 ext
 https
-jsp
-jstl
-plus
+ee9-jsp
+ee9-jstl
+ee9-plus
 resources
 server
-servlets
+ee9-servlets
 ssl
 
 [xml]

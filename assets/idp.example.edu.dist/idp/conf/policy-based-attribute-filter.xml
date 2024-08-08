@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Attribute filter for REFEDS and other Policy based attributes release -->
+
+<AttributeFilterPolicyGroup id="Policy-based-filter"
+        xmlns="urn:mace:shibboleth:2.0:afp"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
+
+{% if refeds_r_and_s_v1_3 == "true" %}
+<!-- REFEDS Research and Scholarship -->
+<!-- Releases the following attributes for services that are registered as R&S -->
+<!--  *  eduPersonPrincipalName      -->
+<!--  *  email                       -->
+<!--  *  displayName                 -->
+<!--  *  givenName                   -->
+<!--  *  sn                          -->
+<!--  *  eduPersonScopedAffiliation  -->
+<!--                                 -->
+<!--  # eduPersonTargetedID - optionally if the eduPersonPrincipalName is reassigned. -->
+<!-- -->
+<!-- See: http://refeds.org/category/research-and-scholarship  -->
+
+  <AttributeFilterPolicy id="REFEDS-Research-and-Scholarship-V1.3">
+    <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+      attributeName="http://macedir.org/entity-category"
+      attributeValue="http://refeds.org/category/research-and-scholarship"/>
+ 
+    <!-- a fixed subset of the Research & Scholarship Attribute Bundle -->
+    <!-- release of ePPN is REQUIRED -->
+    <AttributeRule attributeID="eduPersonPrincipalName" permitAny="true"/>
+ 
+    <!-- if your deployment of ePPN is non-reassigned, release of ePTID is OPTIONAL -->
+    <!-- Un-comment if the ePPN is reassigned -->
+    <!--
+    <AttributeRule attributeID="eduPersonTargetedID" permitAny="true"/>
+    --> 
+
+    <!-- release of email is REQUIRED -->
+    <AttributeRule attributeID="email" permitAny="true"/>
+ 
+    <!-- either displayName or (givenName and sn) is REQUIRED but all three are RECOMMENDED -->
+    <AttributeRule attributeID="displayName" permitAny="true"/>
+    <AttributeRule attributeID="givenName" permitAny="true"/>
+    <AttributeRule attributeID="sn" permitAny="true"/>
+   
+    <!-- release of ePSA is OPTIONAL -->
+    <AttributeRule attributeID="eduPersonScopedAffiliation" permitAny="true"/>
+  </AttributeFilterPolicy>
+{% endif %}
+
+
+{% if refeds_anonymous_v2 == "true" %}
+<!-- REFEDS Anonymous Access - V1.2 -->
+<!-- Releases the following attributes -->
+<!--  *  schacHomeOrganization       -->
+<!--  *  eduPersonScopedAffiliation  -->
+<!-- -->
+<!-- See: https://refeds.org/category/anonymous -->
+
+  <AttributeFilterPolicy id="REFEDS-Anonymous-Access-V1.2">
+
+    <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+      attributeName="http://macedir.org/entity-category"
+      attributeValue="https://refeds.org/category/anonymous"/>
+ 
+    <!-- release of schacHomeOrganization is REQUIRED -->
+    <AttributeRule attributeID="schacHomeOrganization" permitAny="true"/>
+
+    <!-- release of ePSA is REQUIRED -->
+    <AttributeRule attributeID="eduPersonScopedAffiliation" permitAny="true"/>
+
+  </AttributeFilterPolicy>
+{% endif %}
+
+{% if refeds_pseudonymous_v2 == "true" %}
+<!-- REFEDS Pesudonymous Access - V1.2 -->
+<!-- Releases the following attributes -->
+<!--  *  schacHomeOrganization       -->
+<!--  *  samlPairwiseID              -->
+<!--  *  eduPersonScopedAffiliation  -->
+<!--  *  eduPersonAssurance          -->
+<!-- -->
+<!-- See: https://refeds.org/category/pseudonymous -->
+
+  <AttributeFilterPolicy id="REFEDS-Pseudonymous-Access-V1.2">
+
+    <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+      attributeName="http://macedir.org/entity-category"
+      attributeValue="https://refeds.org/category/pseudonymous"/>
+
+    <!-- release of schacHomeOrganization is REQUIRED -->
+    <AttributeRule attributeID="schacHomeOrganization" permitAny="true"/>
+
+    <!-- release of PairwiseID is REQUIRED -->
+    <AttributeRule attributeID="samlPairwiseID" permitAny="true"/>
+
+    <!-- release of ePSA is REQUIRED -->
+    <AttributeRule attributeID="eduPersonScopedAffiliation" permitAny="true"/>
+
+    <!-- release of eduPersonAssurance is REQUIRED -->
+    <AttributeRule attributeID="eduPersonAssurance" permitAny="true"/>
+
+  </AttributeFilterPolicy>
+{% endif %}
+
+{% if refeds_personalized_v2 == "true" %}
+<!-- REFEDS Personalized Access - V1.2 -->
+<!-- Releases the following attributes -->
+<!--  *  schacHomeOrganization       -->
+<!--  *  samlSubjectID               -->
+<!--  *  displayName                 -->
+<!--  *  givenName                   -->
+<!--  *  sn                          -->
+<!--  *  mail                        -->
+<!--  *  eduPersonScopedAffiliation  -->
+<!--  *  eduPersonAssurance          -->
+<!-- -->
+<!-- See: https://refeds.org/category/personalized -->
+
+  <AttributeFilterPolicy id="REFEDS-Personalized-Access-V1.2">
+
+    <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+      attributeName="http://macedir.org/entity-category"
+      attributeValue="https://refeds.org/category/personalized"/>
+
+    <!-- release of schacHomeOrganization is REQUIRED -->
+    <AttributeRule attributeID="schacHomeOrganization" permitAny="true"/>
+
+    <!-- release of subjectID is REQUIRED -->
+    <AttributeRule attributeID="samlSubjectID" permitAny="true"/>
+
+    <!-- release of displayName is REQUIRED -->
+    <AttributeRule attributeID="displayName" permitAny="true"/>
+
+    <!-- release of givenName is REQUIRED -->
+    <AttributeRule attributeID="givenName" permitAny="true"/>
+
+    <!-- release of sn is REQUIRED -->
+    <AttributeRule attributeID="sn" permitAny="true"/>
+
+    <!-- release of mail is REQUIRED -->
+    <AttributeRule attributeID="mail" permitAny="true"/>
+
+    <!-- release of ePSA is REQUIRED -->
+    <AttributeRule attributeID="eduPersonScopedAffiliation" permitAny="true"/>
+
+    <!-- release of eduPersonAssurance is REQUIRED -->
+    <AttributeRule attributeID="eduPersonAssurance" permitAny="true"/>
+
+  </AttributeFilterPolicy>
+{% endif %}
+
+{% if refeds_code_of_conduct_v2 == "true" %}
+<!-- REFEDS Data Protection Code of Conduct - V2.0 -->
+<!-- Releases the following attributes -->
+<!--  *  eduPersonAffiliation        -->
+<!--  *  eduPersonScopedAffiliation  -->
+<!--  *  eduPersonEntitlement        -->
+<!--  *  schacHomeOrganisation       -->
+<!--  *  PairwiseID                  -->
+<!--  *  SubjectID                   -->
+<!--  *  eduPersonPrincipalName      -->
+<!--  *  eduPersonUniqueID           -->
+<!--  *  eduPersonORCID              -->
+<!--  *  displayName                 -->
+<!--  *  commonName                  -->
+<!--  *  sn                          -->
+<!--  *  givenName                   -->
+<!--  *  mail                        -->
+<!-- -->
+<!-- See: https://refeds.org/category/code-of-conduct/v2 -->
+
+  <AttributeFilterPolicy id="REFEDS-code-of-conduct-V2.0">
+
+    <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+      attributeName="http://macedir.org/entity-category"
+      attributeValue="https://refeds.org/category/code-of-conduct/v2"/>
+
+        <AttributeRule attributeID="eduPersonAffiliation">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonScopedAffiliation">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonEntitlement">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="schacHomeOrganization">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="samlPairwiseID">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="samlSubjectID">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonPrincipalName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonUniqueID">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonOrcid">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="displayName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="cn">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="sn">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+        
+        <AttributeRule attributeID="givenName">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="mail">
+            <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="true"/>
+        </AttributeRule>
+  </AttributeFilterPolicy>
+{% endif %}
+
+</AttributeFilterPolicyGroup>

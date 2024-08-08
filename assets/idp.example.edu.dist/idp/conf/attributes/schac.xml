@@ -26,13 +26,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacMotherTongue</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.1</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.1</prop>
                     <prop key="displayName.en">Mother Tongue</prop>
                     <prop key="displayName.fr">Langue maternelle</prop>
+                    <prop key="displayName.it">Lingua Madre</prop>
                     <prop key="description.en">Mother Tongue of the user</prop>
                     <prop key="description.fr">Langue maternelle (la langue apprise en premier par une personne : fr</prop>
+                    <prop key="description.it">Lingua Madre dell'utente</prop>
                 </props>
             </property>
         </bean>
@@ -41,13 +43,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacGender</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.2</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.2</prop>
                     <prop key="displayName.en">Gender</prop>
                     <prop key="displayName.fr">Genre</prop>
+                    <prop key="displayName.it">Genere</prop>
                     <prop key="description.en">Gender of the user</prop>
                     <prop key="description.fr">Genre de la personne : un chiffre (0 "Not known, 1 "Male", 2 "Female", 9 "Not specified")</prop>
+                    <prop key="description.it">Genere dell'utente</prop>
                 </props>
             </property>
         </bean>
@@ -56,13 +60,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacDateOfBirth</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.3</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.3</prop>
                     <prop key="displayName.en">Date or Birth</prop>
                     <prop key="displayName.fr">Date de naissance</prop>
+                    <prop key="displayName.it">Giorno di nascita</prop>
                     <prop key="description.en">The date of birth for the subject it is associated with</prop>
                     <prop key="description.fr">Date de naissance au format "YYYYMMJJ"</prop>
+                    <prop key="description.it">Giorno di nascita del soggetto</prop>
                 </props>
             </property>
         </bean>
@@ -71,13 +77,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacYearOfBirth</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.0.2.3</prop>
-                    <prop key="saml1.name">urn:schac:attribute-def:schacYearOfBirth</prop>
+                    <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.0.2.3</prop>
                     <prop key="displayName.en">Year of birth</prop>
                     <prop key="displayName.fr">Année de naissance</prop>
+                    <prop key="displayName.it">Anno di nascita</prop>
                     <prop key="description.en">The year of birth for the subject it is associated with</prop>
                     <prop key="description.fr">Année de naissance au format "YYYY"</prop>
+                    <prop key="description.it">Anno di nascita del soggetto</prop>
                 </props>
             </property>
         </bean>
@@ -86,13 +94,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacPlaceOfBirth</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.4</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.4</prop>
                     <prop key="displayName.en">Place of Birth</prop>
                     <prop key="displayName.fr">Lieu de naissance</prop>
+                    <prop key="displayName.it">Luogo di nascita</prop>
                     <prop key="description.en">The place of birth for the subject it is associated with</prop>
                     <prop key="description.fr">Lieu de naissance</prop>
+                    <prop key="description.it">Luogo di nascita del soggetto</prop>
                 </props>
             </property>
         </bean>
@@ -101,13 +111,14 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacCountryOfCitizenship</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.5</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.5</prop>
                     <prop key="displayName.en">Country of Citizenship</prop>
                     <prop key="displayName.fr">Nationalité</prop>
                     <prop key="description.en">The countries of citizenship for the subject it is associated with</prop>
                     <prop key="description.fr">Pays où une personne est un citoyen : 2 lettres au format ISO 3166 (fr, es...)</prop>
+                    <prop key="description.it">Cittadinanza</prop>
                 </props>
             </property>
         </bean>
@@ -116,13 +127,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacSn1</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.6</prop>
-                    <prop key="saml1.name">urn:schac:attribute-def:schacSn1</prop>
+                    <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.6</prop>
                     <prop key="displayName.en">First Surname</prop>
                     <prop key="displayName.fr">Premier nom</prop>
+                    <prop key="displayName.it">Primo Cognome</prop>
                     <prop key="description.en">First surname of a person ("the surname" in international terms)</prop>
                     <prop key="description.fr">Premier nom d'une personne</prop>
+                    <prop key="description.it">Il cognome di una persona</prop>
                 </props>
             </property>
         </bean>
@@ -131,13 +144,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacSn2</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.7</prop>
-                    <prop key="saml1.name">urn:schac:attribute-def:schacSn2</prop>
+                    <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.7</prop>
                     <prop key="displayName.en">Second Surname</prop>
                     <prop key="displayName.fr">Second nom</prop>
+                    <prop key="displayName.it">Secondo Cognome</prop>
                     <prop key="description.en">Second surname of a person</prop>
                     <prop key="description.fr">Second nom d'une personne</prop>
+                    <prop key="description.it">Secondo cognome di una persona</prop>
                 </props>
             </property>
         </bean>
@@ -146,13 +161,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacPersonalTitle</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.8</prop>
-                    <prop key="saml1.name">urn:schac:attribute-def:schacPersonalTitle</prop>
+                    <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.8</prop>
                     <prop key="displayName.en">Personal Title</prop>
                     <prop key="displayName.fr">Titre</prop>
+                    <prop key="displayName.it">Soprannome</prop>
                     <prop key="description.en">Nice name used for the user</prop>
                     <prop key="description.fr">Titre de la personne</prop>
+                    <prop key="description.it">Titolo usato per salutare l'utente</prop>
                 </props>
             </property>
         </bean>
@@ -161,15 +178,17 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacHomeOrganization</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.9</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.9</prop>
                     <prop key="displayName.en">Home Organization</prop>
                     <prop key="displayName.fi">Kotiorganisaatio</prop>
                     <prop key="displayName.fr">Organisme</prop>
+                    <prop key="displayName.it">Dominio dell'istituzione</prop>
                     <prop key="description.en">The domain name of the person's home organisation</prop>
                     <prop key="description.fi">Henkilön kotiorganisaation domain-nimi</prop>
                     <prop key="description.fr">Nom de domaine DNS de l'organisme d'origine d'une personne</prop>
+                    <prop key="description.it">Dominio dell'istituzione</prop>
                 </props>
             </property>
         </bean>
@@ -178,15 +197,17 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacHomeOrganizationType</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.10</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.10</prop>
                     <prop key="displayName.en">Home organization type</prop>
                     <prop key="displayName.fi">Kotiorganisaation tyyppi</prop>
                     <prop key="displayName.fr">Type d'organisme</prop>
+                    <prop key="displayName.it">Tipo di organizzazione di appartenenza (internazionale)</prop>
                     <prop key="description.en">Home organisation type: university, polytechnic, etc</prop>
                     <prop key="description.fi">Kotiorganisaation tyyppi: yliopisto, ammattikorkeakoulu jne</prop>
                     <prop key="description.fr">Type d'organisme d'origine d'une personne</prop>
+                    <prop key="description.it">Tipo di organizzazione di appartenenza</prop>
                 </props>
             </property>
         </bean>
@@ -195,13 +216,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacCountryOfResidence</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.11</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.11</prop>
                     <prop key="displayName.en">Country of Residence</prop>
                     <prop key="displayName.fr">Pays de résidence</prop>
+                    <prop key="displayName.it">Residenza</prop>
                     <prop key="description.en">The country of residence for the subject</prop>
                     <prop key="description.fr">Pays de résidence : fr, es...</prop>
+                    <prop key="description.it">Paese di residenza dell'utente</prop>
                 </props>
             </property>
         </bean>
@@ -210,13 +233,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacUserPresenceID</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.12</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.12</prop>
                     <prop key="displayName.en">User Presence ID</prop>
                     <prop key="displayName.fr">Identifiant de présence</prop>
+                    <prop key="displayName.it">ID utente sulla rete</prop>
                     <prop key="description.en">Identifiers that user collect on the net</prop>
                     <prop key="description.fr">Ensemble de valeurs liées aux protocoles de présence réseau (sip, xmpp, h323...)</prop>
+                    <prop key="description.it">Identificativi usati dall'utente sulla rete</prop>
                 </props>
             </property>
         </bean>
@@ -225,13 +250,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacPersonalPosition</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.13</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.13</prop>
                     <prop key="displayName.en">Personal Position</prop>
                     <prop key="displayName.fr">Position/Rôle</prop>
+                    <prop key="displayName.it">Ruolo ricoperto</prop>
                     <prop key="description.en">Personal Position of the user for the institution</prop>
                     <prop key="description.fr">Position/Rôle de la personne au sein d'une institution</prop>
+                    <prop key="description.it">Ruolo dell'utente nell'istituzione</prop>
                 </props>
             </property>
         </bean>
@@ -240,13 +267,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacPersonalUniqueCode</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.14</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.14</prop>
                     <prop key="displayName.en">Personal Unique Code</prop>
                     <prop key="displayName.fr">Code personnel unique</prop>
+                    <prop key="displayName.it">Codice Univoco</prop>
                     <prop key="description.en">Unique code for the subject it is associated with</prop>
                     <prop key="description.fr">"Code unique" pour le sujet auquel il est associé (peut être le numéro d'étudiant, le numéro d'employé, ...)</prop>
+                    <prop key="description.it">Codice Univoco legato al soggetto</prop>
                 </props>
             </property>
         </bean>
@@ -255,13 +284,15 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacPersonalUniqueID</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.15</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.15</prop>
                     <prop key="displayName.en">Personal Unique ID</prop>
                     <prop key="displayName.fr">Identifiant personnel unique</prop>
+                    <prop key="displayName.it">ID Legale Univoco</prop>
                     <prop key="description.en">Unique Legal Identifier of a person</prop>
                     <prop key="description.fr">identifiant unique légal (DNI en espagne)</prop>
+                    <prop key="description.it">Identificativo Univoco Legale associato alla persona</prop>
                 </props>
             </property>
         </bean>
@@ -270,13 +301,14 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacExpiryDate</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.17</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.17</prop>
                     <prop key="displayName.en">Expiry Date</prop>
                     <prop key="displayName.fr">Date d'expiration</prop>
                     <prop key="description.en">The date from which the set of data is to be considered invalid (specifically, in what refers to rights and entitlements)</prop>
                     <prop key="description.fr">Date à partir de laquelle l'ensemble de données de la personne doit être considéré comme invalide, au format "YYYYMMDDhhmmssZ"</prop>
+                    <prop key="description.it">Data di scadenza dei dati utente (diritti e titoli)</prop>
                 </props>
             </property>
         </bean>
@@ -285,13 +317,14 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacUserPrivateAttribute</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.18</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.18</prop>
                     <prop key="displayName.en">User Private Attribute</prop>
                     <prop key="displayName.fr">Exigences de confidentialité</prop>
                     <prop key="description.en">Datas that the user and/or organization policies want to keep private</prop>
                     <prop key="description.fr">Exigences de confidentialité, telles qu'exprimées par l'utilisateur et / ou les stratégies de l'entreprise</prop>
+                    <prop key="description.it">Dati che l'utente o le policy organizzative vogliono tenere private</prop>
                 </props>
             </property>
         </bean>
@@ -300,13 +333,14 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacUserStatus</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.19</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.19</prop>
                     <prop key="displayName.en">User Status</prop>
                     <prop key="displayName.fr">Status utilisateur</prop>
                     <prop key="description.en">Set of status of a person as user of services</prop>
                     <prop key="description.fr">Ensemble de status d'une personne en tant qu'utilisateur de services</prop>
+                    <prop key="description.it">Stato di attivita' per l'utente sui diversi servizi</prop>
                 </props>
             </property>
         </bean>
@@ -315,13 +349,14 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacProjectMembership</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.20</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.20</prop>
                     <prop key="displayName.en">Project Membership</prop>
                     <prop key="displayName.fr">Appartenance au projet</prop>
                     <prop key="description.en">Name of the project the user belongs to</prop>
                     <prop key="description.fr">Nom du projet auquel l'utilisateur appartient</prop>
+                    <prop key="description.it">Nome del progetto a cui l'utente appartiene</prop>
                 </props>
             </property>
         </bean>
@@ -330,13 +365,14 @@
             <property name="properties">
                 <props merge="true">
                     <prop key="id">schacProjectSpecificRole</prop>
-                    <prop key="transcoder">SAML2StringTranscoder</prop>
+                    <prop key="transcoder">SAML2StringTranscoder SAML1StringTranscoder</prop>
                     <prop key="saml2.name">urn:oid:1.3.6.1.4.1.25178.1.2.21</prop>
                     <prop key="saml1.name">urn:oid:1.3.6.1.4.1.25178.1.2.21</prop>
                     <prop key="displayName.en">Project Specific Role</prop>
                     <prop key="displayName.fr">Roles spécifiques au projet</prop>
                     <prop key="description.en">Set of roles inside specific projects for the user</prop>
                     <prop key="description.fr">Ensemble de rôles dans des projets spécifiques</prop>
+                    <prop key="description.it">Insieme dei ruoli svolti dall'utente su specifici progetti</prop>
                 </props>
             </property>
         </bean>
