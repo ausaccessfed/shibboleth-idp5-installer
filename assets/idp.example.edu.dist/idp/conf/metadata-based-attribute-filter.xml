@@ -10,8 +10,14 @@
 
     <AttributeFilterPolicy id="{{ federation_id }}-fed-policy">
 
-        <PolicyRequirementRule xsi:type="InEntityGroup"
-                               groupID="{{ federation_group_id }}" />
+        <PolicyRequirementRule xsi:type="OR">
+
+            <Rule xsi:type="InEntityGroup" groupID="{{ federation_group_id }}" />
+            <Rule xsi:type="EntityAttributeExactMatch" 
+               attributeName="http://macedir.org/entity-category"
+               attributeValue="http://aaf.edu.au/aaf-approved"/>
+
+        </PolicyRequirementRule>
 
         <AttributeRule attributeID="persistentID">
             <PermitValueRule xsi:type="ANY"/>
@@ -84,8 +90,6 @@
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
         </AttributeRule>
 
-    <!--         AAF Furture possible CORE attributes   -->
-
         <AttributeRule attributeID="samlSubjectID">
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
         </AttributeRule>
@@ -122,7 +126,7 @@
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
         </AttributeRule>
 
-        <!-- Schema: eduCourse -->
+    <!-- Schema: eduCourse -->
   
         <AttributeRule attributeID="eduCourseOffering">
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
@@ -244,7 +248,7 @@
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
         </AttributeRule>
 
-        <!-- Schema: inetOrgPerson -->
+    <!-- Schema: inetOrgPerson -->
   
         <AttributeRule attributeID="carLicense">
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
@@ -266,7 +270,7 @@
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>
         </AttributeRule>
 
-        <!-- Schema: MS Active Directory -->
+     <!-- Schema: MS Active Directory -->
   
         <AttributeRule attributeID="division">
             <PermitValueRule xsi:type="AttributeInMetadata" onlyIfRequired="false"/>

@@ -7,10 +7,10 @@ set -e
 # Supported Operating Systems
 #
 # Fedora like
-#   rhel    - REDHat Linux 7 and 8
-#   centos  - CentOS 7, 8 and Stream
-#   ol      - ORACLE Linux 7 and 8
-#   rocky   - Rocky Linux 8
+#   rhel    - REDHat Linux 8 and 9
+#   centos  - CentOS 8 and Stream
+#   ol      - ORACLE Linux 8 and 9
+#   rocky   - Rocky Linux 8 and 9
 #
 # Debian like
 #   ubuntu - Ubuntu 20.04 (Focal Fossa)
@@ -22,7 +22,7 @@ function setup_valid_oss {
 }
 
 function set_internal_variables {
-    LOCAL_REPO=$INSTALL_BASE/shibboleth-idp4-installer/repository
+    LOCAL_REPO=$INSTALL_BASE/shibboleth-idp5-installer/repository
     SHIBBOLETH_IDP_INSTANCE=$INSTALL_BASE/shibboleth/shibboleth-idp/current
     ANSIBLE_HOSTS_FILE=$LOCAL_REPO/ansible_hosts
     ANSIBLE_HOST_VARS=$LOCAL_REPO/host_vars/$HOST_NAME
@@ -33,20 +33,23 @@ function set_internal_variables {
     CREDENTIAL_BACKUP_PATH=$ASSETS/idp/credentials
     LDAP_PROPERTIES=$ASSETS/idp/conf/ldap.properties
     SECRETS_PROPERTIES=$ASSETS/idp/credentials/secrets.properties
-    ACTIVITY_LOG=$INSTALL_BASE/shibboleth-idp4-installer/activity.log
+    ACTIVITY_LOG=$INSTALL_BASE/shibboleth-idp5-installer/activity.log
 
-    GIT_REPO=https://github.com/ausaccessfed/shibboleth-idp4-installer.git
-    GIT_BRANCH=master
+    GIT_REPO=https://github.com/ausaccessfed/shibboleth-idp5-installer.git
+    GIT_BRANCH=main
 
-    FR_TEST_REG=https://manager.test.aaf.edu.au/federationregistry/registration/idp
-    FR_PROD_REG=https://manager.aaf.edu.au/federationregistry/registration/idp
+    FM_TEST_REG=https://manager.test.aaf.edu.au/
+    FM_PROD_REG=https://manager.aaf.edu.au/
 }
 
 
 function ensure_mandatory_variables_set {
   for var in HOST_NAME ENVIRONMENT ORGANISATION_NAME ORGANISATION_BASE_DOMAIN \
     HOME_ORG_TYPE SOURCE_ATTRIBUTE_ID INSTALL_BASE OS_UPDATE FIREWALL \
-    ENABLE_BACKCHANNEL ENABLE_EDUGAIN IDP_BEHIND_PROXY DEFAULT_ENCRYPTION; do
+    ENABLE_BACKCHANNEL ENABLE_EDUGAIN IDP_BEHIND_PROXY DEFAULT_ENCRYPTION \
+    REFEDS_BASELINE_IDP_V1 REFEDS_ASSURANCE_V2 REFEDS_RAF_UNIQUE REFEDS_RAF_EPPN_UNIQUE \
+    REFEDS_RAF_EPA REFEDS_R_AND_S_V1_3 REFEDS_ANONYMOUS_V2 REFEDS_PSEUDONYMOUS_V2 \
+    REFEDS_PERSONALIZED_V2 REFEDS_CODE_OF_CONDUCT_V2; do
     if [ ! -n "${!var:-}" ]; then
       echo "Variable '$var' is not set! Set this in `basename $0`"
       exit 1
@@ -95,6 +98,67 @@ function ensure_mandatory_variables_set {
   if [ $DEFAULT_ENCRYPTION != "GCM" ] && [ $DEFAULT_ENCRYPTION != "CBC" ]
   then
      echo "Variable DEFAULT_ENCRYPTION must be either GCM or CBC"
+     exit 1
+  fi
+
+  if [ $REFEDS_BASELINE_IDP_V1 != "true" ] && [ $REFEDS_BASELINE_IDP_V1 != "false" ]
+  then
+     echo "Variable REFEDS_BASELINE_IDP_V1 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_ASSURANCE_V2 != "true" ] && [ $REFEDS_ASSURANCE_V2 != "false" ]
+  then
+     echo "Variable REFEDS_ASSURANCE_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_RAF_UNIQUE != "true" ] && [ $REFEDS_RAF_UNIQUE != "false" ]
+  then
+     echo "Variable REFEDS_RAF_UNIQUE must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_RAF_EPPN_UNIQUE != "no-reassign" ] && [ $REFEDS_RAF_EPPN_UNIQUE != "reassign-1y" ]
+
+  then
+     echo "Variable REFEDS_RAF_EPPN_UNIQUE must be either no-reassign or reassign-1y"
+     exit 1
+  fi
+
+  if [ $REFEDS_RAF_EPA != "1d" ] && [ $REFEDS_RAF_EPA != "1m" ]
+
+  then
+     echo "Variable REFEDS_RAF_EPA must be either 1d or 1m"
+     exit 1
+  fi
+  if [ $REFEDS_R_AND_S_V1_3 != "true" ] && [ $REFEDS_R_AND_S_V1_3 != "false" ]
+  then
+     echo "Variable REFEDS_R_AND_S_V1_3 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_ANONYMOUS_V2 != "true" ] && [ $REFEDS_ANONYMOUS_V2 != "false" ]
+  then
+     echo "Variable REFEDS_ANONYMOUS_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_PSEUDONYMOUS_V2 != "true" ] && [ $REFEDS_PSEUDONYMOUS_V2 != "false" ]
+  then
+     echo "Variable REFEDS_PSEUDONYMOUS_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_PERSONALIZED_V2 != "true" ] && [ $REFEDS_PERSONALIZED_V2 != "false" ]
+  then
+     echo "Variable REFEDS_PERSONALIZED_V2 must be either true or false"
+     exit 1
+  fi
+
+  if [ $REFEDS_CODE_OF_CONDUCT_V2 != "true" ] && [ $REFEDS_CODE_OF_CONDUCT_V2 != "false" ]
+  then
+     echo "Variable REFEDS_CODE_OF_CONDUCT_V2 must be either true or false"
      exit 1
   fi
 }
@@ -160,6 +224,10 @@ function install_apt_dependencies {
 }
 
 function install_yum_dependencies {
+  echo ""
+  echo "Install glibc-langpack-en"
+  yum -y -q -e0 install glibc-langpack-en
+
   if [ $OS_UPDATE == "true" ]
   then
     yum -y update
@@ -303,6 +371,34 @@ function set_ansible_host_vars {
   if [ -n "$FTICKS_SECRET_KEY" ]; then
      replace_property 'fticks_secret_key:' "\"$FTICKS_SECRET_KEY"\" $ANSIBLE_HOST_VARS
   fi
+
+  replace_property 'refeds_baseline_idp_v1:' "\"$REFEDS_BASELINE_IDP_V1\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_assurance_v2:' "\"$REFEDS_ASSURANCE_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_raf_unique:' "\"$REFEDS_RAF_UNIQUE\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_raf_eppn_unique:' "\"$REFEDS_RAF_EPPN_UNIQUE\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_raf_epa:' "\"$REFEDS_RAF_EPA\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_r_and_s_v1_3:' "\"$REFEDS_R_AND_S_V1_3\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_anonymous_v2:' "\"$REFEDS_ANONYMOUS_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_pseudonymous_v2:' "\"$REFEDS_PSEUDONYMOUS_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_personalized_v2:' "\"$REFEDS_PERSONALIZED_V2\"" \
+    $ANSIBLE_HOST_VARS
+  replace_property 'refeds_code_of_conduct_v2:' "\"$REFEDS_CODE_OF_CONDUCT_V2\"" \
+    $ANSIBLE_HOST_VARS
+  if [ -n "$WEB_PROXYHOST" ]; then
+     replace_property 'web_proxyhost:' "\"$WEB_PROXYHOST"\" $ANSIBLE_HOST_VARS
+  fi
+  if [ -n "$WEB_PROXYPORT" ]; then
+     replace_property 'web_proxyport:' "\"$WEB_PROXYPORT"\" $ANSIBLE_HOST_VARS
+  fi
+
 }
 
 function set_ansible_cfg_log_path {
@@ -356,7 +452,7 @@ function create_self_signed_certs {
 
 function run_ansible {
   pushd $LOCAL_REPO > /dev/null
-  ansible-playbook -i ansible_hosts site_v4.yml --force-handlers --extra-var="install_base=$INSTALL_BASE"
+  ansible-playbook -i ansible_hosts site_v5.yml --force-handlers --extra-var="install_base=$INSTALL_BASE"
   popd > /dev/null
 }
 
@@ -376,11 +472,11 @@ function backup_shibboleth_credentials {
   
 }
 
-function display_fr_idp_registration_link {
+function display_fm_idp_registration_link {
   if [ "$ENVIRONMENT" == "test" ]; then
-    echo "$FR_TEST_REG"
+    echo "$FM_TEST_REG"
   else
-    echo "$FR_PROD_REG"
+    echo "$FM_PROD_REG"
   fi
 }
 
@@ -391,8 +487,8 @@ Bootstrap finished!
 
 To make your IdP functional follow these steps:
 
-1. Register your IdP in Federation Registry:
-   `display_fr_idp_registration_link`
+1. Register your IdP in Federation Manager:
+   `display_fm_idp_registration_link`
 
    - For 'Step 3. SAML Configuration' we suggest using the "Easy registration
      using defaults" with the value 'https://$HOST_NAME'
@@ -432,11 +528,11 @@ EOF
 }
 
 function prevent_duplicate_execution {
-  touch "/root/.lock-idp-bootstrap-v4"
+  touch "/root/.lock-idp-bootstrap-v5"
 }
 
 function duplicate_execution_warning {
-  if [ -e "/root/.lock-idp-bootstrap-v4" ]
+  if [ -e "/root/.lock-idp-bootstrap-v5" ]
   then
     echo -e "\n\n-----"
     echo "The bootstrap process has already been executed and could be destructive if run again."
@@ -476,7 +572,7 @@ function read_bootstrap_ini {
 
 function run_as_root {
     if [[ $USER != "root" ]]; then
-        echo "bootstrap-v4.sh MUST be run as root!"
+        echo "bootstrap-v5.sh MUST be run as root!"
         exit 1
     fi
 }
@@ -511,7 +607,7 @@ function get_cfg_section {
     if [[ $(declare -F cfg.section.$1) ]]; then
         cfg.section.$1
     else
-       echo "Section [$1] not found in bootstrap-v4.ini"
+       echo "Section [$1] not found in bootstrap-v5.ini"
        exit 1
     fi
 }
@@ -520,10 +616,11 @@ function bootstrap {
   setup_valid_oss
   run_as_root
   run_on_os
-  read_bootstrap_ini 'bootstrap-v4.ini'
+  read_bootstrap_ini 'bootstrap-v5.ini'
   get_cfg_section main
   get_cfg_section logging
   get_cfg_section ldap
+  get_cfg_section policy
   get_cfg_section advanced
   set_internal_variables 
   ensure_mandatory_variables_set

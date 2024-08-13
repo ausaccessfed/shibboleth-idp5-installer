@@ -47,7 +47,7 @@
         <entry key="AccessByAttribute">
             <bean parent="shibboleth.PredicateAccessControl">
                 <constructor-arg>
-                    <bean class="net.shibboleth.idp.profile.logic.SimpleAttributePredicate">
+                    <bean parent="shibboleth.Conditions.SimpleAttribute">
                         <property name="attributeValueMap">
                             <map>
                                 <entry key="eduPersonEntitlement">

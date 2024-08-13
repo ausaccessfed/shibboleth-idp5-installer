@@ -3,14 +3,14 @@
   pre_tasks:
   vars:
     installer:
-      root: "{{ install_base }}/shibboleth-idp4-installer"
-      path: "{{ install_base }}/shibboleth-idp4-installer/build"
-      repository: "{{ install_base }}/shibboleth-idp4-installer/repository"
+      root: "{{ install_base }}/shibboleth-idp5-installer"
+      path: "{{ install_base }}/shibboleth-idp5-installer/build"
+      repository: "{{ install_base }}/shibboleth-idp5-installer/repository"
   tasks:
     - name: 'Verify Ansible meets AAF Installer version requirments.'
       assert:
-        that: "ansible_version.full is version_compare('2.9', '>=')"
-        msg: "You must update Ansible to at least 2.9 to use this version of the AAF IdP Installer."
+        that: "ansible_version.full is version_compare('2.14', '>=')"
+        msg: "You must update Ansible to at least 2.14 to use this version of the AAF IdP Installer."
 
     - name: 'Create local_conf.yml if it does not exist'
       copy:
@@ -28,12 +28,12 @@
     download:
       jetty:
         baseurl: "{{ aaf_binaries.baseurl }}/jetty"
-        version: 9.4.51.v20230217
-        sha256sum: 5c34101bfb56b90c546df9b04f7931822b8f9bed676e02dc8c7c91b02a7f38b7
+        version: 12.0.12
+        sha256sum: 0857554fe0182b62af5d1cea32d4cbcfcf41b174ae3e896ffb6bbc11b4ec8a5e
       shib_idp:
         baseurl: "{{ aaf_binaries.baseurl }}/shibboleth"
-        version: 4.3.1
-        sha256sum: 04d08d324a5a5f016ca69b96dbab58abbb5b3e0045455cc15cf0d33ffd6742d5
+        version: 5.1.3
+        sha256sum: cc72f0b15fda49b43bdd38cef3bdc62cbe01684b59c3d024b5de1ffdba42206e
       mysql_connector:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/Connector-J"
         version: 8.0.28
@@ -43,36 +43,42 @@
         version: 1.0.0
         sha256sum: 5e5de66e3517d30ff19ef66cf7a4aa5443b861d83e36a75e85845b007a03afbf
       aaf_shib_ext:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf_shib_ext"
-        version: 2.0.0
-        sha256sum: 5244b2c2565ed40fe66ee8d551ad5e5f1aac0c26c06eace521658792297d464c
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf-shibext"
+        version: 5.1.2
+        sha256sum: 14913ec24500f4b952773c36c72cdcdc905e1e0be0ce607cf6fbba86073336c1
       keystore:
         baseurl: "{{ aaf_binaries.baseurl }}/keystore"
         version: "Unknown"
         sha256sum: ae4185b2f0bb1af00abc6a4502fbfbdc6a90aec65c7bcee08e37a1bc20de5ac1 
-      logback_access:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
-        version: 1.2.10
-        sha256sum: 8462a7d983a10700c2cc559b7df4254f3a21c2611c32476cb5a6702ce51524c9
-      logback_classic:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
-        version: 1.2.10
-        sha256sum: 3160ae988af82c8bf3024ddbe034a82da98bb186fd09e76c50543c5b9da5cc5e
-      logback_core:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
-        version: 1.2.10
-        sha256sum: ba51a3fe56691f9dd7fe742e4a73c3ab4aaaa32202c73409ba56f18687399a08
       jcl_over_slf4j:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
-        version: 1.7.33
-        sha256sum: a2c0b70507e6f769ea571608fd9b728329c5c723af37c3b772127c58fb593dfc
-      slf4j_api:
-        baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
-        version: 1.7.33
-        sha256sum: 336811855ee97fcd8413343dc42f4d26362502860e8a9193e4db305e3e8ef80a
+        version: 2.0.5
+        sha256sum: 95fa90eb540df07b6a2fa70f3613761180d07c9c8f1c299e3f9a5c943313a2d6
+      logback_classic:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
+        version: 1.3.6
+        sha256sum: c4958cc76d6197ad7ad461fa7be549e3098267d6ff98c831c672d3a4161f5b22
+      logback_core:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
+        version: 1.3.6
+        sha256sum: 671500d3e0f998aeeb412bcd9088119ef8a7013a4d708d356bd4b0afb3c02f64
+      spring_jdbc:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/spring-jdbc"
+        version: 6.0.11
+        sha256sum: 3f617c3999e2fa27b67a07e5e64d81c2f0e10bb39f6fe9fcfedc28e331ec752b
+      plugins:
+        baseurl: "{{ aaf_binaries.baseurl }}/plugins"
+        nashorn:
+          name: "net.shibboleth.idp.plugin.nashorn"
+          version: 2.0.0
+          sha256sum: 6de49acf3a53fbec8698f1e985a0b7b2d16605d1a1a84f8ebf65a6476ba85f2a
+        storage_jdbc:
+          name: "net.shibboleth.plugin.storage.jdbc"
+          version: 2.0.0
+          sha256sum: abac557a582c344c990b5f270c3d84fbe93f8f93d52894057bf50ed037b476bd
     urls:
       jetty:
-        url: "{{ download.jetty.baseurl }}/jetty-distribution-{{ download.jetty.version }}.tar.gz"
+        url: "{{ download.jetty.baseurl }}/jetty-home-{{ download.jetty.version }}.tar.gz"
       shib_idp:
         url: "{{ download.shib_idp.baseurl }}/shibboleth-identity-provider-{{ download.shib_idp.version }}.tar.gz"
       mysql_connector:
@@ -80,30 +86,34 @@
       dta_ssl:
         url: "{{ download.dta_ssl.baseurl }}/jetty94-dta-ssl-{{download.dta_ssl.version}}.jar"
       aaf_shib_ext:
-        url: "{{ download.aaf_shib_ext.baseurl }}/aaf-shib-ext-{{ download.aaf_shib_ext.version }}.jar"
+        url: "{{ download.aaf_shib_ext.baseurl }}/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar"
       keystore:
         url: "{{ download.keystore.baseurl }}/keystore"
-      logback_access:
-         url: "{{ download.logback_access.baseurl }}/logback-access-{{ download.logback_access.version }}.jar"
       logback_classic:
-         url: "{{ download.logback_classic.baseurl }}/logback-classic-{{ download.logback_classic.version }}.jar"
+        url: "{{ download.logback_classic.baseurl }}/logback-classic-{{ download.logback_classic.version }}.jar"
       logback_core:
-         url: "{{ download.logback_core.baseurl }}/logback-core-{{ download.logback_core.version }}.jar"
+        url: "{{ download.logback_core.baseurl }}/logback-core-{{ download.logback_core.version }}.jar"
       jcl_over_slf4j:
-         url: "{{ download.jcl_over_slf4j.baseurl }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar"
-      slf4j_api:
-         url: "{{ download.slf4j_api.baseurl }}/slf4j-api-{{ download.slf4j_api.version }}.jar"
+        url: "{{ download.jcl_over_slf4j.baseurl }}/jcl-over-slf4j-{{ download.jcl_over_slf4j.version }}.jar"
+      spring_jdbc:
+        url: "{{ download.spring_jdbc.baseurl }}/spring-jdbc-{{ download.spring_jdbc.version }}.jar"
+      plugins:
+        nashorn:
+          url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/truststore.asc.{{ download.plugins.nashorn.version }}"
+        storage_jdbc:
+          url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/truststore.asc.{{ download.plugins.storage_jdbc.version }}"
+
     installer:
-      root: "{{ install_base }}/shibboleth-idp4-installer"
-      path: "{{ install_base }}/shibboleth-idp4-installer/build"
-      repository: "{{ install_base }}/shibboleth-idp4-installer/repository"
+      root: "{{ install_base }}/shibboleth-idp5-installer"
+      path: "{{ install_base }}/shibboleth-idp5-installer/build"
+      repository: "{{ install_base }}/shibboleth-idp5-installer/repository"
     jetty:
       root: "{{ install_base }}/jetty"
-      home: "{{ install_base }}/jetty/jetty-distribution-{{ download.jetty.version }}"
-      base: "{{ install_base }}/shibboleth/jetty"
+      home: "{{ install_base }}/jetty/jetty-home-{{ download.jetty.version }}"
+      base: "{{ install_base }}/shibboleth/jetty12"
       current: "{{ install_base }}/jetty/current"
-      tmp_directory: "{{ install_base }}/shibboleth/jetty/tmp"
-      state_directory: "{{ install_base }}/shibboleth/jetty/tmp"
+      tmp_directory: "{{ install_base }}/shibboleth/jetty12/tmp"
+      state_directory: "{{ install_base }}/shibboleth/jetty12/tmp"
       web_443_keystore_pw: "{{ lookup('password', installer.repository + '/passwords/' + inventory_hostname + '/web_443_keystore chars=letters,digits length=64') }}"
     shib_idp:
       home_root: "{{ install_base }}/shibboleth/shibboleth-idp"
