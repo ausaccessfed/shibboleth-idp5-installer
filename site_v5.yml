@@ -64,7 +64,7 @@
         sha256sum: c32b29af69c201efde686225f8b439f9053e88ecaaac110c02fcbe1b4723fadc
       spring_jdbc:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/spring-jdbc"
-        version: 6.0.12
+        version: 6.1.12
         sha256sum: 0288a6866389989d386a32aaad15394575da6d7868dcfea6e90f4ba6ed685c8b
       plugins:
         baseurl: "{{ aaf_binaries.baseurl }}/plugins"
