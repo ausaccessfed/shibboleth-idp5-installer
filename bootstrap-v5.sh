@@ -260,8 +260,16 @@ function install_yum_dependencies {
   yum -y -q -e0 install git
 
   echo ""
-  echo "Install ansible"
-  yum -y -q -e0 install ansible
+  echo "Remove ansible"
+  yum -y -q -e0 erase ansible
+
+  echo ""
+  echo "Install ansible-core and required modules"
+  yum -y -q -e0 install ansible-core
+
+  ansible-galaxy collection install ansible.posix
+  ansible-galaxy collection install community.mysql
+  ansible-galaxy collection install community.crypto
 
   if [ $FIREWALL == "firewalld" ]
   then
