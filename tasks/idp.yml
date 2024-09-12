@@ -115,7 +115,7 @@
 - name: 'Install plugin - nashorn'
   shell: |
     umask 0022
-    {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.nashhorn.plugin_url }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
+    {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.nashorn.plugin_url }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
   when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -124,7 +124,7 @@
 - name: 'Install plugin - nashorn using web-proxy'
   shell: |
     umask 0022
-    {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.nashhorn.plugin_url }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
+    {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.nashorn.plugin_url }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
