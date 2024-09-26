@@ -286,7 +286,6 @@
         scopedValueType =  Java.type("net.shibboleth.idp.attribute.ScopedStringAttributeValue");
 
         samlSubjectID.addValue(new scopedValueType(%{idp.persistentId.sourceAttribute}.getValues().get(0).toLowerCase(), "%{idp.scope}"));
-
     ]]></Script>
 
     </AttributeDefinition>
