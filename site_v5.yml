@@ -72,10 +72,12 @@
         baseurl: "{{ aaf_binaries.baseurl }}/plugins"
         nashorn:
           name: "net.shibboleth.idp.plugin.nashorn"
+          filename: "idp-plugin-nashorn-jdk-dist"
           version: 2.0.0
           sha256sum: 6de49acf3a53fbec8698f1e985a0b7b2d16605d1a1a84f8ebf65a6476ba85f2a
         storage_jdbc:
           name: "net.shibboleth.plugin.storage.jdbc"
+          filename: "java-plugin-jdbc-storage"
           version: 2.0.1
           sha256sum: abac557a582c344c990b5f270c3d84fbe93f8f93d52894057bf50ed037b476bd
     urls:
@@ -102,10 +104,10 @@
       plugins:
         nashorn:
           truststore_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/truststore.asc.{{ download.plugins.nashorn.version }}"
-          plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/-{{ download.plugins.nashorn.version }}.tar.gz"
+          plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/{{ download.plugins.nashorn.filename }}-{{ download.plugins.nashorn.version }}.tar.gz"
         storage_jdbc: 
           truststore_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/truststore.asc.{{ download.plugins.storage_jdbc.version }}"
-          plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/java-plugin-jdbc-storage-{{ download.plugins.storage_jdbc.version }}.tar.gz"
+          plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/{{ download.plugins.storage_jdbc.filename }}-{{ download.plugins.storage_jdbc.version }}.tar.gz"
     installer:
       root: "{{ install_base }}/shibboleth-idp5-installer"
       path: "{{ install_base }}/shibboleth-idp5-installer/build"
