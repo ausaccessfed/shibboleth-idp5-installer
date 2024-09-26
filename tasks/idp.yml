@@ -98,11 +98,7 @@
 
 - name: 'Keys for plugings - nashorn'
   get_url:
-<<<<<<< HEAD
     url: '{{ urls.plugins.nashorn.truststore_url }}'
-=======
-    url: '{{ urls.plugins.nashorn.url }}'
->>>>>>> e8c6068 (Develop (#16))
     dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.nashorn.name }}/truststore.asc'
     owner: root
     group: jetty
@@ -110,11 +106,7 @@
 
 - name: 'Keys for plugings - storage.jdbc'
   get_url:
-<<<<<<< HEAD
     url: '{{ urls.plugins.storage_jdbc.truststore_url }}'
-=======
-    url: '{{ urls.plugins.storage_jdbc.url }}'
->>>>>>> e8c6068 (Develop (#16))
     dest: '{{ shib_idp.home }}/credentials/{{ download.plugins.storage_jdbc.name }}/truststore.asc'
     owner: root
     group: jetty
@@ -123,11 +115,7 @@
 - name: 'Install plugin - nashorn'
   shell: |
     umask 0022
-<<<<<<< HEAD
     {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.nashorn.plugin_url }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
-=======
-    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
->>>>>>> e8c6068 (Develop (#16))
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
   when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -136,11 +124,7 @@
 - name: 'Install plugin - nashorn using web-proxy'
   shell: |
     umask 0022
-<<<<<<< HEAD
     {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.nashorn.plugin_url }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
-=======
-    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.nashorn.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}
->>>>>>> e8c6068 (Develop (#16))
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.nashorn.name }}.{{download.plugins.nashorn.version }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -149,11 +133,7 @@
 - name: 'Install plugin - storage.jdbc'
   shell: |
     umask 0022
-<<<<<<< HEAD
     {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.storage_jdbc.plugin_url }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
-=======
-    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
->>>>>>> e8c6068 (Develop (#16))
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
   when: ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -162,11 +142,7 @@
 - name: 'Install plugin - storage.jdbc using web-proxy'
   shell: |
     umask 0022
-<<<<<<< HEAD
     {{ shib_idp.home }}/bin/plugin.sh -i {{ download.plugins.storage_jdbc.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
-=======
-    {{ shib_idp.home }}/bin/plugin.sh -I {{ download.plugins.storage_jdbc.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
->>>>>>> e8c6068 (Develop (#16))
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or

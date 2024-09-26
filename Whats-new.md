@@ -1,12 +1,8 @@
 # What's new in the AAF IdP Installer
 
 ## Overview
-<<<<<<< HEAD
-This is a brief not of the new features and functionality provided in the AAF Installer.
-=======
-This is a brief note of the new features and functionality provided in the AAF Installer.
->>>>>>> e8c6068 (Develop (#16))
 
+This is a brief note of the new features and functionality provided in the AAF Installer.
 
 ## New Features
 
