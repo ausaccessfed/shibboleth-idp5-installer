@@ -28,8 +28,18 @@
     download:
       jetty:
         baseurl: "{{ aaf_binaries.baseurl }}/jetty"
+<<<<<<< HEAD
+<<<<<<< HEAD
         version: 12.0.13
         sha256sum: f25b80e6905f660135a216bcca0466bdf113e2dc74ccf33b37713c616569dcae
+=======
+        version: 12.0.12
+        sha256sum: 0857554fe0182b62af5d1cea32d4cbcfcf41b174ae3e896ffb6bbc11b4ec8a5e
+>>>>>>> e8c6068 (Develop (#16))
+=======
+        version: 12.0.13
+        sha256sum: f25b80e6905f660135a216bcca0466bdf113e2dc74ccf33b37713c616569dcae
+>>>>>>> 10f0896 (Fix some issues with initial version and setup for metadata driven feature (#22))
       shib_idp:
         baseurl: "{{ aaf_binaries.baseurl }}/shibboleth"
         version: 5.1.3
@@ -44,14 +54,21 @@
         sha256sum: 5e5de66e3517d30ff19ef66cf7a4aa5443b861d83e36a75e85845b007a03afbf
       aaf_shib_ext:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf-shibext"
+<<<<<<< HEAD
         version: 5.1.3
         sha256sum: 63f2f49fbafbcaf7b478f26a9504a9924109c1194cf25991d5b7a283a176b962
+=======
+        version: 5.1.2
+        sha256sum: 14913ec24500f4b952773c36c72cdcdc905e1e0be0ce607cf6fbba86073336c1
+>>>>>>> e8c6068 (Develop (#16))
       keystore:
         baseurl: "{{ aaf_binaries.baseurl }}/keystore"
         version: "Unknown"
         sha256sum: ae4185b2f0bb1af00abc6a4502fbfbdc6a90aec65c7bcee08e37a1bc20de5ac1 
       jcl_over_slf4j:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/slf4j"
+<<<<<<< HEAD
+<<<<<<< HEAD
         version: 2.0.16
         sha256sum: 5744d62c5af556e839ab922c9fa3f737f0a5971e478ba68b2eb5256b2842ec78
       logback_classic:
@@ -66,6 +83,31 @@
         baseurl: "{{ aaf_binaries.baseurl }}/jars/spring-jdbc"
         version: 6.1.12
         sha256sum: 0288a6866389989d386a32aaad15394575da6d7868dcfea6e90f4ba6ed685c8b
+=======
+        version: 2.0.5
+        sha256sum: 95fa90eb540df07b6a2fa70f3613761180d07c9c8f1c299e3f9a5c943313a2d6
+=======
+        version: 2.0.16
+        sha256sum: 5744d62c5af556e839ab922c9fa3f737f0a5971e478ba68b2eb5256b2842ec78
+>>>>>>> 10f0896 (Fix some issues with initial version and setup for metadata driven feature (#22))
+      logback_classic:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
+        version: 1.5.7
+        sha256sum: 7cb17f6b12fda4ee691916048ca7a9ae4d1b0cdbe68125acf9d6e2dafdb2c17d
+      logback_core:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/logback"
+        version: 1.5.7
+        sha256sum: c32b29af69c201efde686225f8b439f9053e88ecaaac110c02fcbe1b4723fadc
+      spring_jdbc:
+        baseurl: "{{ aaf_binaries.baseurl }}/jars/spring-jdbc"
+<<<<<<< HEAD
+        version: 6.0.11
+        sha256sum: 3f617c3999e2fa27b67a07e5e64d81c2f0e10bb39f6fe9fcfedc28e331ec752b
+>>>>>>> e8c6068 (Develop (#16))
+=======
+        version: 6.1.12
+        sha256sum: 0288a6866389989d386a32aaad15394575da6d7868dcfea6e90f4ba6ed685c8b
+>>>>>>> 10f0896 (Fix some issues with initial version and setup for metadata driven feature (#22))
       plugins:
         baseurl: "{{ aaf_binaries.baseurl }}/plugins"
         nashorn:
@@ -74,7 +116,11 @@
           sha256sum: 6de49acf3a53fbec8698f1e985a0b7b2d16605d1a1a84f8ebf65a6476ba85f2a
         storage_jdbc:
           name: "net.shibboleth.plugin.storage.jdbc"
+<<<<<<< HEAD
           version: 2.0.1
+=======
+          version: 2.0.0
+>>>>>>> e8c6068 (Develop (#16))
           sha256sum: abac557a582c344c990b5f270c3d84fbe93f8f93d52894057bf50ed037b476bd
     urls:
       jetty:
@@ -99,11 +145,17 @@
         url: "{{ download.spring_jdbc.baseurl }}/spring-jdbc-{{ download.spring_jdbc.version }}.jar"
       plugins:
         nashorn:
+<<<<<<< HEAD
           truststore_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/truststore.asc.{{ download.plugins.nashorn.version }}"
           plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/-{{ download.plugins.nashorn.version }}.tar.gz"
         storage_jdbc: 
           truststore_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/truststore.asc.{{ download.plugins.storage_jdbc.version }}"
           plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/java-plugin-jdbc-storage-{{ download.plugins.storage_jdbc.version }}.tar.gz"
+=======
+          url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/truststore.asc.{{ download.plugins.nashorn.version }}"
+        storage_jdbc:
+          url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/truststore.asc.{{ download.plugins.storage_jdbc.version }}"
+>>>>>>> e8c6068 (Develop (#16))
 
     installer:
       root: "{{ install_base }}/shibboleth-idp5-installer"

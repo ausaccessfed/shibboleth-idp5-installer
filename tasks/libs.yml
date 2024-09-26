@@ -70,7 +70,11 @@
 - name: 'Install aaf-shibext library'
   get_url:
     url: '{{ urls.aaf_shib_ext.url }}'
+<<<<<<< HEAD
     dest: '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib/aaf-shibext-v5.jar'
+=======
+    dest: '{{ shib_idp.home }}/edit-webapp/WEB-INF/lib/aaf-shibext-{{ download.aaf_shib_ext.version }}.jar'
+>>>>>>> e8c6068 (Develop (#16))
     checksum: 'sha256:{{ download.aaf_shib_ext.sha256sum }}'
     mode: 0640
     owner: root

@@ -281,11 +281,28 @@
     <!-- ========================================== -->
 
     <AttributeDefinition xsi:type="ScriptedAttribute" id="samlSubjectID">
+<<<<<<< HEAD
+<<<<<<< HEAD
         <InputDataConnector ref="ldap" attributeNames="%{idp.newPersistentId.sourceAttribute}"/>
     <Script><![CDATA[
         scopedValueType =  Java.type("net.shibboleth.idp.attribute.ScopedStringAttributeValue");
 
         samlSubjectID.addValue(new scopedValueType(%{idp.persistentId.sourceAttribute}.getValues().get(0).toLowerCase(), "%{idp.scope}"));
+=======
+        <InputDataConnector ref="ldap" attributeNames="%{idp.persistentId.sourceAttribute}"/>
+    <Script><![CDATA[
+        scopedValueType =  Java.type("net.shibboleth.idp.attribute.ScopedStringAttributeValue");
+
+        samlSubjectID.addValue(new scopedValueType(%{idp.persistentId.sourceAttribute}.getValues().get(0).toLower(), "%{idp.scope}"));
+>>>>>>> e8c6068 (Develop (#16))
+=======
+        <InputDataConnector ref="ldap" attributeNames="%{idp.newPersistentId.sourceAttribute}"/>
+    <Script><![CDATA[
+        scopedValueType =  Java.type("net.shibboleth.idp.attribute.ScopedStringAttributeValue");
+
+        samlSubjectID.addValue(new scopedValueType(%{idp.persistentId.sourceAttribute}.getValues().get(0).toLowerCase(), "%{idp.scope}"));
+
+>>>>>>> 10f0896 (Fix some issues with initial version and setup for metadata driven feature (#22))
     ]]></Script>
 
     </AttributeDefinition>
