@@ -102,7 +102,7 @@
       plugins:
         nashorn:
           truststore_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/truststore.asc.{{ download.plugins.nashorn.version }}"
-          plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/-{{ download.plugins.nashorn.version }}.tar.gz"
+          plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.nashorn.name }}/idp-plugin-nashorn-jdk-dist-{{ download.plugins.nashorn.version }}.tar.gz"
         storage_jdbc: 
           truststore_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/truststore.asc.{{ download.plugins.storage_jdbc.version }}"
           plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/java-plugin-jdbc-storage-{{ download.plugins.storage_jdbc.version }}.tar.gz
