@@ -108,6 +108,7 @@
         storage_jdbc: 
           truststore_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/truststore.asc.{{ download.plugins.storage_jdbc.version }}"
           plugin_url: "{{ download.plugins.baseurl }}/{{ download.plugins.storage_jdbc.name }}/{{ download.plugins.storage_jdbc.filename }}-{{ download.plugins.storage_jdbc.version }}.tar.gz"
+
     installer:
       root: "{{ install_base }}/shibboleth-idp5-installer"
       path: "{{ install_base }}/shibboleth-idp5-installer/build"
