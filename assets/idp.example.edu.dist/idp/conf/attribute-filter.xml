@@ -1,16 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
-    Base Attribute Filter - Honors the Subject ID requirement tag in metadata.
--->
+    This file is an EXAMPLE policy file.  While the policy presented in this 
+    example file is illustrative of some simple cases, it relies on the names of
+    non-existent example services and the example attributes demonstrated in the
+    default attribute-resolver.xml file.
 
+    This example does contain some usable "general purpose" policies that may be
+    useful in conjunction with specific deployment choices, but those policies may
+    not be applicable to your specific needs or constraints.    
+-->
 <AttributeFilterPolicyGroup id="ShibbolethFilterPolicy"
         xmlns="urn:mace:shibboleth:2.0:afp"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
 
     <!--
-    Honoring Subject ID requirement tag in metadata.
-    Will supply pairwise-id if subject-id isn't explicitly required.
+    Example rule relying on a locally applied tag in metadata to trigger attribute
+    release of some specific attributes. Add additional attributes as desired.
+    -->
+	<AttributeFilterPolicy id="Per-Attribute-singleValued">
+	    <PolicyRequirementRule xsi:type="ANY" />
+	 
+	    <AttributeRule attributeID="eduPersonPrincipalName">
+	        <PermitValueRule xsi:type="EntityAttributeExactMatch"
+	            attributeName="http://shibboleth.net/ns/attributes/releaseAllValues"
+	            attributeNameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	            attributeValue="eduPersonPrincipalName" />
+	    </AttributeRule>
+	 
+	    <AttributeRule attributeID="mail">
+	        <PermitValueRule xsi:type="EntityAttributeExactMatch"
+	            attributeName="http://shibboleth.net/ns/attributes/releaseAllValues"
+	            attributeNameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	            attributeValue="mail" />
+	    </AttributeRule>
+	</AttributeFilterPolicy>
+
+    <!--
+    Same as above but more efficient form for an attribute with multiple values.
+    -->
+    <AttributeFilterPolicy id="Per-Attribute-Affiliation">
+        <PolicyRequirementRule xsi:type="EntityAttributeExactMatch"
+            attributeName="http://shibboleth.net/ns/attributes/releaseAllValues"
+            attributeNameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+            attributeValue="eduPersonScopedAffiliation" />
+     
+        <AttributeRule attributeID="eduPersonScopedAffiliation" permitAny="true" />
+    </AttributeFilterPolicy>
+
+    <!--
+    Example rule for honoring Subject ID requirement tag in metadata.
+    The example supplies pairwise-id if subject-id isn't explicitly required.
     -->
     <AttributeFilterPolicy id="subject-identifiers">
         <PolicyRequirementRule xsi:type="ANY" />
@@ -35,5 +75,59 @@
                 attributeValue="subject-id" />
         </AttributeRule>
     </AttributeFilterPolicy>
-    
+
+    <!-- Release an additional attribute to an SP. -->
+    <AttributeFilterPolicy id="example1">
+        <PolicyRequirementRule xsi:type="Requester" value="https://sp.example.org" />
+
+        <AttributeRule attributeID="uid" permitAny="true" />
+    </AttributeFilterPolicy>
+
+    <!-- Release eduPersonScopedAffiliation to two specific SPs. -->
+    <AttributeFilterPolicy id="example2">
+        <PolicyRequirementRule xsi:type="OR">
+            <Rule xsi:type="Requester" value="https://sp.example.org" />
+            <Rule xsi:type="Requester" value="https://another.example.org/shibboleth" />
+        </PolicyRequirementRule>
+
+        <AttributeRule attributeID="eduPersonScopedAffiliation" permitAny="true" />
+    </AttributeFilterPolicy>
+
+  <!-- TRS: Restrict attribute release to SP's that have the R&S tag -->
+	
+  <AttributeFilterPolicy id="releaseRandSAttributeBundle2">
+  <PolicyRequirementRule xsi:type="ANY" />
+  <!--  attributeName="http://macedir.org/entity-category"
+  attributeValue="http://refeds.org/category/research-and-scholarship"/>
+  -->
+
+ <!-- a fixed subset of the Research & Scholarship Attribute Bundle -->
+ <!-- release of ePPN is REQUIRED -->
+  <AttributeRule attributeID="eduPersonPrincipalName">
+    <PermitValueRule xsi:type="ANY"/>
+  </AttributeRule>
+  <!-- if your deployment of ePPN is non-reassigned, release of ePTID is OPTIONAL -->
+  <AttributeRule attributeID="eduPersonTargetedID">
+    <PermitValueRule xsi:type="ANY"/>
+  </AttributeRule>
+ <!-- release of email is REQUIRED -->
+ <AttributeRule attributeID="mail">
+    <PermitValueRule xsi:type="ANY"/>
+  </AttributeRule>
+  <!-- either displayName or (givenName and sn) is REQUIRED but all three are RECOMMENDED -->
+  <AttributeRule attributeID="displayName">
+    <PermitValueRule xsi:type="ANY"/>
+  </AttributeRule>
+  <AttributeRule attributeID="givenName">
+    <PermitValueRule xsi:type="ANY"/>
+  </AttributeRule>
+  <AttributeRule attributeID="surname">
+    <PermitValueRule xsi:type="ANY"/>
+  </AttributeRule>
+  <!-- release of ePSA is OPTIONAL -->
+  <AttributeRule attributeID="eduPersonScopedAffiliation">
+    <PermitValueRule xsi:type="ANY"/>
+  </AttributeRule>
+</AttributeFilterPolicy>
+	
 </AttributeFilterPolicyGroup>
