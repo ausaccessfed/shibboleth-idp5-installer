@@ -3,6 +3,7 @@ Description=Shibboleth V5 Identity Provider
 After=syslog.target network.target mariadb.target
 
 [Service]
+RuntimeDirectory=jetty
 Environment=JETTY_START_TIMEOUT=360
 ExecStart=/bin/bash -c "{{ install_base }}/shibboleth/shibboleth-idp/current/bin/idp.sh start"
 ExecStop=/bin/bash -c "{{ install_base }}/shibboleth/shibboleth-idp/current/bin/idp.sh stop"
