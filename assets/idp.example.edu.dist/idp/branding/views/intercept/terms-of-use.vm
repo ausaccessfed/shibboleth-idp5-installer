@@ -34,27 +34,32 @@
                 <h1>#springMessageText("${termsOfUseId}.title", "Terms of Use")</h1>
                 #if ($rpOrganizationLogo)
                     <img class="service-logo" src="$encoder.encodeForHTMLAttribute($rpOrganizationLogo)" alt="logo for $encoder.encodeForHTMLAttribute($serviceName)" />
-                #end    
-                
+                #end
+
                 <p>#springMessageText("${termsOfUseId}.text", "Terms of Use Text...")</p>
                 <form action="$flowExecutionUrl" method="post">
                     <fieldset>
                         <legend><span>Agreement</span></legend>
-                        <form action="$flowExecutionUrl" method="post" >
-                            #parse("csrf/csrf.vm")
-                            <input id="accept" type="checkbox" name="_shib_idp_consentIds" value="$encoder.encodeForHTML($termsOfUseId)" required>
-                            <label for="accept">#springMessageText("idp.terms-of-use.accept", "I accept the terms of use")
-                            #if ($requireCheckbox)
-                                <br/><small>#springMessageText("idp.terms-of-use.required", "Please check this box if you want to proceed.")</small>
-                            #end
-                            </label>
+                        #parse("csrf/csrf.vm")
+                        <input id="accept" type="checkbox" name="_shib_idp_consentIds" value="$encoder.encodeForHTML($termsOfUseId)" required>
+                        <label for="accept">#springMessageText("idp.terms-of-use.accept", "I accept the terms of use")
+                        #if ($requireCheckbox)
+                            <br/><small>#springMessageText("idp.terms-of-use.required", "Please check this box if you want to proceed.")</small>
+                        #end
+                        </label>
                     </fieldset>
-                    
+
+                    <p>
+                        #springMessageText("${termsOfUseId}.linkLabel", "Terms of use document:")
+                        <a href="#springMessageText("${termsOfUseId}.link", "#")" target="_blank" rel="noopener noreferer">
+                            #springMessageText("${termsOfUseId}.link", "")
+                        </a>
+                    </p>
+
                     <div class="grid md-2">
                         <div class="grid-item">
-                            <button class="button--full" type="submit" name="_eventId_proceed">#springMessageText("idp.terms-of-use.submit", "Submit")</button> 
+                            <button class="button--full" type="submit" name="_eventId_proceed">#springMessageText("idp.terms-of-use.submit", "Submit")</button>
                         </div>
-                        </form>
                         <div class="grid-item">
                             <form action="$flowExecutionUrl" method="post">
                                 #parse("csrf/csrf.vm")
