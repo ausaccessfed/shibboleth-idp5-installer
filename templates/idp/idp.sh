@@ -10,14 +10,14 @@ usage()
 
 case "$1" in
   start)
-    rm -rf {{ install_base }}/shibboleth/jetty/tmp/*
+    rm -rf {{ install_base }}/shibboleth/jetty12/tmp/*
     /bin/bash -c "{{ install_base }}/jetty/current/bin/jetty.sh -d start"
 
     ;;
 
   stop)
     /bin/bash -c "{{ install_base }}/jetty/current/bin/jetty.sh stop"
-    rm -rf {{ install_base }}/shibboleth/jetty/tmp/*
+    rm -rf {{ install_base }}/shibboleth/jetty12/tmp/*
     
     ;;
 

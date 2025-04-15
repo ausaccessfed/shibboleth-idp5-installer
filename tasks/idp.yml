@@ -78,7 +78,7 @@
 - name: 'Run IdP install with proxy'
   shell: |
     umask 0022
-    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml
   args:
     creates: '{{ shib_idp.home }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -142,7 +142,7 @@
 - name: 'Install plugin - storage.jdbc using web-proxy'
   shell: |
     umask 0022
-    {{ shib_idp.home }}/bin/plugin.sh -i {{ download.plugins.storage_jdbc.name }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
+    {{ shib_idp.home }}/bin/plugin.sh -i {{ urls.plugins.storage_jdbc.plugin_url }} -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml 2> {{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}
   args:
     creates: '{{ shib_idp.home }}/plugins/{{ download.plugins.storage_jdbc.name }}.{{download.plugins.storage_jdbc.version }}'
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
@@ -179,7 +179,7 @@
 - name: 'Re-Run IdP install to include the local libraries in idp.war with proxy'
   shell: |
     umask 0022
-    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt
+    {{ shib_idp.src }}/bin/install.sh --propertyFile '{{ shib_idp.src_root }}/install-{{ download.shib_idp.version }}.properties' --noPrompt -hc customHttpClient {{ shib_idp.home_root }}/web_proxy.xml
   when: not ((web_proxyhost is undefined) or (web_proxyhost is none) or (web_proxyhost == "") or
              (web_proxyport is undefined) or (web_proxyport is none) or (web_proxyport == ""))
 
