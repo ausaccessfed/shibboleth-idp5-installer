@@ -45,8 +45,8 @@
         sha256sum: 5e5de66e3517d30ff19ef66cf7a4aa5443b861d83e36a75e85845b007a03afbf
       aaf_shib_ext:
         baseurl: "{{ aaf_binaries.baseurl }}/jars/aaf-shibext"
-        version: 5.1.3
-        sha256sum: e9834920bd7118535611a48fd417f27cad134f3d2ecaafa0322161053db4be6a
+        version: 5.1.4
+        sha256sum: 91942eaffd31e9743005a9a1eb49cd4030a2b5bda735804c2cc3398ca01b57b1
       keystore:
         baseurl: "{{ aaf_binaries.baseurl }}/keystore"
         version: "Unknown"
