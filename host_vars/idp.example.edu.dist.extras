@@ -48,6 +48,11 @@ refeds_pseudonymous_v2: "false"
 #
 refeds_personalized_v2: "false"
 
+# This IdP conforms to the REFEDS Code of Conduct v.1
+# Ref: http://www.geant.net/uri/dataprotection-code-of-conduct/v1
+#
+refeds_code_of_conduct_v1: "false"
+
 # This IdP conforms to the REFEDS Code of Conduct v.2
 # Ref: https://refeds.org/category/code-of-conduct/v2
 #
