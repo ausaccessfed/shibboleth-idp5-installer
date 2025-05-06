@@ -19,3 +19,10 @@
         src: '{{ installer.repository }}/assets/idp.example.edu.dist/'
         dest: '{{ installer.repository }}/assets/{{inventory_hostname}}'
         force: no
+    - name: 'Add Code of Conduct V1 to host_vars if it does not exist'
+      lineinfile:
+        path: '{{ installer.repository }}/host_vars/{{inventory_hostname}}'
+        line: "\n# # This IdP conforms to the REFEDS Code of Conduct v.1\nrefeds_code_of_conduct_v1: \"false\""
+        insertafter: EOF
+      when:  refeds_code_of_conduct_v1 is not defined
+
