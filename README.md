@@ -24,7 +24,7 @@ Apache License Version 2.0, January 2004
 
 Need a managed, secure and highly available cloud Identity Provider solution?
 
-[Contact the AAF about Rapid IdP today.](https://aaf.edu.au/rapid/)
+Contact the AAF about Rapid IdP today.
 
-[<img src="https://aaf.edu.au/images/Rapid-IdP.png"  width="500"/>](https://aaf.edu.au/rapid/)
+<img src="https://aafweb.wpenginepowered.com/images/Rapid-IdP.png"  width="500"/>
 
